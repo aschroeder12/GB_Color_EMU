@@ -448,6 +448,137 @@ void LOAD_REGISTER_L_A()
 	L_REGISTER = A_REGISTER;
 }
 
+/*************************************************************************************************** 0x70 **/
+/** LD HL, B - LOAD REGISTER (REGISTER)
+ * Load to the 8-bit register HL, data from the 8-bit register B.
+ */
+void LOAD_REGISTER_HL_B()
+{
+	HL_REGISTER = B_REGISTER;
+}
+/** LD HL, C - LOAD REGISTER (REGISTER)
+ * Load to the 8-bit register HL, data from the 8-bit register C. 
+ */
+void LOAD_REGISTER_HL_C()
+{
+	HL_REGISTER = C_REGISTER;
+}
+/** LD HL, D - LOAD REGISTER (REGISTER)
+ * Load to the 8-bit register HL, data from the 8-bit register D. 
+ */
+void LOAD_REGISTER_HL_D()
+{
+	HL_REGISTER = D_REGISTER;
+}
+/** LD HL, E - LOAD REGISTER (REGISTER)
+ * Load to the 8-bit register HL, data from the 8-bit register E. 
+ */
+void LOAD_REGISTER_HL_E()
+{
+	HL_REGISTER = E_REGISTER;
+}
+/** LD HL, H - LOAD REGISTER (REGISTER)
+ * Load to the 8-bit register HL, data from the 8-bit register H
+ */
+void LOAD_REGISTER_HL_H()
+{
+	HL_REGISTER = H_REGISTER;
+}
+/** LD HL, L - LOAD REGISTER (REGISTER)
+ * Load to the 8-bit register HL, data from the 8-bit register L
+ */
+void LOAD_REGISTER_HL_L()
+{
+	HL_REGISTER = L_REGISTER;
+}
+/** HALT
+ * Enter CPU low-power consumption mode until an interrupt occurs. 
+ * The exact behavior of this instruction depends on the state of the IME flag.
+ * 
+ * IME set
+ * 	- The CPU enters low-power mode until after an interrupt is about to be serviced. 
+ * 	- The handler is executed normally, and the CPU resumes execution after the HALT when that returns.
+ * 
+ * IME not set
+ * 	- The behavior depends on whether an interrupt is pending (i.e. ‘[IE] & [IF]’ is non-zero).
+ * 		- None pending
+ * 			As soon as an interrupt becomes pending, the CPU resumes execution. This is like the above, except that the handler is not called.
+ * 		- Some pending
+ * 			The CPU continues execution after the HALT, but the byte after it is read twice in a row (PC is not incremented, due to a hardware bug).
+ * 
+ */
+void HALT()
+{
+	/*TODO*/
+}
+/** LD HL, A - LOAD REGISTER (REGISTER)
+ * Load to the 8-bit register HL, data from the 8-bit register A
+ */
+void LOAD_REGISTER_HL_A()
+{
+	HL_REGISTER = A_REGISTER;
+}
+/** LD A, B - LOAD REGISTER (REGISTER)
+ * Load to the 8-bit register A, data from the 8-bit register B.
+ */
+void LOAD_REGISTER_A_B()
+{
+	A_REGISTER = B_REGISTER;
+}
+/** LD A, C - LOAD REGISTER (REGISTER)
+ * Load to the 8-bit register A, data from the 8-bit register C.
+ */
+void LOAD_REGISTER_A_C()
+{
+	A_REGISTER = C_REGISTER;
+}
+/** LD A, D - LOAD REGISTER (REGISTER)
+ * Load to the 8-bit register A, data from the 8-bit register D. 
+ */
+void LOAD_REGISTER_A_D()
+{
+	A_REGISTER = D_REGISTER;
+}
+/** LD A, E - LOAD REGISTER (REGISTER)
+ * Load to the 8-bit register A, data from the 8-bit register E. 
+ */
+void LOAD_REGISTER_A_E()
+{
+	A_REGISTER = E_REGISTER;
+}
+/** LD A, H - LOAD REGISTER (REGISTER)
+ * Load to the 8-bit register A, data from the 8-bit register H
+ */
+void LOAD_REGISTER_A_H()
+{
+	A_REGISTER = H_REGISTER;
+}
+/** LD A, L - LOAD REGISTER (REGISTER)
+ * Load to the 8-bit register A, data from the 8-bit register L
+ */
+void LOAD_REGISTER_A_L()
+{
+	A_REGISTER = L_REGISTER;
+}
+/** LD A, HL - LOAD REGISTER (INDIRECT HL)
+ * Load to the 8-bit register A, data from the absolute address
+ * specified by the 16-bit register HL
+ */
+void LOAD_REGISTER_A_HL()
+{
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
+	/* Debug this ADDRESS to make sure it is correct */
+	DATA_BUS = ReadMemory(ADDRESS_BUS);
+	A_REGISTER = DATA_BUS;
+}
+/** LD A, A - LOAD REGISTER (REGISTER)
+ * Load to the 8-bit register A, data from the 8-bit register A
+ */
+void LOAD_REGISTER_A_A()
+{
+	A_REGISTER = A_REGISTER;
+}
 
 
 
