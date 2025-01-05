@@ -50,23 +50,39 @@
  *  0x6e LD L, (HL) 		- LOAD REGISTER (INDIRECT HL)
  *  0x6f LD L, A 			- LOAD REGISTER (REGISTER)
  * 
- *  0x70 LD H, B 			- LOAD REGISTER (REGISTER)
- *  0x71 LD H, C 			- LOAD REGISTER (REGISTER)
- *  0x72 LD H, D 			- LOAD REGISTER (REGISTER)
- *  0x73 LD H, E 			- LOAD REGISTER (REGISTER)
- *  0x74 LD H, H 			- LOAD REGISTER (REGISTER)
- *  0x75 LD H, L 			- LOAD REGISTER (REGISTER)
+ *  0x70 LD HL, B 			- LOAD FROM REGISTER (INDIRECT HL)
+ *  0x71 LD HL, C 			- LOAD FROM REGISTER (INDIRECT HL)
+ *  0x72 LD HL, D 			- LOAD FROM REGISTER (INDIRECT HL)
+ *  0x73 LD HL, E 			- LOAD FROM REGISTER (INDIRECT HL)
+ *  0x74 LD HL, H 			- LOAD FROM REGISTER (INDIRECT HL)
+ *  0x75 LD HL, L 			- LOAD FROM REGISTER (INDIRECT HL)
  *  0x76 HALT				- HALT SYSTEM CLOCK, look at gbdev.io
- *  0x77 LD H, A 			- LOAD REGISTER (REGISTER)
- *  0x78 LD L, B 			- LOAD REGISTER (REGISTER)
- *  0x79 LD L, C 			- LOAD REGISTER (REGISTER)
- *  0x7a LD L, D 			- LOAD REGISTER (REGISTER)
- *  0x7b LD L, E 			- LOAD REGISTER (REGISTER)
- *  0x7c LD L, H 			- LOAD REGISTER (REGISTER)
- *  0x7d LD L, L 			- LOAD REGISTER (REGISTER)
- *  0x7e LD L, (HL) 		- LOAD REGISTER (INDIRECT HL)
- *  0x7f LD L, A 			- LOAD REGISTER (REGISTER)
- * 
+ *  0x77 LD HL, A 			- LOAD FROM REGISTER (INDIRECT HL)
+ *  0x78 LD A, B 			- LOAD REGISTER (REGISTER)
+ *  0x79 LD A, C 			- LOAD REGISTER (REGISTER)
+ *  0x7a LD A, D 			- LOAD REGISTER (REGISTER)
+ *  0x7b LD A, E 			- LOAD REGISTER (REGISTER)
+ *  0x7c LD A, H 			- LOAD REGISTER (REGISTER)
+ *  0x7d LD A, L 			- LOAD REGISTER (REGISTER)
+ *  0x7e LD A, (HL) 		- LOAD REGISTER (INDIRECT HL)
+ *  0x7f LD A, A 			- LOAD REGISTER (REGISTER)
+ * 	
+ * 	0x80 ADD B 				- ADD (REGISTER)
+ * 	0x81 ADD C 				- ADD (REGISTER)
+ * 	0x82 ADD D 				- ADD (REGISTER)
+ * 	0x83 ADD E 				- ADD (REGISTER)
+ * 	0x84 ADD H 				- ADD (REGISTER)
+ * 	0x85 ADD L 				- ADD (REGISTER)
+ * 	0x86 ADD (HL) 			- ADD (INDIRECT HL)
+ * 	0x87 ADD A 				- ADD (REGISTER)
+ * 	0x88 ADC B 				- ADD (REGISTER)
+ * 	0x89 ADC C 				- ADD (REGISTER)
+ * 	0x8a ADC D 				- ADD (REGISTER)
+ * 	0x8b ADC E 				- ADD (REGISTER)
+ * 	0x8c ADC H 				- ADD (REGISTER)
+ * 	0x8d ADC L 				- ADD (REGISTER)
+ * 	0x8e ADC (HL) 			- ADD (INDIRECT HL)
+ * 	0x8f ADC A 				- ADD (REGISTER)
  * 
  * 
  *******************************************************/
@@ -450,46 +466,47 @@ void LOAD_REGISTER_L_A()
 
 /*************************************************************************************************** 0x70 **/
 /** LD HL, B - LOAD REGISTER (REGISTER)
- * Load to the 8-bit register HL, data from the 8-bit register B.
+ * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register B.
  */
 void LOAD_REGISTER_HL_B()
 {
-	HL_REGISTER = B_REGISTER;
+
+	WriteMemory(HL_REGISTER, B_REGISTER);
 }
 /** LD HL, C - LOAD REGISTER (REGISTER)
- * Load to the 8-bit register HL, data from the 8-bit register C. 
+ * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register C. 
  */
 void LOAD_REGISTER_HL_C()
 {
-	HL_REGISTER = C_REGISTER;
+	WriteMemory(HL_REGISTER, C_REGISTER);
 }
 /** LD HL, D - LOAD REGISTER (REGISTER)
- * Load to the 8-bit register HL, data from the 8-bit register D. 
+ * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register D. 
  */
 void LOAD_REGISTER_HL_D()
 {
-	HL_REGISTER = D_REGISTER;
+	WriteMemory(HL_REGISTER, D_REGISTER);
 }
 /** LD HL, E - LOAD REGISTER (REGISTER)
- * Load to the 8-bit register HL, data from the 8-bit register E. 
+ * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register E. 
  */
 void LOAD_REGISTER_HL_E()
 {
-	HL_REGISTER = E_REGISTER;
+	WriteMemory(HL_REGISTER, E_REGISTER);
 }
 /** LD HL, H - LOAD REGISTER (REGISTER)
- * Load to the 8-bit register HL, data from the 8-bit register H
+ * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register H
  */
 void LOAD_REGISTER_HL_H()
 {
-	HL_REGISTER = H_REGISTER;
+	WriteMemory(HL_REGISTER, H_REGISTER);
 }
 /** LD HL, L - LOAD REGISTER (REGISTER)
- * Load to the 8-bit register HL, data from the 8-bit register L
+ * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register L
  */
 void LOAD_REGISTER_HL_L()
 {
-	HL_REGISTER = L_REGISTER;
+	WriteMemory(HL_REGISTER, L_REGISTER);
 }
 /** HALT
  * Enter CPU low-power consumption mode until an interrupt occurs. 
@@ -510,13 +527,41 @@ void LOAD_REGISTER_HL_L()
 void HALT()
 {
 	/*TODO*/
+	/* If IME is set */
+	if (IME_FLAG != 0)
+	{
+		while (IE_REGISTER & Interrupt_FLAG == 0)
+		{
+			/* Spin baby spin until there is a pending interrupt*/
+			/* Call an "check for interrupts" function so we aren't stuck in an infinite loop?*/
+		}
+
+		/* Call interrupt handler */
+	}
+	else /* IME not set */
+	{
+		/* If no interrupt pending */
+		if (IE_REGISTER & Interrupt_FLAG == 0)
+		{
+			while (IE_REGISTER & Interrupt_FLAG == 0)
+			{
+				/* Spin baby spin until there is a pending interrupt*/
+				/* Call an "check for interrupts" function so we aren't stuck in an infinite loop?*/
+			}
+			/* Exit without calling an interrupt handler */
+		}
+		else /* there is an interrupt pending */
+		{
+			/* immediately exit, but due to halt bug the PC fails to be normally incremented */
+		}
+	}
 }
 /** LD HL, A - LOAD REGISTER (REGISTER)
- * Load to the 8-bit register HL, data from the 8-bit register A
+ * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register A
  */
 void LOAD_REGISTER_HL_A()
 {
-	HL_REGISTER = A_REGISTER;
+	WriteMemory(HL_REGISTER, A_REGISTER);
 }
 /** LD A, B - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register A, data from the 8-bit register B.
@@ -580,7 +625,19 @@ void LOAD_REGISTER_A_A()
 	A_REGISTER = A_REGISTER;
 }
 
+/** 0x80 ADD B - ADD (REGISTER)
+ * Adds to the 8-bit A register, the 8-bit register B, and stores the result back into the A register.
+ */
+void ADD_REGISTER_B()
+{
+	unsigned char result, carry_per_bit;
 
+	result, carry_per_bit = A_REGISTER + B_REGISTER;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	
+
+}
 
 /** LD r, n - LOAD REGISTER (IMMEDIATE)
  * Load to the 8-bit register r, the immediate data n

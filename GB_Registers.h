@@ -12,6 +12,7 @@
  *  L REGISTER (HL - 16 BIT)		-  8 BIT
  *  IR (Instruction Register) 		-  8 BIT
  *  IE (Interrupt Enable)			-  8 BIT
+ *  IME (Interrupt Master Enable) 	-  8 BIT
  * 
  ********************************************/
 
@@ -38,3 +39,4 @@ extern unsigned char H_REGISTER;
 extern unsigned char L_REGISTER;
 extern unsigned char IR_REGISTER;
 extern unsigned char IE_REGISTER;
+extern unsigned char IME_FLAG;
