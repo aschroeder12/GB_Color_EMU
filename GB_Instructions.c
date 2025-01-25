@@ -635,7 +635,35 @@ void ADD_REGISTER_B()
 	result, carry_per_bit = A_REGISTER + B_REGISTER;
 	// debug the carry_per_bit to make sure it works
 	A_REGISTER = result;
-	
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+	}
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | CARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER | CARRY_RESET;
+	}
 
 }
 

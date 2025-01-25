@@ -16,6 +16,16 @@
  * 
  ********************************************/
 
+/* Constant values used to AND and OR the F_REGISTER to set/reset flags */
+const unsigned char ZERO_SET = 0x80;
+const unsigned char ZERO_RESET = 0x7f;
+const unsigned char SUBTRACTION_SET = 0x40;
+const unsigned char SUBTRACTION_RESET = 0xbf;
+const unsigned char HALFCARRY_SET = 0x20;
+const unsigned char HALFCARRY_RESET = 0xdf;
+const unsigned char CARRY_SET = 0x10;
+const unsigned char CARRY_RESET = 0xef;
+
 
 extern unsigned short PC_REGISTER;
 extern unsigned short SP_REGISTER;
