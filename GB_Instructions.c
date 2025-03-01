@@ -101,6 +101,23 @@
  * 	0x9e SBC (HL) 			- SUB WITH CARRY (INDIRECT HL)
  * 	0x9f SBC A 				- SUB WITH CARRY (REGISTER)
  * 
+ *  0xa0 AND B 				- AND (REGISTER)
+ * 	0xa1 AND C 				- AND (REGISTER)
+ * 	0xa2 AND D 				- AND (REGISTER)
+ * 	0xa3 AND E 				- AND (REGISTER)
+ * 	0xa4 AND H 				- AND (REGISTER)
+ * 	0xa5 AND L 				- AND (REGISTER)
+ * 	0xa6 AND (HL) 			- AND (INDIRECT HL)
+ * 	0xa7 AND A 				- AND (REGISTER)
+ * 	0xa8 XOR B 				- BITWISE XOR (REGISTER)
+ * 	0xa9 XOR C 				- BITWISE XOR (REGISTER)
+ * 	0xaa XOR D 				- BITWISE XOR (REGISTER)
+ * 	0xab XOR E 				- BITWISE XOR (REGISTER)
+ * 	0xac XOR H 				- BITWISE XOR (REGISTER)
+ * 	0xad XOR L 				- BITWISE XOR (REGISTER)
+ * 	0xae XOR (HL) 			- BITWISE XOR (INDIRECT HL)
+ * 	0xaf XOR A 				- BITWISE XOR (REGISTER)
+ * 
  *******************************************************/
 
 #include"GB_Registers.h"
@@ -670,7 +687,7 @@ void ADD_REGISTER_B()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -679,7 +696,7 @@ void ADD_REGISTER_B()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -711,7 +728,7 @@ void ADD_REGISTER_C()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -720,7 +737,7 @@ void ADD_REGISTER_C()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -752,7 +769,7 @@ void ADD_REGISTER_D()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -761,7 +778,7 @@ void ADD_REGISTER_D()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -793,7 +810,7 @@ void ADD_REGISTER_E()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -802,7 +819,7 @@ void ADD_REGISTER_E()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -834,7 +851,7 @@ void ADD_REGISTER_H()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -843,7 +860,7 @@ void ADD_REGISTER_H()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -875,7 +892,7 @@ void ADD_REGISTER_L()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -884,7 +901,7 @@ void ADD_REGISTER_L()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -921,7 +938,7 @@ void ADD_REGISTER_HL()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -930,7 +947,7 @@ void ADD_REGISTER_HL()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -962,7 +979,7 @@ void ADD_REGISTER_A()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -971,7 +988,7 @@ void ADD_REGISTER_A()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1004,7 +1021,7 @@ void ADC_REGISTER_B()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1013,7 +1030,7 @@ void ADC_REGISTER_B()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1046,7 +1063,7 @@ void ADC_REGISTER_C()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1055,7 +1072,7 @@ void ADC_REGISTER_C()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1088,7 +1105,7 @@ void ADC_REGISTER_D()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1097,7 +1114,7 @@ void ADC_REGISTER_D()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1130,7 +1147,7 @@ void ADC_REGISTER_E()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1139,7 +1156,7 @@ void ADC_REGISTER_E()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1172,7 +1189,7 @@ void ADC_REGISTER_H()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1181,7 +1198,7 @@ void ADC_REGISTER_H()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1214,7 +1231,7 @@ void ADC_REGISTER_L()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1223,7 +1240,7 @@ void ADC_REGISTER_L()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1261,7 +1278,7 @@ void ADC_REGISTER_HL()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1270,7 +1287,7 @@ void ADC_REGISTER_HL()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1303,7 +1320,7 @@ void ADC_REGISTER_A()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1312,7 +1329,7 @@ void ADC_REGISTER_A()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1338,7 +1355,7 @@ void SUB_REGISTER_B()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1346,7 +1363,7 @@ void SUB_REGISTER_B()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1355,7 +1372,7 @@ void SUB_REGISTER_B()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1380,7 +1397,7 @@ void SUB_REGISTER_C()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1388,7 +1405,7 @@ void SUB_REGISTER_C()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1397,7 +1414,7 @@ void SUB_REGISTER_C()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1422,7 +1439,7 @@ void SUB_REGISTER_D()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1430,7 +1447,7 @@ void SUB_REGISTER_D()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER * HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1439,7 +1456,7 @@ void SUB_REGISTER_D()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1464,7 +1481,7 @@ void SUB_REGISTER_E()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1472,7 +1489,7 @@ void SUB_REGISTER_E()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1481,7 +1498,7 @@ void SUB_REGISTER_E()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1506,7 +1523,7 @@ void SUB_REGISTER_H()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1514,7 +1531,7 @@ void SUB_REGISTER_H()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1523,7 +1540,7 @@ void SUB_REGISTER_H()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1548,7 +1565,7 @@ void SUB_REGISTER_L()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1556,7 +1573,7 @@ void SUB_REGISTER_L()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1565,7 +1582,7 @@ void SUB_REGISTER_L()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1593,7 +1610,7 @@ void SUB_REGISTER_HL()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1601,7 +1618,7 @@ void SUB_REGISTER_HL()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1610,7 +1627,7 @@ void SUB_REGISTER_HL()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1635,7 +1652,7 @@ void SUB_REGISTER_A()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1643,7 +1660,7 @@ void SUB_REGISTER_A()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1652,7 +1669,7 @@ void SUB_REGISTER_A()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1677,7 +1694,7 @@ void SBC_REGISTER_B()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1685,7 +1702,7 @@ void SBC_REGISTER_B()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1694,7 +1711,7 @@ void SBC_REGISTER_B()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1719,7 +1736,7 @@ void SBC_REGISTER_C()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1727,7 +1744,7 @@ void SBC_REGISTER_C()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1736,7 +1753,7 @@ void SBC_REGISTER_C()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1761,7 +1778,7 @@ void SBC_REGISTER_D()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1769,7 +1786,7 @@ void SBC_REGISTER_D()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1778,7 +1795,7 @@ void SBC_REGISTER_D()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1803,7 +1820,7 @@ void SBC_REGISTER_E()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1811,7 +1828,7 @@ void SBC_REGISTER_E()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1820,7 +1837,7 @@ void SBC_REGISTER_E()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1845,7 +1862,7 @@ void SBC_REGISTER_H()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1853,7 +1870,7 @@ void SBC_REGISTER_H()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1862,7 +1879,7 @@ void SBC_REGISTER_H()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1870,7 +1887,7 @@ void SBC_REGISTER_H()
  * Subtracts to the 8-bit A register, the carry flag and the 8-bit register L, 
  * and stores the result back into the A register.
  */
-void ADC_REGISTER_L()
+void SBC_REGISTER_L()
 {
 	unsigned char result, carry_per_bit;
 
@@ -1887,7 +1904,7 @@ void ADC_REGISTER_L()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1895,7 +1912,7 @@ void ADC_REGISTER_L()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1904,7 +1921,7 @@ void ADC_REGISTER_L()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1934,7 +1951,7 @@ void SBC_REGISTER_HL()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1942,7 +1959,7 @@ void SBC_REGISTER_HL()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1951,7 +1968,7 @@ void SBC_REGISTER_HL()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
@@ -1976,7 +1993,7 @@ void SBC_REGISTER_A()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_SET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
@@ -1984,7 +2001,7 @@ void SBC_REGISTER_A()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | HALFCARRY_RESET;
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
@@ -1993,15 +2010,237 @@ void SBC_REGISTER_A()
 	}
 	else
 	{
-		F_REGISTER = F_REGISTER | CARRY_RESET;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
 
-/** LD r, n - LOAD REGISTER (IMMEDIATE)
- * Load to the 8-bit register r, the immediate data n
+/************************************************************************************************** 0xa0 
+ * AND B - AND (REGISTER)
+ * Performs a bitwise AND operation between the 8-bit A register and the 8-bit register B, and
+ * stores the result back into the A register.
  */
-
-void LOAD_REGISTER_I(unsigned char* R_DEST)
+void AND_REGISTER_B()
 {
-	*R_DEST = 
+	unsigned char result, carry_per_bit;
+
+	result, carry_per_bit = A_REGISTER & B_REGISTER;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
 }
+
+/* AND C - AND (REGISTER)
+ * Performs a bitwise AND operation between the 8-bit A register and the 8-bit register C, and
+ * stores the result back into the A register.
+ */
+void AND_REGISTER_C()
+{
+	unsigned char result, carry_per_bit;
+
+	result, carry_per_bit = A_REGISTER & C_REGISTER;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* AND D - AND (REGISTER)
+ * Performs a bitwise AND operation between the 8-bit A register and the 8-bit register D, and
+ * stores the result back into the A register.
+ */
+void AND_REGISTER_D()
+{
+	unsigned char result, carry_per_bit;
+
+	result, carry_per_bit = A_REGISTER & D_REGISTER;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* AND E - AND (REGISTER)
+ * Performs a bitwise AND operation between the 8-bit A register and the 8-bit register E, and
+ * stores the result back into the A register.
+ */
+void AND_REGISTER_E()
+{
+	unsigned char result, carry_per_bit;
+
+	result, carry_per_bit = A_REGISTER & E_REGISTER;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* AND H - AND (REGISTER)
+ * Performs a bitwise AND operation between the 8-bit A register and the 8-bit register H, and
+ * stores the result back into the A register.
+ */
+void AND_REGISTER_H()
+{
+	unsigned char result, carry_per_bit;
+
+	result, carry_per_bit = A_REGISTER & H_REGISTER;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* AND L - AND (REGISTER)
+ * Performs a bitwise AND operation between the 8-bit A register and the 8-bit register L, and
+ * stores the result back into the A register.
+ */
+void AND_REGISTER_L()
+{
+	unsigned char result, carry_per_bit;
+
+	result, carry_per_bit = A_REGISTER & L_REGISTER;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* AND HL - AND (INDIRECT HL)
+ * Performs a bitwise AND operation between the 8-bit A register and data from the absolute
+ * address specified by the 16-bit register HL, and stores the result back into the A register.
+ */
+void AND_REGISTER_C()
+{
+	unsigned char result, carry_per_bit;
+
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
+	/* Debug this ADDRESS to make sure it is correct */
+	DATA_BUS = ReadMemory(ADDRESS_BUS);
+
+	result, carry_per_bit = A_REGISTER & DATA_BUS;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* AND A - AND (REGISTER)
+ * Performs a bitwise AND operation between the 8-bit A register and the 8-bit register A, and
+ * stores the result back into the A register.
+ */
+void AND_REGISTER_A()
+{
+	unsigned char result, carry_per_bit;
+
+	result, carry_per_bit = A_REGISTER & A_REGISTER;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
