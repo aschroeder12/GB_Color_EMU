@@ -2187,7 +2187,7 @@ void AND_REGISTER_L()
  * Performs a bitwise AND operation between the 8-bit A register and data from the absolute
  * address specified by the 16-bit register HL, and stores the result back into the A register.
  */
-void AND_REGISTER_C()
+void AND_REGISTER_HL()
 {
 	unsigned char result, carry_per_bit;
 
@@ -2216,15 +2216,15 @@ void AND_REGISTER_C()
 	F_REGISTER = F_REGISTER & CARRY_RESET;
 }
 
-/* AND A - AND (REGISTER)
- * Performs a bitwise AND operation between the 8-bit A register and the 8-bit register A, and
+/* XOR B - XOR (REGISTER)
+ * Performs a bitwise XOR operation between the 8-bit A register and the 8-bit register B, and
  * stores the result back into the A register.
  */
-void AND_REGISTER_A()
+void XOR_REGISTER_B()
 {
 	unsigned char result, carry_per_bit;
 
-	result, carry_per_bit = A_REGISTER & A_REGISTER;
+	result, carry_per_bit = A_REGISTER ^ B_REGISTER;
 	// debug the carry_per_bit to make sure it works
 	A_REGISTER = result;
 	/* Deal with zero flag, bit 7 of F_REGISTER */
@@ -2239,7 +2239,208 @@ void AND_REGISTER_A()
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
 	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
-	F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* XOR C - XOR (REGISTER)
+ * Performs a bitwise XOR operation between the 8-bit A register and the 8-bit register C, and
+ * stores the result back into the A register.
+ */
+void XOR_REGISTER_C()
+{
+	unsigned char result, carry_per_bit;
+
+	result, carry_per_bit = A_REGISTER ^ C_REGISTER;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* XOR D - XOR (REGISTER)
+ * Performs a bitwise XOR operation between the 8-bit A register and the 8-bit register D, and
+ * stores the result back into the A register.
+ */
+void XOR_REGISTER_D()
+{
+	unsigned char result, carry_per_bit;
+
+	result, carry_per_bit = A_REGISTER ^ D_REGISTER;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* XOR E - XOR (REGISTER)
+ * Performs a bitwise XOR operation between the 8-bit A register and the 8-bit register E, and
+ * stores the result back into the A register.
+ */
+void XOR_REGISTER_E()
+{
+	unsigned char result, carry_per_bit;
+
+	result, carry_per_bit = A_REGISTER ^ E_REGISTER;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* XOR H - XOR (REGISTER)
+ * Performs a bitwise XOR operation between the 8-bit A register and the 8-bit register H, and
+ * stores the result back into the A register.
+ */
+void XOR_REGISTER_H()
+{
+	unsigned char result, carry_per_bit;
+
+	result, carry_per_bit = A_REGISTER ^ H_REGISTER;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* XOR L - XOR (REGISTER)
+ * Performs a bitwise XOR operation between the 8-bit A register and the 8-bit register L, and
+ * stores the result back into the A register.
+ */
+void XOR_REGISTER_L()
+{
+	unsigned char result, carry_per_bit;
+
+	result, carry_per_bit = A_REGISTER ^ L_REGISTER;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* XOR L - XOR (REGISTER)
+ * Performs a bitwise XOR operation between the 8-bit A register and data from the absolute 
+ * address specified by the 16-bit register HL, and stores the result back into the A register
+ */
+void XOR_REGISTER_HL()
+{
+	unsigned char result, carry_per_bit;
+
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
+	/* Debug this ADDRESS to make sure it is correct */
+	DATA_BUS = ReadMemory(ADDRESS_BUS);
+
+	result, carry_per_bit = A_REGISTER ^ DATA_BUS;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* XOR A - XOR (REGISTER)
+ * Performs a bitwise XOR operation between the 8-bit A register and the 8-bit register A, and
+ * stores the result back into the A register.
+ */
+void XOR_REGISTER_A()
+{
+	unsigned char result, carry_per_bit;
+
+	result, carry_per_bit = A_REGISTER ^ A_REGISTER;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	F_REGISTER = F_REGISTER & CARRY_RESET;
 }
