@@ -1,0 +1,7 @@
+/*  GB CONTROL FLOW INSTRUCTIONS 
+ *
+ *  0xc0 RET NZ 				- RETURN (CONDITIONAL)
+ *  0xc2 JP NZ, nn				- JUMP (CONDITIONAL)
+ *  0xc3 JP nn					- JUMP
+ *  0xc4 CALL NZ, nn			- CALL FUNCTION (CONDITIONAL)
+ */
