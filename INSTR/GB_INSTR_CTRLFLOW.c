@@ -11,6 +11,20 @@
  *  0xcc CALL Z, nn 			- CALL FUNCTION (CONDITIONAL)
  *  0xcd CALL nn 				- CALL FUNCTION
  *  0xcf RST 0x08				- RESTART / CALL FUNCTION (IMPLIED)
+ *  0xd0 RET NC 				- RETURN (CONDITIONAL)
+ *  0xd2 JP NC, nn 				- JUMP (CONDTIONAL)
+ *  0xd4 CALL NC, nn 			- CALL FUNCTION (CONDITIONAL)
+ *  0xd7 RST 0x10				- RESTART / CALL FUNCTION (IMPLIED)
+ *  0xd8 RET C 					- RETURN (CONDITIONAL)
+ *  0xd9 RETI					- RETURN FROM INTERRUPT HANDLER
+ *  0xda JP C, nn 				- JUMP (CONDITIONAL)
+ *  0xdc CALL C, nn 			- CALL (CONDITIONAL)
+ *  0xdf RST 0x18 				- RESTART / CALL FUNCTION (IMPLIED)
+ *  0xe7 RST 0x20				- RESTART / CALL FUNCTION (IMPLIED)
+ *  0xe9 JP HANDLER				- JUMP TO HL
+ *  0xef RST 0x28 				- RESTART / CALL FUNCTION (IMPLIED)
+ *  0xf7 RST 0x30 				- RESTART / CALL FUNCTION (IMPLIED)
+ *  0xff RST 0x38 				- RESTART / CALL FUNCTION (IMPLIED)
  */
 
 /* RET NZ - RETURN (CONDITIONAL)
@@ -268,4 +282,303 @@ void RESTART_08(void)
 	PC_REGISTER = (unsigned short)0x0008;
 }
 
+/* RET NC - RETURN (CONDITIONAL)
+ * Conditional return from a function, depending on the NO-CARRY condition.
+ */
+void RETURN_NC(void)
+{
+	unsigned char lsb;
+	unsigned char msb;
+	unsigned short addr;
+
+	/* If Carry Flag not set, set PC to new address specified by the Stack Pointer 
+	 * See CALL instruction for how this return Address is stored */
+	if ((F_REGISTER | (unsigned char)0xef) == (unsigned char)0xef)
+	{
+		lsb = ReadMemory(SP_REGISTER);
+		SP_REGISTER = SP_REGISTER + 1; /* increment by 1 because it's BYTE adressable, is it tho? */
+		msb = ReadMemory(SP_REGISTER);
+		SP_REGISTER = SP_REGISTER + 1;
+		addr = (unsigned short)(msb << 8) + (unsigned short)lsb;
+		PC_REGISTER = addr;
+	}
+}
+
+/* JP NC - JUMP (CONDITIONAL)
+ * Conditional jump to the absolute address specified by the 16-bit operand, 
+ * depending on the NO-CARRY condition.
+ */
+void JUMP_NC(void)
+{
+	unsigned char lsb;
+	unsigned char msb;
+	unsigned short addr;
+
+	lsb = ReadMemory(SP_REGISTER);
+	SP_REGISTER = SP_REGISTER + 1; /* increment by 1 because it's BYTE adressable, is it tho? */
+	msb = ReadMemory(SP_REGISTER);
+	SP_REGISTER = SP_REGISTER + 1;
+	addr = (unsigned short)(msb << 8) + (unsigned short)lsb;
+
+	/* If Carry Flag not set, set PC to new address */
+	if ((F_REGISTER | (unsigned char)0xef) == (unsigned char)0xef)
+	{
+		PC_REGISTER = addr;
+	}
+}
+
+/* CALL NC - CALL (CONDITIONAL)
+ * Conditional function call to the absolute address specified by the 16-bit operand, 
+ * depending on the NO-CARRY condition.
+ * Note that the operand (absolute address) is read even when the condition is false!
+ */
+void CALL_NC(void)
+{
+	unsigned char lsb;
+	unsigned char msb;
+	unsigned short addr;
+	unsigned char tmp;
+
+	lsb = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1; /* increment by 1 because it's BYTE adressable, is it tho? */
+	msb = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	addr = (unsigned short)(msb << 8) + (unsigned short)lsb;
+
+	/* If Carry Flag not set, create the Return Address from the current PC, write it to SP, 
+	 * then set the PC to the newly called function */
+	if ((F_REGISTER | (unsigned char)0xef) == (unsigned char)0xef)
+	{
+		SP_REGISTER = SP_REGISTER - 1;
+		tmp = PC_REGISTER >> 8;
+		WriteMemory(SP_REGISTER, tmp);
+		SP_REGISTER = SP_REGISTER - 1; 
+		tmp = PC_REGISTER;
+		WriteMemory(SP_REGISTER, tmp);
+		PC_REGISTER = addr;
+	}
+}
+
+/* RST 0x10 - RESTART / CALL (IMPLIED)
+ * Unconditional function call to the absolute fixed address 0x10.
+ */
+void RESTART_10(void)
+{
+	unsigned short addr;
+	unsigned char tmp;
+
+	/* Create return address from current PC, write it to SP. 
+	 * Then set PC to 0x0010 */
+	SP_REGISTER = SP_REGISTER - 1;
+	tmp = PC_REGISTER >> 8;
+	WriteMemory(SP_REGISTER, tmp);
+	SP_REGISTER = SP_REGISTER - 1; 
+	tmp = PC_REGISTER;
+	WriteMemory(SP_REGISTER, tmp);
+	PC_REGISTER = (unsigned short)0x0010;
+}
+
+/* RET C - RETURN (CONDITIONAL)
+ * Conditional return from a function, depending on the CARRY condition.
+ */
+void RETURN_C(void)
+{
+	unsigned char lsb;
+	unsigned char msb;
+	unsigned short addr;
+
+	/* If Zero Flag set, set PC to new address specified by the Stack Pointer 
+	 * See CALL instruction for how this return Address is stored */
+	if ((F_REGISTER | (unsigned char)0xef) == (unsigned char)0xff)
+	{
+		lsb = ReadMemory(SP_REGISTER);
+		SP_REGISTER = SP_REGISTER + 1; /* increment by 1 because it's BYTE adressable, is it tho? */
+		msb = ReadMemory(SP_REGISTER);
+		SP_REGISTER = SP_REGISTER + 1;
+		addr = (unsigned short)(msb << 8) + (unsigned short)lsb;
+		PC_REGISTER = addr;
+	}
+}
+
+/* RETI - RETURN FROM INTERRUPT HANDLER
+ * Unconditional return from a function. Also enables interrupts by setting IME=1.
+ */
+void RETURN_IME(void)
+{
+	unsigned char lsb;
+	unsigned char msb;
+	unsigned short addr;
+
+	/* Set PC to new address specified by the Stack Pointer 
+	 * See CALL instruction for how this return Address is stored */
+
+	lsb = ReadMemory(SP_REGISTER);
+	SP_REGISTER = SP_REGISTER + 1; /* increment by 1 because it's BYTE adressable, is it tho? */
+	msb = ReadMemory(SP_REGISTER);
+	SP_REGISTER = SP_REGISTER + 1;
+	addr = (unsigned short)(msb << 8) + (unsigned short)lsb;
+	PC_REGISTER = addr;
+	IME_FLAG = 1;
+}
+
+/* JP C - JUMP (CONDITIONAL)
+ * Conditional jump to the absolute address specified by the 16-bit operand, 
+ * depending on the CARRY condition.
+ * Note that the operand (absolute address) is read even when the condition is false!
+ */
+void JUMP_C(void)
+{
+	unsigned char lsb;
+	unsigned char msb;
+	unsigned short addr;
+
+	lsb = ReadMemory(SP_REGISTER);
+	SP_REGISTER = SP_REGISTER + 1; /* increment by 1 because it's BYTE adressable, is it tho? */
+	msb = ReadMemory(SP_REGISTER);
+	SP_REGISTER = SP_REGISTER + 1;
+	addr = (unsigned short)(msb << 8) + (unsigned short)lsb;
+
+	/* If Zero Flag set, set PC to new address */
+	if ((F_REGISTER | (unsigned char)0xef) == (unsigned char)0xff)
+	{
+		PC_REGISTER = addr;
+	}
+}
+
+/* CALL C - CALL (CONDITIONAL)
+ * Conditional function call to the absolute address specified by the 16-bit operand, 
+ * depending on the CARRY condition.
+ * Note that the operand (absolute address) is read even when the condition is false!
+ */
+void CALL_C(void)
+{
+	unsigned char lsb;
+	unsigned char msb;
+	unsigned short addr;
+	unsigned char tmp;
+
+	lsb = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1; /* increment by 1 because it's BYTE adressable, is it tho? */
+	msb = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	addr = (unsigned short)(msb << 8) + (unsigned short)lsb;
+
+	/* If Zero Flag set, create the Return Address from the current PC, write it to SP, 
+	 * then set the PC to the newly called function */
+	if ((F_REGISTER | (unsigned char)0xef) == (unsigned char)0xff)
+	{
+		SP_REGISTER = SP_REGISTER - 1;
+		tmp = PC_REGISTER >> 8;
+		WriteMemory(SP_REGISTER, tmp);
+		SP_REGISTER = SP_REGISTER - 1; 
+		tmp = PC_REGISTER;
+		WriteMemory(SP_REGISTER, tmp);
+		PC_REGISTER = addr;
+	}
+}
+
+/* RST 0x18 - RESTART / CALL (IMPLIED)
+ * Unconditional function call to the absolute fixed address 0x18.
+ */
+void RESTART_18(void)
+{
+	unsigned short addr;
+	unsigned char tmp;
+
+	/* Create return address from current PC, write it to SP. 
+	 * Then set PC to 0x0018 */
+	SP_REGISTER = SP_REGISTER - 1;
+	tmp = PC_REGISTER >> 8;
+	WriteMemory(SP_REGISTER, tmp);
+	SP_REGISTER = SP_REGISTER - 1; 
+	tmp = PC_REGISTER;
+	WriteMemory(SP_REGISTER, tmp);
+	PC_REGISTER = (unsigned short)0x0018;
+}
+
+/* RST 0x20 - RESTART / CALL (IMPLIED)
+ * Unconditional function call to the absolute fixed address 0x20.
+ */
+void RESTART_20(void)
+{
+	unsigned short addr;
+	unsigned char tmp;
+
+	/* Create return address from current PC, write it to SP. 
+	 * Then set PC to 0x0020 */
+	SP_REGISTER = SP_REGISTER - 1;
+	tmp = PC_REGISTER >> 8;
+	WriteMemory(SP_REGISTER, tmp);
+	SP_REGISTER = SP_REGISTER - 1; 
+	tmp = PC_REGISTER;
+	WriteMemory(SP_REGISTER, tmp);
+	PC_REGISTER = (unsigned short)0x0020;
+}
+
+/* JP HL - JUMP TO HL
+ * Unconditional jump to the absolute address specified by the 16-bit register HL.
+ */
+void JUMP_HL(void)
+{
+	unsigned short addr;
+	addr = (unsigned short)(H_REGISTER << 8) + (unsigned short)L_REGISTER;
+	PC_REGISTER = addr;
+}
+
+/* RST 0x28 - RESTART / CALL (IMPLIED)
+ * Unconditional function call to the absolute fixed address 0x28.
+ */
+void RESTART_28(void)
+{
+	unsigned short addr;
+	unsigned char tmp;
+
+	/* Create return address from current PC, write it to SP. 
+	 * Then set PC to 0x0028 */
+	SP_REGISTER = SP_REGISTER - 1;
+	tmp = PC_REGISTER >> 8;
+	WriteMemory(SP_REGISTER, tmp);
+	SP_REGISTER = SP_REGISTER - 1; 
+	tmp = PC_REGISTER;
+	WriteMemory(SP_REGISTER, tmp);
+	PC_REGISTER = (unsigned short)0x0028;
+}
+
+/* RST 0x30 - RESTART / CALL (IMPLIED)
+ * Unconditional function call to the absolute fixed address 0x30.
+ */
+void RESTART_30(void)
+{
+	unsigned short addr;
+	unsigned char tmp;
+
+	/* Create return address from current PC, write it to SP. 
+	 * Then set PC to 0x0030 */
+	SP_REGISTER = SP_REGISTER - 1;
+	tmp = PC_REGISTER >> 8;
+	WriteMemory(SP_REGISTER, tmp);
+	SP_REGISTER = SP_REGISTER - 1; 
+	tmp = PC_REGISTER;
+	WriteMemory(SP_REGISTER, tmp);
+	PC_REGISTER = (unsigned short)0x0030;
+}
+
+/* RST 0x38 - RESTART / CALL (IMPLIED)
+ * Unconditional function call to the absolute fixed address 0x38.
+ */
+void RESTART_38(void)
+{
+	unsigned short addr;
+	unsigned char tmp;
+
+	/* Create return address from current PC, write it to SP. 
+	 * Then set PC to 0x0038 */
+	SP_REGISTER = SP_REGISTER - 1;
+	tmp = PC_REGISTER >> 8;
+	WriteMemory(SP_REGISTER, tmp);
+	SP_REGISTER = SP_REGISTER - 1; 
+	tmp = PC_REGISTER;
+	WriteMemory(SP_REGISTER, tmp);
+	PC_REGISTER = (unsigned short)0x0038;
+}
 
