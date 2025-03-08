@@ -1,5 +1,10 @@
 /*  GB CONTROL FLOW INSTRUCTIONS 
  *
+ *  0x18 JR e 					- JUMP RELATIVE
+ *  0x20 JR NZ, e				- JUMP RELATIVE (CONDITIONAL)
+ *  0x28 JR Z, e 				- JUMP RELATIVE (CONDITIONAL)
+ *  0x30 JR NC, e				- JUMP RELATIVE (CONDITIONAL)
+ *  0x38 JR C, e 				- JUMP RELATIVE (CONDITIONAL)
  *  0xc0 RET NZ 				- RETURN (CONDITIONAL)
  *  0xc2 JP NZ, nn				- JUMP (CONDITIONAL)
  *  0xc3 JP nn					- JUMP
@@ -26,6 +31,92 @@
  *  0xf7 RST 0x30 				- RESTART / CALL FUNCTION (IMPLIED)
  *  0xff RST 0x38 				- RESTART / CALL FUNCTION (IMPLIED)
  */
+
+/* JR e - JUMP RELATIVE
+ * Unconditional jump to the relative address specified by the signed 8-bit operand e
+ */
+void JUMPR(void)
+{
+	signed char e;
+
+	e = (signed char)ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	PC_REGISTER = PC_REGISTER + e;
+	/* 50% sure this handles overflow correctly, debug this to be sure */
+}
+
+/* JR NZ, e - JUMP RELATIVE (CONDITIONAL)
+ * Unconditional jump to the relative address specified by the signed 8-bit operand e,
+ * depending on the NON-ZERO condition.
+ */
+void JUMPR_NZ(void)
+{
+	signed char e;
+
+	e = (signed char)ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	/* If the Zero flag not set, add e to the PC */
+	if ((F_REGISTER | (unsigned char)0x7f) == (unsigned char)0x7f)
+	{
+		PC_REGISTER = PC_REGISTER + e;
+		/* 50% sure this handles overflow correctly, debug this to be sure */
+	}
+}
+
+/* JR Z, e - JUMP RELATIVE (CONDITIONAL)
+ * Unconditional jump to the relative address specified by the signed 8-bit operand e,
+ * depending on the ZERO condition.
+ */
+void JUMPR_Z(void)
+{
+	signed char e;
+
+	e = (signed char)ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	/* If the Zero flag set, add e to the PC */
+	if ((F_REGISTER | (unsigned char)0x7f) == (unsigned char)0xff)
+	{
+		PC_REGISTER = PC_REGISTER + e;
+		/* 50% sure this handles overflow correctly, debug this to be sure */
+	}
+}
+
+/* JR NC, e - JUMP RELATIVE (CONDITIONAL)
+ * Unconditional jump to the relative address specified by the signed 8-bit operand e,
+ * depending on the NO-CARRY condition.
+ */
+void JUMPR_NC(void)
+{
+	signed char e;
+
+	e = (signed char)ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	/* If the Carry flag not set, add e to the PC */
+	if ((F_REGISTER | (unsigned char)0xef) == (unsigned char)0xef)
+	{
+		PC_REGISTER = PC_REGISTER + e;
+		/* 50% sure this handles overflow correctly, debug this to be sure */
+	}
+}
+
+/* JR C, e - JUMP RELATIVE (CONDITIONAL)
+ * Unconditional jump to the relative address specified by the signed 8-bit operand e,
+ * depending on the CARRY condition.
+ */
+void JUMPR_C(void)
+{
+	signed char e;
+
+	e = (signed char)ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	/* If the Carry flag set, add e to the PC */
+	if ((F_REGISTER | (unsigned char)0xef) == (unsigned char)0xff)
+	{
+		PC_REGISTER = PC_REGISTER + e;
+		/* 50% sure this handles overflow correctly, debug this to be sure */
+	}
+}
+
 
 /* RET NZ - RETURN (CONDITIONAL)
  * Conditional return from a function, depending on the NON-ZERO condition.

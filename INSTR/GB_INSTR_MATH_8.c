@@ -16,7 +16,6 @@
  * 	0x8d ADC L 				- ADD WITH CARRY (REGISTER)
  * 	0x8e ADC (HL) 			- ADD WITH CARRY (INDIRECT HL)
  * 	0x8f ADC A 				- ADD WITH CARRY (REGISTER)
- * 
  *  0x90 SUB B 				- SUB (REGISTER)
  * 	0x91 SUB C 				- SUB (REGISTER)
  * 	0x92 SUB D 				- SUB (REGISTER)
