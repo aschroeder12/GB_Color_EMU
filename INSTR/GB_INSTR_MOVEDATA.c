@@ -57,7 +57,6 @@
  *  0x73 LD HL, E 			- LOAD FROM REGISTER (INDIRECT HL)
  *  0x74 LD HL, H 			- LOAD FROM REGISTER (INDIRECT HL)
  *  0x75 LD HL, L 			- LOAD FROM REGISTER (INDIRECT HL)
- *  0x76 HALT				- HALT SYSTEM CLOCK, look at gbdev.io
  *  0x77 LD HL, A 			- LOAD FROM REGISTER (INDIRECT HL)
  *  0x78 LD A, B 			- LOAD REGISTER (REGISTER)
  *  0x79 LD A, C 			- LOAD REGISTER (REGISTER)
@@ -492,54 +491,6 @@ void LOAD_REGISTER_HL_H()
 void LOAD_REGISTER_HL_L()
 {
 	WriteMemory(HL_REGISTER, L_REGISTER);
-}
-/** HALT
- * Enter CPU low-power consumption mode until an interrupt occurs. 
- * The exact behavior of this instruction depends on the state of the IME flag.
- * 
- * IME set
- * 	- The CPU enters low-power mode until after an interrupt is about to be serviced. 
- * 	- The handler is executed normally, and the CPU resumes execution after the HALT when that returns.
- * 
- * IME not set
- * 	- The behavior depends on whether an interrupt is pending (i.e. ‘[IE] & [IF]’ is non-zero).
- * 		- None pending
- * 			As soon as an interrupt becomes pending, the CPU resumes execution. This is like the above, except that the handler is not called.
- * 		- Some pending
- * 			The CPU continues execution after the HALT, but the byte after it is read twice in a row (PC is not incremented, due to a hardware bug).
- * 
- */
-void HALT()
-{
-	/*TODO*/
-	/* If IME is set */
-	if (IME_FLAG != 0)
-	{
-		while (IE_REGISTER & Interrupt_FLAG == 0)
-		{
-			/* Spin baby spin until there is a pending interrupt*/
-			/* Call an "check for interrupts" function so we aren't stuck in an infinite loop?*/
-		}
-
-		/* Call interrupt handler */
-	}
-	else /* IME not set */
-	{
-		/* If no interrupt pending */
-		if (IE_REGISTER & Interrupt_FLAG == 0)
-		{
-			while (IE_REGISTER & Interrupt_FLAG == 0)
-			{
-				/* Spin baby spin until there is a pending interrupt*/
-				/* Call an "check for interrupts" function so we aren't stuck in an infinite loop?*/
-			}
-			/* Exit without calling an interrupt handler */
-		}
-		else /* there is an interrupt pending */
-		{
-			/* immediately exit, but due to halt bug the PC fails to be normally incremented */
-		}
-	}
 }
 /** LD HL, A - LOAD REGISTER (REGISTER)
  * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register A

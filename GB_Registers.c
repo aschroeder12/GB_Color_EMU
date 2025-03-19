@@ -42,4 +42,4 @@ unsigned char L_REGISTER;
 unsigned char IR_REGISTER;
 unsigned char IE_REGISTER;
 unsigned char IME_FLAG;
-unsigned char Interrupt_FLAG;
+unsigned char INTERRUPT_FLAG;

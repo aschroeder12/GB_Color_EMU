@@ -48,5 +48,14 @@ extern unsigned char E_REGISTER;
 extern unsigned char H_REGISTER;
 extern unsigned char L_REGISTER;
 extern unsigned char IR_REGISTER;
-extern unsigned char IE_REGISTER;
 extern unsigned char IME_FLAG;
+/******** IE / IF BITS *************************************************************
+ * BIT 		NAME		DESCRIPTION	
+ * 4		Joypad		Controls whether Joypad Interrupt Handler is being requested
+ * 3 		Serial		"" Serial Interrupt Handler
+ * 2 		Timer		"" Timer
+ * 1		LCD			"" LCD
+ * 0 		VBlank		"" VBlank
+ ************************************************************************************/
+extern unsigned char IE_REGISTER;
+extern unsigned char INTERRUPT_FLAG;
