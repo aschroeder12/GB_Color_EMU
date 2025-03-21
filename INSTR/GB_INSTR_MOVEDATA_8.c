@@ -1,5 +1,22 @@
 /*  GB MOVE DATA INSTRUCTIONS 
  *
+ *  0x02 LD BC, A 			- LOAD FROM ACCUMULATOR (INDIRECT BC)
+ *  0x06 LD B, n 			- LOAD REGISTER (IMMEDIATE)
+ *  0x0a LD A, (BC) 		- LOAD ACCUMULATOR (INDIRECT BC)
+ *  0x0e LD C, n 			- LOAD REGISTER (IMMEDIATE)
+ *  0x12 LD DE, A 			- LOAD FROM ACCUMULATOR (INDIRECT DE)
+ *  0x16 LD D, n 			- LOAD REGISTER (IMMEDIATE)
+ *  0x1a LD A, (DE) 		- LOAD ACCUMULATOR (INDIRECT DE)
+ *  0x1e LD E, n 			- LOAD REGISTER (IMMEDIATE)
+ *  0x22 LD HL+, A 			- LOAD FROM ACCUMULATOR (INDIRECT HL, INCREMENT)
+ *  0x26 LD H, n 			- LOAD REGISTER (IMMEDIATE)
+ *  0x2a LD A, (HL+) 		- LOAD ACCUMULATOR (INDIRECT HL, INCREMENT)
+ *  0x2e LD L, n 			- LOAD REGISTER (IMMEDIATE)
+ *  0x32 LD HL-, A 			- LOAD FROM ACCUMULATOR (INDIRECT HL, DECREMENT)
+ *  0x36 LD (HL), n 		- LOAD REGISTER (IMMEDIATE)
+ *  0x3a LD A, (HL-) 		- LOAD ACCUMULATOR (INDIRECT HL, DECREMENT)
+ *  0x3e LD A, n 			- LOAD REGISTER (IMMEDIATE)
+
  *  0x40 LD B, B 			- LOAD REGISTER (REGISTER)
  *  0x41 LD B, C 			- LOAD REGISTER (REGISTER)
  *  0x42 LD B, D 			- LOAD REGISTER (REGISTER)
@@ -73,50 +90,216 @@
 
 #include"GB_Registers.h"
 
+/* LD BC, A - LOAD FROM ACCUMULATOR (INDIRECT BC)
+ * Load to the absolute address specified by the 16-bit register BC, data from the 8-bit A register
+ */
+void LOAD_REGISTER_BC_A(void)
+{
+	ADDRESS_BUS = (unsigned short)(B_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | C_REGISTER;
+	WriteMemory(ADDRESS_BUS, A_REGISTER);
+}
+
+/* LD B, n - LOAD REGISTER (IMMEDIATE)
+ * Load to the 8-bit register B, the immediate data n.
+ */
+void LOAD_REGISTER_B_N(void)
+{
+	B_REGISTER = ReadMemory(PC_REGISTER);
+}
+
+/* LD A, (BC) - LOAD ACCUMULATOR (INDIRECT BC)
+ * Load to the 8-bit A register, data from the absolute address specified by the 16-bit register BC
+ */
+void LOAD_REGISTER_A_BC(void)
+{
+	ADDRESS_BUS = (unsigned short)(B_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | C_REGISTER;
+	A_REGISTER = ReadMemory(ADDRESS_BUS);
+}
+
+/* LD C, n - LOAD REGISTER (IMMEDIATE)
+ * Load to the 8-bit register C, the immediate data n.
+ */
+void LOAD_REGISTER_C_N(void)
+{
+	C_REGISTER = ReadMemory(PC_REGISTER);
+}
+
+/* LD DE, A - LOAD FROM ACCUMULATOR (INDIRECT DE)
+ * Load to the absolute address specified by the 16-bit register DE, data from the 8-bit A register
+ */
+void LOAD_REGISTER_DE_A(void)
+{
+	ADDRESS_BUS = (unsigned short)(D_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | E_REGISTER;
+	WriteMemory(ADDRESS_BUS, A_REGISTER);
+}
+
+/* LD D, n - LOAD REGISTER (IMMEDIATE)
+ * Load to the 8-bit register D, the immediate data n.
+ */
+void LOAD_REGISTER_B_N(void)
+{
+	D_REGISTER = ReadMemory(PC_REGISTER);
+}
+
+/* LD A, (DE) - LOAD ACCUMULATOR (INDIRECT DE)
+ * Load to the 8-bit A register, data from the absolute address specified by the 16-bit register DE
+ */
+void LOAD_REGISTER_A_DE(void)
+{
+	ADDRESS_BUS = (unsigned short)(D_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | E_REGISTER;
+	A_REGISTER = ReadMemory(ADDRESS_BUS);
+}
+
+/* LD E, n - LOAD REGISTER (IMMEDIATE)
+ * Load to the 8-bit register E, the immediate data n.
+ */
+void LOAD_REGISTER_E_N(void)
+{
+	E_REGISTER = ReadMemory(PC_REGISTER);
+}
+
+/* LD HL+, A - LOAD FROM ACCUMULATOR (INDIRECT HL, INCREMENT)
+ * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit A register.
+ * The value of HL is incremented after the memory write
+ */
+void LOAD_REGISTER_HLI_A(void)
+{
+	unsigned short addr;
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS, addr = ADDRESS_BUS | L_REGISTER;
+	WriteMemory(ADDRESS_BUS, A_REGISTER);
+	addr = addr + 1;
+	H_REGISTER = addr >> 8;
+	L_REGISTER = addr;
+}
+
+/* LD H, n - LOAD REGISTER (IMMEDIATE)
+ * Load to the 8-bit register H, the immediate data n.
+ */
+void LOAD_REGISTER_H_N(void)
+{
+	H_REGISTER = ReadMemory(PC_REGISTER);
+}
+
+/* LD A, (HL+) - LOAD ACCUMULATOR (INDIRECT HL, INCREMENT)
+ * Load to the 8-bit A register, data from the absolute address specified by the 16-bit register HL.
+ * The value of HL is incremented after the memory read.
+ */
+void LOAD_REGISTER_A_HLI(void)
+{
+	unsigned short addr;
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS, addr = ADDRESS_BUS | L_REGISTER;
+	A_REGISTER = ReadMemory(ADDRESS_BUS);
+	addr = addr + 1;
+	H_REGISTER = addr >> 8;
+	L_REGISTER = addr;
+}
+
+/* LD L, n - LOAD REGISTER (IMMEDIATE)
+ * Load to the 8-bit register L, the immediate data n.
+ */
+void LOAD_REGISTER_L_N(void)
+{
+	L_REGISTER = ReadMemory(PC_REGISTER);
+}
+
+/* LD HL-, A - LOAD FROM ACCUMULATOR (INDIRECT HL, DECREMENT)
+ * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit A register.
+ * The value of HL is decremented after the memory write
+ */
+void LOAD_REGISTER_HLD_A(void)
+{
+	unsigned short addr;
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS, addr = ADDRESS_BUS | L_REGISTER;
+	WriteMemory(ADDRESS_BUS, A_REGISTER);
+	addr = addr - 1;
+	H_REGISTER = addr >> 8;
+	L_REGISTER = addr;
+}
+
+/* LD (HL), n - LOAD REGISTER (IMMEDIATE)
+ * Load to the absolute address specified by the 16-bit register HL, the immediate data n
+ */
+void LOAD_REGISTER_HL_N(void)
+{
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS, addr = ADDRESS_BUS | L_REGISTER;
+	WriteMemory(ADDRESS_BUS, ReadMemory(PC_REGISTER));
+}
+
+/* LD A, (HL-) - LOAD ACCUMULATOR (INDIRECT HL, DECREMENT)
+ * Load to the 8-bit A register, data from the absolute address specified by the 16-bit register HL.
+ * The value of HL is decremented after the memory read.
+ */
+void LOAD_REGISTER_A_HLD(void)
+{
+	unsigned short addr;
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS, addr = ADDRESS_BUS | L_REGISTER;
+	A_REGISTER = ReadMemory(ADDRESS_BUS);
+	addr = addr - 1;
+	H_REGISTER = addr >> 8;
+	L_REGISTER = addr;
+}
+
+/* LD A, n - LOAD REGISTER (IMMEDIATE)
+ * Load to the 8-bit register A, the immediate data n.
+ */
+void LOAD_REGISTER_A_N(void)
+{
+	A_REGISTER = ReadMemory(PC_REGISTER);
+}
+
 /*************************************************************************************************** 0x40 **/
-/** LD B, B - LOAD REGISTER (REGISTER)
+/* LD B, B - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register B, data from the 8-bit register B. Why?
  */
 void LOAD_REGISTER_B_B()
 {
 	B_REGISTER = B_REGISTER;
 }
-/** LD B, C - LOAD REGISTER (REGISTER)
+/* LD B, C - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register B, data from the 8-bit register C. 
  */
 void LOAD_REGISTER_B_C()
 {
 	B_REGISTER = C_REGISTER;
 }
-/** LD B, D - LOAD REGISTER (REGISTER)
+/* LD B, D - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register B, data from the 8-bit register D. 
  */
 void LOAD_REGISTER_B_D()
 {
 	B_REGISTER = D_REGISTER;
 }
-/** LD B, E - LOAD REGISTER (REGISTER)
+/* LD B, E - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register B, data from the 8-bit register E. 
  */
 void LOAD_REGISTER_B_E()
 {
 	B_REGISTER = E_REGISTER;
 }
-/** LD B, H - LOAD REGISTER (REGISTER)
+/* LD B, H - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register B, data from the 8-bit register H
  */
 void LOAD_REGISTER_B_H()
 {
 	B_REGISTER = H_REGISTER;
 }
-/** LD B, L - LOAD REGISTER (REGISTER)
+/* LD B, L - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register B, data from the 8-bit register L
  */
 void LOAD_REGISTER_B_L()
 {
 	B_REGISTER = L_REGISTER;
 }
-/** LD B, HL - LOAD REGISTER (INDIRECT HL)
+/* LD B, HL - LOAD REGISTER (INDIRECT HL)
  * Load to the 8-bit register B, data from the absolute address
  * specified by the 16-bit register HL
  */
@@ -128,56 +311,56 @@ void LOAD_REGISTER_B_HL()
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 	B_REGISTER = DATA_BUS;
 }
-/** LD B, A - LOAD REGISTER (REGISTER)
+/* LD B, A - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register B, data from the 8-bit register A
  */
 void LOAD_REGISTER_B_A()
 {
 	B_REGISTER = A_REGISTER;
 }
-/** LD C, B - LOAD REGISTER (REGISTER)
+/* LD C, B - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register C, data from the 8-bit register B.
  */
 void LOAD_REGISTER_C_B()
 {
 	C_REGISTER = B_REGISTER;
 }
-/** LD C, C - LOAD REGISTER (REGISTER)
+/* LD C, C - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register C, data from the 8-bit register C. Why? 
  */
 void LOAD_REGISTER_C_C()
 {
 	C_REGISTER = C_REGISTER;
 }
-/** LD C, D - LOAD REGISTER (REGISTER)
+/* LD C, D - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register C, data from the 8-bit register D. 
  */
 void LOAD_REGISTER_C_D()
 {
 	C_REGISTER = D_REGISTER;
 }
-/** LD C, E - LOAD REGISTER (REGISTER)
+/* LD C, E - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register C, data from the 8-bit register E. 
  */
 void LOAD_REGISTER_C_E()
 {
 	C_REGISTER = E_REGISTER;
 }
-/** LD C, H - LOAD REGISTER (REGISTER)
+/* LD C, H - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register C, data from the 8-bit register H
  */
 void LOAD_REGISTER_C_H()
 {
 	C_REGISTER = H_REGISTER;
 }
-/** LD C, L - LOAD REGISTER (REGISTER)
+/* LD C, L - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register C, data from the 8-bit register L
  */
 void LOAD_REGISTER_C_L()
 {
 	C_REGISTER = L_REGISTER;
 }
-/** LD C, HL - LOAD REGISTER (INDIRECT HL)
+/* LD C, HL - LOAD REGISTER (INDIRECT HL)
  * Load to the 8-bit register C, data from the absolute address
  * specified by the 16-bit register HL
  */
@@ -189,7 +372,7 @@ void LOAD_REGISTER_C_HL()
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 	C_REGISTER = DATA_BUS;
 }
-/** LD C, A - LOAD REGISTER (REGISTER)
+/* LD C, A - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register C, data from the 8-bit register A
  */
 void LOAD_REGISTER_C_A()
@@ -198,50 +381,50 @@ void LOAD_REGISTER_C_A()
 }
 
 
-/*************************************************************************************************** 0x50 **/
-/** LD D, B - LOAD REGISTER (REGISTER)
+/************************************************************************************************** 0x50 **/
+/* LD D, B - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register D, data from the 8-bit register B.
  */
 void LOAD_REGISTER_D_B()
 {
 	D_REGISTER = B_REGISTER;
 }
-/** LD D, C - LOAD REGISTER (REGISTER)
+/* LD D, C - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register D, data from the 8-bit register C. 
  */
 void LOAD_REGISTER_D_C()
 {
 	D_REGISTER = C_REGISTER;
 }
-/** LD D, D - LOAD REGISTER (REGISTER)
+/* LD D, D - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register D, data from the 8-bit register D. 
  */
 void LOAD_REGISTER_D_D()
 {
 	D_REGISTER = D_REGISTER;
 }
-/** LD D, E - LOAD REGISTER (REGISTER)
+/* LD D, E - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register D, data from the 8-bit register E. 
  */
 void LOAD_REGISTER_D_E()
 {
 	D_REGISTER = E_REGISTER;
 }
-/** LD D, H - LOAD REGISTER (REGISTER)
+/* LD D, H - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register D, data from the 8-bit register H
  */
 void LOAD_REGISTER_D_H()
 {
 	D_REGISTER = H_REGISTER;
 }
-/** LD D, L - LOAD REGISTER (REGISTER)
+/* LD D, L - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register D, data from the 8-bit register L
  */
 void LOAD_REGISTER_D_L()
 {
 	D_REGISTER = L_REGISTER;
 }
-/** LD D, HL - LOAD REGISTER (INDIRECT HL)
+/* LD D, HL - LOAD REGISTER (INDIRECT HL)
  * Load to the 8-bit register D, data from the absolute address
  * specified by the 16-bit register HL
  */
@@ -253,56 +436,56 @@ void LOAD_REGISTER_D_HL()
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 	D_REGISTER = DATA_BUS;
 }
-/** LD D, A - LOAD REGISTER (REGISTER)
+/* LD D, A - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register D, data from the 8-bit register A
  */
 void LOAD_REGISTER_D_A()
 {
 	D_REGISTER = A_REGISTER;
 }
-/** LD E, B - LOAD REGISTER (REGISTER)
+/* LD E, B - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register E, data from the 8-bit register B.
  */
 void LOAD_REGISTER_E_B()
 {
 	E_REGISTER = B_REGISTER;
 }
-/** LD E, C - LOAD REGISTER (REGISTER)
+/* LD E, C - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register E, data from the 8-bit register C.
  */
 void LOAD_REGISTER_E_C()
 {
 	E_REGISTER = C_REGISTER;
 }
-/** LD E, D - LOAD REGISTER (REGISTER)
+/* LD E, D - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register E, data from the 8-bit register D. 
  */
 void LOAD_REGISTER_E_D()
 {
 	E_REGISTER = D_REGISTER;
 }
-/** LD E, E - LOAD REGISTER (REGISTER)
+/* LD E, E - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register E, data from the 8-bit register E. 
  */
 void LOAD_REGISTER_E_E()
 {
 	E_REGISTER = E_REGISTER;
 }
-/** LD E, H - LOAD REGISTER (REGISTER)
+/* LD E, H - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register E, data from the 8-bit register H
  */
 void LOAD_REGISTER_E_H()
 {
 	E_REGISTER = H_REGISTER;
 }
-/** LD E, L - LOAD REGISTER (REGISTER)
+/* LD E, L - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register E, data from the 8-bit register L
  */
 void LOAD_REGISTER_E_L()
 {
 	E_REGISTER = L_REGISTER;
 }
-/** LD E, HL - LOAD REGISTER (INDIRECT HL)
+/* LD E, HL - LOAD REGISTER (INDIRECT HL)
  * Load to the 8-bit register E, data from the absolute address
  * specified by the 16-bit register HL
  */
@@ -314,7 +497,7 @@ void LOAD_REGISTER_E_HL()
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 	E_REGISTER = DATA_BUS;
 }
-/** LD E, A - LOAD REGISTER (REGISTER)
+/* LD E, A - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register E, data from the 8-bit register A
  */
 void LOAD_REGISTER_E_A()
@@ -325,49 +508,49 @@ void LOAD_REGISTER_E_A()
 
 
 /*************************************************************************************************** 0x60 **/
-/** LD H, B - LOAD REGISTER (REGISTER)
+/* LD H, B - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register H, data from the 8-bit register B.
  */
 void LOAD_REGISTER_H_B()
 {
 	H_REGISTER = B_REGISTER;
 }
-/** LD H, C - LOAD REGISTER (REGISTER)
+/* LD H, C - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register H, data from the 8-bit register C. 
  */
 void LOAD_REGISTER_H_C()
 {
 	H_REGISTER = C_REGISTER;
 }
-/** LD H, D - LOAD REGISTER (REGISTER)
+/* LD H, D - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register H, data from the 8-bit register D. 
  */
 void LOAD_REGISTER_H_D()
 {
 	H_REGISTER = D_REGISTER;
 }
-/** LD H, E - LOAD REGISTER (REGISTER)
+/* LD H, E - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register H, data from the 8-bit register E. 
  */
 void LOAD_REGISTER_H_E()
 {
 	H_REGISTER = E_REGISTER;
 }
-/** LD H, H - LOAD REGISTER (REGISTER)
+/* LD H, H - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register H, data from the 8-bit register H
  */
 void LOAD_REGISTER_H_H()
 {
 	H_REGISTER = H_REGISTER;
 }
-/** LD H, L - LOAD REGISTER (REGISTER)
+/* LD H, L - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register H, data from the 8-bit register L
  */
 void LOAD_REGISTER_H_L()
 {
 	H_REGISTER = L_REGISTER;
 }
-/** LD H, HL - LOAD REGISTER (INDIRECT HL)
+/* LD H, HL - LOAD REGISTER (INDIRECT HL)
  * Load to the 8-bit register H, data from the absolute address
  * specified by the 16-bit register HL
  */
@@ -379,56 +562,56 @@ void LOAD_REGISTER_H_HL()
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 	H_REGISTER = DATA_BUS;
 }
-/** LD H, A - LOAD REGISTER (REGISTER)
+/* LD H, A - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register H, data from the 8-bit register A
  */
 void LOAD_REGISTER_H_A()
 {
 	H_REGISTER = A_REGISTER;
 }
-/** LD L, B - LOAD REGISTER (REGISTER)
+/* LD L, B - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register L, data from the 8-bit register B.
  */
 void LOAD_REGISTER_L_B()
 {
 	L_REGISTER = B_REGISTER;
 }
-/** LD L, C - LOAD REGISTER (REGISTER)
+/* LD L, C - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register L, data from the 8-bit register C.
  */
 void LOAD_REGISTER_L_C()
 {
 	L_REGISTER = C_REGISTER;
 }
-/** LD L, D - LOAD REGISTER (REGISTER)
+/* LD L, D - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register L, data from the 8-bit register D. 
  */
 void LOAD_REGISTER_L_D()
 {
 	L_REGISTER = D_REGISTER;
 }
-/** LD L, E - LOAD REGISTER (REGISTER)
+/* LD L, E - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register L, data from the 8-bit register E. 
  */
 void LOAD_REGISTER_L_E()
 {
 	L_REGISTER = E_REGISTER;
 }
-/** LD L, H - LOAD REGISTER (REGISTER)
+/* LD L, H - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register L, data from the 8-bit register H
  */
 void LOAD_REGISTER_L_H()
 {
 	L_REGISTER = H_REGISTER;
 }
-/** LD L, L - LOAD REGISTER (REGISTER)
+/* LD L, L - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register L, data from the 8-bit register L
  */
 void LOAD_REGISTER_L_L()
 {
 	L_REGISTER = L_REGISTER;
 }
-/** LD L, HL - LOAD REGISTER (INDIRECT HL)
+/* LD L, HL - LOAD REGISTER (INDIRECT HL)
  * Load to the 8-bit register L, data from the absolute address
  * specified by the 16-bit register HL
  */
@@ -440,7 +623,7 @@ void LOAD_REGISTER_L_HL()
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 	L_REGISTER = DATA_BUS;
 }
-/** LD L, A - LOAD REGISTER (REGISTER)
+/* LD L, A - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register L, data from the 8-bit register A
  */
 void LOAD_REGISTER_L_A()
@@ -449,99 +632,112 @@ void LOAD_REGISTER_L_A()
 }
 
 /*************************************************************************************************** 0x70 **/
-/** LD HL, B - LOAD REGISTER (REGISTER)
+/* LD HL, B - LOAD REGISTER (REGISTER)
  * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register B.
  */
 void LOAD_REGISTER_HL_B()
 {
-
-	WriteMemory(HL_REGISTER, B_REGISTER);
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
+	WriteMemory(ADDRESS_BUS, B_REGISTER);
 }
-/** LD HL, C - LOAD REGISTER (REGISTER)
+/* LD HL, C - LOAD REGISTER (REGISTER)
  * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register C. 
  */
 void LOAD_REGISTER_HL_C()
 {
-	WriteMemory(HL_REGISTER, C_REGISTER);
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
+	WriteMemory(ADDRESS_BUS, C_REGISTER);
 }
-/** LD HL, D - LOAD REGISTER (REGISTER)
+/* LD HL, D - LOAD REGISTER (REGISTER)
  * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register D. 
  */
 void LOAD_REGISTER_HL_D()
 {
-	WriteMemory(HL_REGISTER, D_REGISTER);
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
+	WriteMemory(ADDRESS_BUS, D_REGISTER);
 }
-/** LD HL, E - LOAD REGISTER (REGISTER)
+/* LD HL, E - LOAD REGISTER (REGISTER)
  * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register E. 
  */
 void LOAD_REGISTER_HL_E()
 {
-	WriteMemory(HL_REGISTER, E_REGISTER);
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
+	WriteMemory(ADDRESS_BUS, E_REGISTER);
 }
-/** LD HL, H - LOAD REGISTER (REGISTER)
+/* LD HL, H - LOAD REGISTER (REGISTER)
  * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register H
  */
 void LOAD_REGISTER_HL_H()
 {
-	WriteMemory(HL_REGISTER, H_REGISTER);
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
+	WriteMemory(ADDRESS_BUS, H_REGISTER);
 }
-/** LD HL, L - LOAD REGISTER (REGISTER)
+/* LD HL, L - LOAD REGISTER (REGISTER)
  * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register L
  */
 void LOAD_REGISTER_HL_L()
 {
-	WriteMemory(HL_REGISTER, L_REGISTER);
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
+	WriteMemory(ADDRESS_BUS, L_REGISTER);
 }
-/** LD HL, A - LOAD REGISTER (REGISTER)
+/* LD HL, A - LOAD REGISTER (REGISTER)
  * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register A
  */
 void LOAD_REGISTER_HL_A()
 {
-	WriteMemory(HL_REGISTER, A_REGISTER);
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
+	WriteMemory(ADDRESS_BUS, A_REGISTER);
 }
-/** LD A, B - LOAD REGISTER (REGISTER)
+/* LD A, B - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register A, data from the 8-bit register B.
  */
 void LOAD_REGISTER_A_B()
 {
 	A_REGISTER = B_REGISTER;
 }
-/** LD A, C - LOAD REGISTER (REGISTER)
+/* LD A, C - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register A, data from the 8-bit register C.
  */
 void LOAD_REGISTER_A_C()
 {
 	A_REGISTER = C_REGISTER;
 }
-/** LD A, D - LOAD REGISTER (REGISTER)
+/* LD A, D - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register A, data from the 8-bit register D. 
  */
 void LOAD_REGISTER_A_D()
 {
 	A_REGISTER = D_REGISTER;
 }
-/** LD A, E - LOAD REGISTER (REGISTER)
+/* LD A, E - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register A, data from the 8-bit register E. 
  */
 void LOAD_REGISTER_A_E()
 {
 	A_REGISTER = E_REGISTER;
 }
-/** LD A, H - LOAD REGISTER (REGISTER)
+/* LD A, H - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register A, data from the 8-bit register H
  */
 void LOAD_REGISTER_A_H()
 {
 	A_REGISTER = H_REGISTER;
 }
-/** LD A, L - LOAD REGISTER (REGISTER)
+/* LD A, L - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register A, data from the 8-bit register L
  */
 void LOAD_REGISTER_A_L()
 {
 	A_REGISTER = L_REGISTER;
 }
-/** LD A, HL - LOAD REGISTER (INDIRECT HL)
+/* LD A, HL - LOAD REGISTER (INDIRECT HL)
  * Load to the 8-bit register A, data from the absolute address
  * specified by the 16-bit register HL
  */
@@ -553,7 +749,7 @@ void LOAD_REGISTER_A_HL()
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 	A_REGISTER = DATA_BUS;
 }
-/** LD A, A - LOAD REGISTER (REGISTER)
+/* LD A, A - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register A, data from the 8-bit register A
  */
 void LOAD_REGISTER_A_A()
