@@ -1,4 +1,4 @@
-/*  GB MATH INSTRUCTIONS 	
+/*  GB MATH INSTRUCTIONS TODO
  *
  *  0x04 INC B 				- INCREMENT (REGISTER)
  *  0x05 DEC B 				- DECREMENT (REGISTER)
@@ -20,6 +20,7 @@
  *  0x3c INC A 				- INCREMENT (REGISTER)
  *  0x3d DEC A 				- DECREMENT (REGISTER)
  *  0x3f CCF				- COMPLIMENT CARRY FLAG
+ I'm missing some of the above instructions, so don't trust the excel
 
  *  0x80 ADD B 				- ADD (REGISTER)
  * 	0x81 ADD C 				- ADD (REGISTER)
@@ -358,6 +359,7 @@ void DEC_H()
 /* DAA - DECIMAL ADJUST ACCUMULATOR
  * Designed to be used after performing an arithmetic instruction (ADD, ADC, SUB, SBC) 
  * whose inputs were in Binary-Coded Decimal (BCD), adjusting the result to likewise be in BCD.
+ TODO
  */
 void DAA()
 {

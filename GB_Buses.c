@@ -17,7 +17,5 @@
  * 
  ******************************************/
 
-
-
 unsigned short ADDRESS_BUS;
 unsigned char DATA_BUS;

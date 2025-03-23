@@ -1,4 +1,4 @@
-/*  GB MOVE DATA INSTRUCTIONS 
+/*  GB MOVE DATA INSTRUCTIONS DONE!!!
  *
  *  0x02 LD BC, A 			- LOAD FROM ACCUMULATOR (INDIRECT BC)
  *  0x06 LD B, n 			- LOAD REGISTER (IMMEDIATE)
@@ -84,8 +84,12 @@
  *  0x7e LD A, (HL) 		- LOAD REGISTER (INDIRECT HL)
  *  0x7f LD A, A 			- LOAD REGISTER (REGISTER)
  * 
- 
- * 
+ *  0xe0 LDH (n), A 		- LOAD FROM ACCUMLATOR (DIRECT)
+ *  0xe2 LDH (C), A 		- LOAD FROM ACCUMLATOR (INDIRECT)
+ *  0xea LDH (nn), A 		- LOAD FROM ACCUMLATOR (DIRECT)
+ *  0xf0 LDH A, (n) 		- LOAD ACCUMLATOR (DIRECT)
+ *  0xf2 LDH A, (C)			- LOAD ACCUMLATOR (INDIRECT)
+ *  0xfa LDH A, (nn)		- LOAD ACCUMLATOR (DIRECT)
  *******************************************************/
 
 #include"GB_Registers.h"
@@ -757,4 +761,94 @@ void LOAD_REGISTER_A_A()
 	A_REGISTER = A_REGISTER;
 }
 
+/* LDH (n), A - LOAD FROM ACCUMULATOR (DIRECT)
+ * Load to the address specified by the 8-bit immediate data n, data from the 8-bit A register. The
+ * full 16-bit absolute address is obtained by setting the most significant byte to 0xFF and the
+ * least significant byte to the value of n, so the possible range is 0xFF00-0xFFFF.
+ */
+void LOAD_HW_N_A(void)
+{
+	unsigned char lsb, msb;
+	lsb = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	msb = 0xff;
+	ADDRESS_BUS = (unsigned short)(msb << 8) + (unsigned short)lsb;
+	WriteMemory(ADDRESS_BUS, A_REGISTER);
+	/* Should I be using the ADDRESS_BUS for all memory writes/reads??*/
+}
 
+/* LDH (C), A - LOAD FROM ACCUMULATOR (INDIRECT)
+ * Load to the address specified by the 8-bit C register, data from the 8-bit A register. The full
+ * 16-bit absolute address is obtained by setting the most significant byte to 0xFF and the least
+ * significant byte to the value of C, so the possible range is 0xFF00-0xFFFF.
+ */
+void LOAD_HW_C_A(void)
+{
+	unsigned char lsb, msb;
+	lsb = C_REGISTER;
+	msb = 0xff;
+	ADDRESS_BUS = (unsigned short)(msb << 8) + (unsigned short)lsb;
+	WriteMemory(ADDRESS_BUS, A_REGISTER);
+	/* Should I be using the ADDRESS_BUS for all memory writes/reads??*/
+}
+
+/* LDH (nn), A - LOAD FROM ACCUMULATOR (DIRECT)
+ * Load to the address specified by the 16-bit immediate data nn, data from the 8-bit A register.
+ */
+void LOAD_HW_NN_A(void)
+{
+	unsigned char lsb, msb;
+	lsb = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	msb = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	ADDRESS_BUS = (unsigned short)(msb << 8) + (unsigned short)lsb;
+	WriteMemory(ADDRESS_BUS, A_REGISTER);
+	/* Should I be using the ADDRESS_BUS for all memory writes/reads??*/
+}
+
+/* LDH A, (n) - LOAD ACCUMULATOR (DIRECT)
+ * Load to the 8-bit A register, data from the address specified by the 8-bit immediate data n. The
+ * full 16-bit absolute address is obtained by setting the most significant byte to 0xFF and the
+ * least significant byte to the value of n, so the possible range is 0xFF00-0xFFFF.
+ */
+void LOAD_HW_A_N(void)
+{
+	unsigned char lsb, msb;
+	lsb = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	msb = 0xff;
+	ADDRESS_BUS = (unsigned short)(msb << 8) + (unsigned short)lsb;
+	A_REGISTER =  ReadMemory(ADDRESS_BUS);
+	/* Should I be using the ADDRESS_BUS for all memory writes/reads??*/
+}
+
+/* LDH A, (C) - LOAD ACCUMULATOR (DIRECT)
+ * Load to the 8-bit A register, data from the address specified by the 8-bit C register. The
+ * full 16-bit absolute address is obtained by setting the most significant byte to 0xFF and the
+ * least significant byte to the value of n, so the possible range is 0xFF00-0xFFFF.
+ */
+void LOAD_HW_A_C(void)
+{
+	unsigned char lsb, msb;
+	lsb = C_REGISTER;
+	msb = 0xff;
+	ADDRESS_BUS = (unsigned short)(msb << 8) + (unsigned short)lsb;
+	A_REGISTER =  ReadMemory(ADDRESS_BUS);
+	/* Should I be using the ADDRESS_BUS for all memory writes/reads??*/
+}
+
+/* LDH A, (nn) - LOAD ACCUMULATOR (DIRECT)
+ * Load to the 8-bit A register, data from the absolute address specified by the 16-bit operand nn.
+ */
+void LOAD_HW_A_NN(void)
+{
+	unsigned char lsb, msb;
+	lsb = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	msb = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	ADDRESS_BUS = (unsigned short)(msb << 8) + (unsigned short)lsb;
+	A_REGISTER =  ReadMemory(ADDRESS_BUS);
+	/* Should I be using the ADDRESS_BUS for all memory writes/reads??*/
+}

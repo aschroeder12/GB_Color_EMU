@@ -1,4 +1,4 @@
-/*  GB LOGICAL INSTRUCTIONS
+/*  GB LOGICAL INSTRUCTIONS DONE?
  *
  *  0xa0 AND B 				- AND (REGISTER)
  * 	0xa1 AND C 				- AND (REGISTER)
@@ -33,6 +33,12 @@
  * 	0xbd CP L 				- COMPARE (REGISTER)
  * 	0xbe CP (HL) 			- COMPARE (INDIRECT HL)
  * 	0xbf CP A 				- COMPARE (REGISTER)
+ * 
+ *  0xe6 AND n 				- AND (IMMEDIATE)
+ *  0xee XOR n 				- XOR (IMMEDIATE)
+ *  0xf6 OR n 				- OR (IMMEDIATE)
+ *  0xfe CP n 				- COMPARE (IMMEDIATE)
+ */
 
 /************************************************************************************************** 0xa0 
  * AND B - AND (REGISTER)
@@ -112,7 +118,7 @@ void AND_REGISTER_D()
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	F_REGISTER = F_REGISTER | HALFCARRY_SET;
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
@@ -1037,6 +1043,132 @@ void CP_REGISTER_A()
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
 	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	}
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | CARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & CARRY_RESET;
+	}
+}
+
+/* AND n - AND (IMMEDIATE)
+ * Performs a bitwise AND operation between the 8-bit A register and immediate data n, and
+ * stores the result back into the A register.
+ */
+void AND_N(void)
+{
+	unsigned char n, result;
+	n = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	result = A_REGISTER & n;
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* XOR n - XOR (IMMEDIATE)
+ * Performs a bitwise XOR operation between the 8-bit A register and immediate data n, and
+ * stores the result back into the A register.
+ */
+void XOR_N(void)
+{
+	unsigned char n, result;
+	n = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	result = A_REGISTER ^ n;
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* OR n - OR (IMMEDIATE)
+ * Performs a bitwise OR operation between the 8-bit A register and immediate data n, and
+ * stores the result back into the A register.
+ */
+void OR_N(void)
+{
+	unsigned char n, result;
+	n = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	result = A_REGISTER | n;
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* CP n - COMPARE (IMMEDIATE)
+ * Subtracts from the 8-bit A register, the immediate data n, and updates flags based on the result.
+ * This instruction is basically identical to SUB n, but does not update the A register
+ */
+void CP_N(void)
+{
+	unsigned char n, result, carry_per_bit;
+	n = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	result, carry_per_bit = A_REGISTER - n;
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
