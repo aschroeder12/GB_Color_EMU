@@ -1,4 +1,4 @@
-/*  GB MATH INSTRUCTIONS TODO
+/*  GB 8-BIT MATH INSTRUCTIONS TODO
  * 
  *  various INC R 			- INCREMENT (REGISTER)
  *  various DEC R 			- DECREMENT (REGISTER)
@@ -11,7 +11,7 @@
  *  0x37 SCF				- SET CARRY FLAG
 
  *  0x3f CCF				- COMPLIMENT CARRY FLAG
- I'm missing some of the above instructions, so don't trust the excel
+ I'm missing some of the above instructions, but you can trust the excel now
 
  *  0x80 - 0x85, 0x87 		- ADD (REGISTER)
  * 	0x86 ADD (HL) 			- ADD (INDIRECT HL)
