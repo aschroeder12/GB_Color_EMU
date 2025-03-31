@@ -1,17 +1,16 @@
 /*  GB 8-BIT MATH INSTRUCTIONS TODO
  * 
- *  various INC R 			- INCREMENT (REGISTER)
- *  various DEC R 			- DECREMENT (REGISTER)
- 
  *  0x27 DAA 				- DECIMAL ADJUST ACCUMULATOR
-
  *  0x2f CPL 				- COMPLEMENT ACCUMULATOR
- *  0x34 INC HL 			- INCREMENT (INDIRECT HL)
- *  0x35 DEC HL				- DECREMENT (INDIRECT HL)
  *  0x37 SCF				- SET CARRY FLAG
 
  *  0x3f CCF				- COMPLIMENT CARRY FLAG
- I'm missing some of the above instructions, but you can trust the excel now
+ I'm missing the above instructions, but you can trust the excel now
+
+ *  various INC R 			- INCREMENT (REGISTER)
+ *  various DEC R 			- DECREMENT (REGISTER)
+ *  0x34 INC HL 			- INCREMENT (INDIRECT HL)
+ *  0x35 DEC HL				- DECREMENT (INDIRECT HL)
 
  *  0x80 - 0x85, 0x87 		- ADD (REGISTER)
  * 	0x86 ADD (HL) 			- ADD (INDIRECT HL)
@@ -31,6 +30,40 @@ void INC_R(unsigned char *R)
 	unsigned char result, carry_per_bit;
 	result, carry_per_bit = *R + 1;
 	*R = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	}
+}
+
+/* INC HL - INCREMENT (INDIRECT HL)
+ * Increments data at the absolute address specified by the 16-bit register HL.
+ */
+void INC_HL()
+{
+	unsigned char result, data, carry_per_bit;
+	unsigned short addr;
+
+	addr = (unsigned short)(H_REGISTER << 8) + (unsigned short)L_REGISTER;
+	data = ReadMemory(addr);
+	result, carry_per_bit = data + 1;
+	WriteMemory(addr, result)
 	/* Deal with zero flag, bit 7 of F_REGISTER */
 	if (result == (unsigned char)0) 
 	{
@@ -82,6 +115,41 @@ void DEC_R(unsigned char *R)
 		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 }
+
+/* DEC HL - DECREMENT (INDIRECT HL)
+ * Decrements data at the absolute address specified by the 16-bit register HL.
+ */
+void DEC_HL()
+{
+	unsigned char result, data, carry_per_bit;
+	unsigned short addr;
+
+	addr = (unsigned short)(H_REGISTER << 8) + (unsigned short)L_REGISTER;
+	data = ReadMemory(addr);
+	result, carry_per_bit = data - 1;
+	WriteMemory(addr, result)
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	}
+}
+
 
 /* DAA - DECIMAL ADJUST ACCUMULATOR
  * Designed to be used after performing an arithmetic instruction (ADD, ADC, SUB, SBC) 
