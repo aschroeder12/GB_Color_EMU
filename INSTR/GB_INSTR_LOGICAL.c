@@ -11,6 +11,9 @@
  *  0xee XOR n 				- XOR (IMMEDIATE)
  *  0xf6 OR n 				- OR (IMMEDIATE)
  *  0xfe CP n 				- COMPARE (IMMEDIATE)
+ *  0x2f CPL 				- COMPLIMENT ACCUMULATOR
+ *  0x3f CCF 				- COMPLIMENT CARRY FLAG
+ *  0x37 SCF 				- SET CARRY FLAG
  */
 
 /* AND R - AND (REGISTER) 0xa0 - 0xa5, 0xa7
@@ -407,3 +410,51 @@ void CP_N(void)
 		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
+
+/* CPL - COMPLIMENT ACCUMULATOR
+ * Flips all the bits in the 8-bit A register, and sets the N and H flags.
+ */
+void CPL()
+{
+	A_REGISTER = ~A_REGISTER;
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER | HALFCARRY_SET;
+}
+
+/* CCF - COMPLIMENT CARRY FLAG
+ * Flips the carry flag, and clears the N and H flags
+ */
+void CCF()
+{
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	/* Flip the Carry Flag by seeing if it is set */
+	if (F_REGISTER | CARRY_SET == F_REGISTER)
+	{
+		/* If set, reset it */
+		F_REGISTER = F_REGISTER & CARRY_RESET;
+	}
+	else
+	{
+		/* If not set, set it */
+		F_REGISTER = F_REGISTER | CARRY_SET;
+	}
+}
+
+/* SCF - SET CARRY FLAG
+ * Sets the carry flag, and clears the N and H flags
+ */
+void SCF()
+{
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER | CARRY_SET;
+}
+

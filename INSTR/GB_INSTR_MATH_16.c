@@ -1,5 +1,6 @@
 /* GB 16-BIT MATH INSTRUCTIONS DONE!
  * INC, DEC, ADD HL (RR)
+ * ADD SP, e
  */
 
 /* INC rr - INCREMENT (16-BIT REGISTER, except SP)
@@ -106,6 +107,42 @@ void ADD_HL_SP()
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
 	if ((carry_per_bit | (unsigned short)0x7fff) == (unsigned short)0xffff)
+	{
+		F_REGISTER = F_REGISTER | CARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & CARRY_RESET;
+	}
+}
+
+/* ADD SP, e - ADD TO STACK POINTER (RELATIVE)
+ * Loads to the 16-bit SP register, 16-bit data calculated by adding the signed 8-bit operand e to
+ * the 16-bit value of the SP register.
+ */
+void ADD_SP_E()
+{
+	unsigned char result, carry_per_bit;
+	signed char e;
+	e = (signed char)ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	result, carry_per_bit = SP_REGISTER + e;
+	SP = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	F_REGISTER = F_REGISTER & ZERO_RESET;
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	}
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
 	{
 		F_REGISTER = F_REGISTER | CARRY_SET;
 	}
