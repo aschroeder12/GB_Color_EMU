@@ -40,6 +40,36 @@ void AND_REGISTER_R(unsigned char *R)
 	F_REGISTER = F_REGISTER & CARRY_RESET;
 }
 
+/* AND N - AND (IMMEDIATE)
+ * Performs a bitwise AND operation between the 8-bit A register and immediate data n, and
+ * stores the result back into the A register.
+ */
+void AND_N()
+{
+	unsigned char result, carry_per_bit, data;
+	data = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	result, carry_per_bit = A_REGISTER & data;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+
 /* AND HL - AND (INDIRECT HL)
  * Performs a bitwise AND operation between the 8-bit A register and data from the absolute
  * address specified by the 16-bit register HL, and stores the result back into the A register.
@@ -140,6 +170,35 @@ void OR_REGISTER_R(unsigned char *R)
 {
 	unsigned char result, carry_per_bit;
 	result, carry_per_bit = A_REGISTER | *R;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	F_REGISTER = F_REGISTER & CARRY_RESET;
+}
+
+/* OR N - OR (IMMEDIATE)
+ * Performs a bitwise OR operation between the 8-bit A register and immediate data n, and stores
+ * the result back into the A register.
+ */
+void OR_N()
+{
+	unsigned char result, carry_per_bit, data;
+	data = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	result, carry_per_bit = A_REGISTER | data;
 	// debug the carry_per_bit to make sure it works
 	A_REGISTER = result;
 	/* Deal with zero flag, bit 7 of F_REGISTER */
@@ -279,34 +338,6 @@ void CP_REGISTER_HL()
 	}
 }
 
-/* AND n - AND (IMMEDIATE)
- * Performs a bitwise AND operation between the 8-bit A register and immediate data n, and
- * stores the result back into the A register.
- */
-void AND_N(void)
-{
-	unsigned char n, result;
-	n = ReadMemory(PC_REGISTER);
-	PC_REGISTER = PC_REGISTER + 1;
-	result = A_REGISTER & n;
-	A_REGISTER = result;
-	/* Deal with zero flag, bit 7 of F_REGISTER */
-	if (result == (unsigned char)0) 
-	{
-		F_REGISTER = F_REGISTER | ZERO_SET;
-	}
-	else
-	{
-		F_REGISTER = F_REGISTER & ZERO_RESET;
-	}
-	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
-	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
-	F_REGISTER = F_REGISTER | HALFCARRY_SET;
-	/* Deal with the carry flag, bit 4 of F_REGISTER */
-	F_REGISTER = F_REGISTER & CARRY_RESET;
-}
-
 /* XOR n - XOR (IMMEDIATE)
  * Performs a bitwise XOR operation between the 8-bit A register and immediate data n, and
  * stores the result back into the A register.
@@ -317,34 +348,6 @@ void XOR_N(void)
 	n = ReadMemory(PC_REGISTER);
 	PC_REGISTER = PC_REGISTER + 1;
 	result = A_REGISTER ^ n;
-	A_REGISTER = result;
-	/* Deal with zero flag, bit 7 of F_REGISTER */
-	if (result == (unsigned char)0) 
-	{
-		F_REGISTER = F_REGISTER | ZERO_SET;
-	}
-	else
-	{
-		F_REGISTER = F_REGISTER & ZERO_RESET;
-	}
-	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
-	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
-	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
-	/* Deal with the carry flag, bit 4 of F_REGISTER */
-	F_REGISTER = F_REGISTER & CARRY_RESET;
-}
-
-/* OR n - OR (IMMEDIATE)
- * Performs a bitwise OR operation between the 8-bit A register and immediate data n, and
- * stores the result back into the A register.
- */
-void OR_N(void)
-{
-	unsigned char n, result;
-	n = ReadMemory(PC_REGISTER);
-	PC_REGISTER = PC_REGISTER + 1;
-	result = A_REGISTER | n;
 	A_REGISTER = result;
 	/* Deal with zero flag, bit 7 of F_REGISTER */
 	if (result == (unsigned char)0) 

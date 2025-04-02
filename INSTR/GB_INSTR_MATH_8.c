@@ -20,6 +20,10 @@
  *  0x96 SUB (HL)			- SUBTRACT (INDIRECT HL)
  *  0x98 - 0x9d, 0x9f		- SUBTRACT WITH CARRY (REGISTER)
  * 	0x9e SBC (HL) 			- SUBTRACT WITH CARRY (INDIRECT HL)
+ *  0xc6 AND N 				- ADD (IMMEDIATE)
+ *  0xd6 SUB N 				- SUBTRACT (IMMEDIATE)
+ *  0xce ADC N 				- ADD WITH CARRY (IMMEDIATE)
+ *  0xde SBC N 				- SUBTRACT WITH CARRY (IMMEDIATE)
  */
 
 /* INC R - INCREMENT (REGISTER)
@@ -161,6 +165,47 @@ void DAA()
 	
 }
 
+/* ADD n - ADD (IMMEDIATE) 0xc6
+ * Adds to the 8-bit A register, the immediate data n, and stores the result back into the A register.
+ */
+void ADD_N()
+{
+	unsigned char result, carry_per_bit, data;
+	data = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	result, carry_per_bit = A_REGISTER + data;
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	}
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | CARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & CARRY_RESET;
+	}
+}
+
 
 /* ADD r - ADD (REGISTER) 0x80 - 0x85, 0x87
  * Adds to the 8-bit A register, the 8-bit register r, and stores the result back into the A register.
@@ -246,6 +291,50 @@ void ADD_REGISTER_HL()
 		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 }
+
+/* ADC N - ADD WITH CARRY (IMMEDIATE) 
+ * Adds to the 8-bit A register, the carry flag and the immediate data n, and stores the result back
+ * into the A register.
+ */
+void ADC_N()
+{
+	unsigned char result, carry_per_bit, data;
+	data = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	result, carry_per_bit = A_REGISTER + data + (F_REGISTER >> 7);
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	}
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | CARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & CARRY_RESET;
+	}
+}
+
 
 /* ADC R - ADD WITH CARRY (REGISTER) 0x88 - 0x8d, 0x8f
  * Adds to the 8-bit A register, the carry flag and the 8-bit register r, and stores the result back
@@ -335,6 +424,50 @@ void ADC_REGISTER_HL()
 	}
 }
 
+/* SUB n - SUBTRACT (IMMEDIATE) 0xd6
+ * Subtracts from the 8-bit A register, the immediate data n, and stores the result back into the A
+ * register.
+ */
+void SUB_N()
+{
+	unsigned char result, carry_per_bit, data;
+	data = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	result, carry_per_bit = A_REGISTER - data;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	}
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | CARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & CARRY_RESET;
+	}
+}
+
+
 /* SUB R - SUBTRACT (REGISTER) 0x90 - 0x95, 0x97
  * Subtracts from the 8-bit A register, the 8-bit register r, and stores the result back into the A
  * register.
@@ -388,6 +521,49 @@ void SUB_REGISTER_HL()
 	/* Debug this ADDRESS to make sure it is correct */
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 	result, carry_per_bit = A_REGISTER - DATA_BUS;
+	// debug the carry_per_bit to make sure it works
+	A_REGISTER = result;
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (result == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
+	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | HALFCARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	}
+	/* Deal with the carry flag, bit 4 of F_REGISTER */
+	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | CARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & CARRY_RESET;
+	}
+}
+
+/* SBC N - SUBTRACT WITH CARRY (IMMEDIATE) 
+ * Subtracts from the 8-bit A register, the carry flag and the immediate data n, and stores the
+ * result back into the A register.
+ */
+void SBC_N()
+{
+	unsigned char result, carry_per_bit, data;
+	data = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	result, carry_per_bit = A_REGISTER - data - (F_REGISTER >> 7);
 	// debug the carry_per_bit to make sure it works
 	A_REGISTER = result;
 	/* Deal with zero flag, bit 7 of F_REGISTER */
