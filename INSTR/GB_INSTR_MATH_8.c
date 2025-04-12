@@ -1,16 +1,9 @@
-/*  GB 8-BIT MATH INSTRUCTIONS TODO
- * 
- *  0x27 DAA 				- DECIMAL ADJUST ACCUMULATOR
- *  0x2f CPL 				- COMPLEMENT ACCUMULATOR
- *  0x37 SCF				- SET CARRY FLAG
-
- *  0x3f CCF				- COMPLIMENT CARRY FLAG
- I'm missing the above instructions, but you can trust the excel now
-
+/*  GB 8-BIT MATH INSTRUCTIONS DONE
  *  various INC R 			- INCREMENT (REGISTER)
  *  various DEC R 			- DECREMENT (REGISTER)
  *  0x34 INC HL 			- INCREMENT (INDIRECT HL)
  *  0x35 DEC HL				- DECREMENT (INDIRECT HL)
+ *  0x27 DAA 				- DECIMAL ADJUST ACCUMULATOR
 
  *  0x80 - 0x85, 0x87 		- ADD (REGISTER)
  * 	0x86 ADD (HL) 			- ADD (INDIRECT HL)
@@ -154,15 +147,70 @@ void DEC_HL()
 	}
 }
 
-
 /* DAA - DECIMAL ADJUST ACCUMULATOR
  * Designed to be used after performing an arithmetic instruction (ADD, ADC, SUB, SBC) 
  * whose inputs were in Binary-Coded Decimal (BCD), adjusting the result to likewise be in BCD.
- TODO
  */
 void DAA()
 {
-	
+	unsigned char adj;
+	adj = (unsigned char)0;
+	/* if subtraction flag (N) is set */
+	if (F_REGISTER | SUBTRACTION_RESET == (unsigned char)0xff)
+	{
+		/* if half-carry flag (H) is set, add 0x06 to adj */
+		if (F_REGISTER | HALFCARRY_RESET == (unsigned char)0xff)
+		{
+			adj = adj + (unsigned char)0x06;
+		}
+		/* if the carry flag is set, add 0x60 to adj */
+		if (F_REGISTER | CARRY_RESET == (unsigned char)0xff)
+		{
+			adj = adj + (unsigned char)0x60;
+		}
+		A_REGISTER = A_REGISTER - adj;
+	}
+	/* if subtraction flag (N) not set */
+	else
+	{
+		/* if half-carry flag (H) is set OR A & 0x0f > 0x09, add 0x06 to adj */
+		if ((F_REGISTER | HALFCARRY_RESET == (unsigned char)0xff) || (A_REGISTER & 0x0f > 0x09))
+		{
+			adj = adj + 0x06;
+		}
+		/* if carry flag is set OR A > 0x99, add 0x60 to adj */
+		if ((F_REGISTER + CARRY_RESET == (unsigned char)0xff) || (A_REGISTER > 0x99))
+		{
+			adj = adj + 0x60;
+		}
+		A_REGISTER = A_REGISTER + adj;
+	}
+	/* Deal with zero flag, bit 7 of F_REGISTER */
+	if (A_REGISTER == (unsigned char)0) 
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	/* Deal with the half-carry flag (H) bit 5 of F_REGISTER */
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	/* Deal with the carry flag (C), bit 4 of F_REGISTER.
+	 * Remember, we are treating hex values as "normal" numbers. So if after an addition,
+	 * our hex value is greater than 0x99, we need to indicate that with the carry flag.
+	 * Also, if our carry flag was already set from the previous operation, it was already 
+	 * greater than 0x99, so our final value will be as well. 
+	 */
+	if (F_REGISTER | SUBTRACTION_RESET != (unsigned char)0xff && A_REGISTER > 0x99) || 
+		(F_REGISTER | CARRY_RESET == (unsigned char)0xff)
+	{
+		F_REGISTER = F_REGISTER | CARRY_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & CARRY_RESET;
+	}
 }
 
 /* ADD n - ADD (IMMEDIATE) 0xc6

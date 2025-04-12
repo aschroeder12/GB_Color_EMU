@@ -1,0 +1,8 @@
+#include "GB_INSTR_BITOPS.h"
+#include "GB_INSTR_CTRLFLOW.h"
+#include "GB_INSTR_LOGICAL.h"
+#include "GB_INSTR_MATH_16.h"
+#include "GB_INSTR_MATH_8.h"
+#include "GB_INSTR_MISC.h"
+#include "GB_INSTR_MOVEDATA_16.h"
+#include "GB_INSTR_MOVEDATA_8.h"
