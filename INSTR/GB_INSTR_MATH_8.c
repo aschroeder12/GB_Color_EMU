@@ -22,7 +22,7 @@
 /* INC R - INCREMENT (REGISTER)
  * Increments data in the 8-bit register R
  */
-void INC_R(unsigned char *R)
+void INSTR_INC_R(unsigned char *R)
 {
 	unsigned char result, carry_per_bit;
 	result, carry_per_bit = *R + 1;
@@ -52,7 +52,7 @@ void INC_R(unsigned char *R)
 /* INC HL - INCREMENT (INDIRECT HL)
  * Increments data at the absolute address specified by the 16-bit register HL.
  */
-void INC_HL()
+void INSTR_INC_HL()
 {
 	unsigned char result, data, carry_per_bit;
 	unsigned short addr;
@@ -86,7 +86,7 @@ void INC_HL()
 /* DEC R - DECREMENT (REGISTER)
  * Decrements data in the 8-bit register R
  */
-void DEC_R(unsigned char *R)
+void INSTR_DEC_R(unsigned char *R)
 {
 	unsigned char result, carry_per_bit;
 	result, carry_per_bit = *R - 1;
@@ -116,7 +116,7 @@ void DEC_R(unsigned char *R)
 /* DEC HL - DECREMENT (INDIRECT HL)
  * Decrements data at the absolute address specified by the 16-bit register HL.
  */
-void DEC_HL()
+void INSTR_DEC_HL()
 {
 	unsigned char result, data, carry_per_bit;
 	unsigned short addr;
@@ -151,7 +151,7 @@ void DEC_HL()
  * Designed to be used after performing an arithmetic instruction (ADD, ADC, SUB, SBC) 
  * whose inputs were in Binary-Coded Decimal (BCD), adjusting the result to likewise be in BCD.
  */
-void DAA()
+void INSTR_DAA()
 {
 	unsigned char adj;
 	adj = (unsigned char)0;
@@ -216,7 +216,7 @@ void DAA()
 /* ADD n - ADD (IMMEDIATE) 0xc6
  * Adds to the 8-bit A register, the immediate data n, and stores the result back into the A register.
  */
-void ADD_N()
+void INSTR_ADD_N()
 {
 	unsigned char result, carry_per_bit, data;
 	data = ReadMemory(PC_REGISTER);
@@ -258,7 +258,7 @@ void ADD_N()
 /* ADD r - ADD (REGISTER) 0x80 - 0x85, 0x87
  * Adds to the 8-bit A register, the 8-bit register r, and stores the result back into the A register.
  */
-void ADD_REGISTER_R(unsigned char *R)
+void INSTR_ADD_REGISTER_R(unsigned char *R)
 {
 	unsigned char result, carry_per_bit;
 	result, carry_per_bit = A_REGISTER + *R;
@@ -298,7 +298,7 @@ void ADD_REGISTER_R(unsigned char *R)
  * Adds to the 8-bit A register, data from the absolute address specificed by the 16-bit register HL, 
  * and stores the result back into the A register.
  */
-void ADD_REGISTER_HL()
+void INSTR_ADD_REGISTER_HL()
 {
 	unsigned char result, carry_per_bit;
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
@@ -344,7 +344,7 @@ void ADD_REGISTER_HL()
  * Adds to the 8-bit A register, the carry flag and the immediate data n, and stores the result back
  * into the A register.
  */
-void ADC_N()
+void INSTR_ADC_N()
 {
 	unsigned char result, carry_per_bit, data;
 	data = ReadMemory(PC_REGISTER);
@@ -388,7 +388,7 @@ void ADC_N()
  * Adds to the 8-bit A register, the carry flag and the 8-bit register r, and stores the result back
  * into the A register.
  */
-void ADC_REGISTER_R(unsigned char* R)
+void INSTR_ADC_REGISTER_R(unsigned char* R)
 {
 	unsigned char result, carry_per_bit;
 	result, carry_per_bit = A_REGISTER + *R + (F_REGISTER >> 7);
@@ -429,7 +429,7 @@ void ADC_REGISTER_R(unsigned char* R)
  * Adds to the 8-bit A register, the carry flag and the data from the absolute address specified
  * by the 16-bit register HL, and stores the result back into the A register.
  */
-void ADC_REGISTER_HL()
+void INSTR_ADC_REGISTER_HL()
 {
 	unsigned char result, carry_per_bit;
 
@@ -476,7 +476,7 @@ void ADC_REGISTER_HL()
  * Subtracts from the 8-bit A register, the immediate data n, and stores the result back into the A
  * register.
  */
-void SUB_N()
+void INSTR_SUB_N()
 {
 	unsigned char result, carry_per_bit, data;
 	data = ReadMemory(PC_REGISTER);
@@ -520,7 +520,7 @@ void SUB_N()
  * Subtracts from the 8-bit A register, the 8-bit register r, and stores the result back into the A
  * register.
  */
-void SUB_REGISTER_R(unsigned char* R)
+void INSTR_SUB_REGISTER_R(unsigned char* R)
 {
 	unsigned char result, carry_per_bit;
 	result, carry_per_bit = A_REGISTER - *R;
@@ -561,7 +561,7 @@ void SUB_REGISTER_R(unsigned char* R)
  * Subtracts from the 8-bit A register, the 8-bit register HL, and stores the result back into the A
  * register.
  */
-void SUB_REGISTER_HL()
+void INSTR_SUB_REGISTER_HL()
 {
 	unsigned char result, carry_per_bit;
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
@@ -606,7 +606,7 @@ void SUB_REGISTER_HL()
  * Subtracts from the 8-bit A register, the carry flag and the immediate data n, and stores the
  * result back into the A register.
  */
-void SBC_N()
+void INSTR_SBC_N()
 {
 	unsigned char result, carry_per_bit, data;
 	data = ReadMemory(PC_REGISTER);
@@ -649,7 +649,7 @@ void SBC_N()
  * Subtracts from the 8-bit A register, the carry flag and the 8-bit register r, and stores the result
  * back into the A register.
  */
-void SBC_REGISTER_R(unsigned char *R)
+void INSTR_SBC_REGISTER_R(unsigned char *R)
 {
 	unsigned char result, carry_per_bit;
 	result, carry_per_bit = A_REGISTER - *R - (F_REGISTER >> 7);
@@ -690,7 +690,7 @@ void SBC_REGISTER_R(unsigned char *R)
  * Subtracts to the 8-bit A register, the carry flag and the data from the absolute address specified
  * by the 16-bit register HL, and stores the result back into the A register.
  */
-void SBC_REGISTER_HL()
+void INSTR_SBC_REGISTER_HL()
 {
 	unsigned char result, carry_per_bit;
 

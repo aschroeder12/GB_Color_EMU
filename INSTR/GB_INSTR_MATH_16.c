@@ -6,7 +6,7 @@
 /* INC rr - INCREMENT (16-BIT REGISTER, except SP)
  * Increments data in the 16-bit register rr. MSB is R1, LSB is R2!
  */
-void INC_RR(unsigned char *R1, unsigned char *R2)
+void INSTR_INC_RR(unsigned char *R1, unsigned char *R2)
 {	
 	unsigned short val;
 	val = (unsigned short)(*R1 << 8) + (unsigned short)*R2;
@@ -18,7 +18,7 @@ void INC_RR(unsigned char *R1, unsigned char *R2)
 /* INC SP - INCREMENT (SP REGISTER)
  * Increments data in the SP Register
  */
-void INC_SP()
+void INSTR_INC_SP()
 {
 	SP_REGISTER = SP_REGISTER + 1;
 }
@@ -26,7 +26,7 @@ void INC_SP()
 /* DEC rr - DECREMENT (16-BIT REGISTER, except SP)
  * Decrements data in the 16-bit register rr. MSB is R1, LSB is R2!
  */
-void DEC_RR(unsigned char *R1, unsigned char *R2)
+void INSTR_DEC_RR(unsigned char *R1, unsigned char *R2)
 {	
 	unsigned short val;
 	val = (unsigned short)(*R1 << 8) + (unsigned short)*R2;
@@ -38,7 +38,7 @@ void DEC_RR(unsigned char *R1, unsigned char *R2)
 /* DEC SP - DECREMENT (SP REGISTER)
  * Decrements data in the SP Register
  */
-void DEC_SP()
+void INSTR_DEC_SP()
 {
 	SP_REGISTER = SP_REGISTER - 1;
 }
@@ -51,7 +51,7 @@ void DEC_SP()
  * If there are issues, you need to add L and C first, then
  * calculate the carry bit, then also add that to H + B. 
  */
-void ADD_HL_RR(unsigned char *R1, unsigned char *R2)
+void INSTR_ADD_HL_RR(unsigned char *R1, unsigned char *R2)
 {
 	unsigned short result, carry_per_bit, val1, val2;
 	/* Get HL and RR */
@@ -87,7 +87,7 @@ void ADD_HL_RR(unsigned char *R1, unsigned char *R2)
  * Adds to the 16-bit HL register pair, the SP REGISTER, and stores the result back into the HL
  * register pair.
  */
-void ADD_HL_SP()
+void INSTR_ADD_HL_SP()
 {
 	unsigned short result, carry_per_bit, val;
 	val = (unsigned short)(H_REGISTER << 8) + (unsigned short)L_REGISTER;
@@ -120,7 +120,7 @@ void ADD_HL_SP()
  * Loads to the 16-bit SP register, 16-bit data calculated by adding the signed 8-bit operand e to
  * the 16-bit value of the SP register.
  */
-void ADD_SP_E()
+void INSTR_ADD_SP_E()
 {
 	unsigned char result, carry_per_bit;
 	signed char e;

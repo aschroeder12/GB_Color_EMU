@@ -20,7 +20,7 @@
  * Performs a bitwise AND operation between the 8-bit A register and the 8-bit register r, and
  * stores the result back into the A register.
  */
-void AND_REGISTER_R(unsigned char *R)
+void INSTR_AND_REGISTER_R(unsigned char *R)
 {
 	unsigned char result, carry_per_bit;
 	result, carry_per_bit = A_REGISTER & *R;
@@ -47,7 +47,7 @@ void AND_REGISTER_R(unsigned char *R)
  * Performs a bitwise AND operation between the 8-bit A register and immediate data n, and
  * stores the result back into the A register.
  */
-void AND_N()
+void INSTR_AND_N()
 {
 	unsigned char result, carry_per_bit, data;
 	data = ReadMemory(PC_REGISTER);
@@ -77,7 +77,7 @@ void AND_N()
  * Performs a bitwise AND operation between the 8-bit A register and data from the absolute
  * address specified by the 16-bit register HL, and stores the result back into the A register.
  */
-void AND_REGISTER_HL()
+void INSTR_AND_REGISTER_HL()
 {
 	unsigned char result, carry_per_bit;
 
@@ -110,7 +110,7 @@ void AND_REGISTER_HL()
  * Performs a bitwise XOR operation between the 8-bit A register and the 8-bit register R, and
  * stores the result back into the A register.
  */
-void XOR_REGISTER_R(unsigned char *R)
+void INSTR_XOR_REGISTER_R(unsigned char *R)
 {
 	unsigned char result, carry_per_bit;
 	result, carry_per_bit = A_REGISTER ^ *R;
@@ -137,7 +137,7 @@ void XOR_REGISTER_R(unsigned char *R)
  * Performs a bitwise XOR operation between the 8-bit A register and data from the absolute 
  * address specified by the 16-bit register HL, and stores the result back into the A register
  */
-void XOR_REGISTER_HL()
+void INSTR_XOR_REGISTER_HL()
 {
 	unsigned char result, carry_per_bit;
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
@@ -169,7 +169,7 @@ void XOR_REGISTER_HL()
  * Performs a bitwise OR operation between the 8-bit A register and the 8-bit register R, and
  * stores the result back into the A register.
  */
-void OR_REGISTER_R(unsigned char *R)
+void INSTR_OR_REGISTER_R(unsigned char *R)
 {
 	unsigned char result, carry_per_bit;
 	result, carry_per_bit = A_REGISTER | *R;
@@ -196,7 +196,7 @@ void OR_REGISTER_R(unsigned char *R)
  * Performs a bitwise OR operation between the 8-bit A register and immediate data n, and stores
  * the result back into the A register.
  */
-void OR_N()
+void INSTR_OR_N()
 {
 	unsigned char result, carry_per_bit, data;
 	data = ReadMemory(PC_REGISTER);
@@ -225,7 +225,7 @@ void OR_N()
  * Performs a bitwise OR operation between the 8-bit A register and data from the absolute
  * address specified by the 16-bit register HL, and stores the result back into the A register.
  */
-void OR_REGISTER_HL()
+void INSTR_OR_REGISTER_HL()
 {
 	unsigned char result, carry_per_bit;
 
@@ -258,7 +258,7 @@ void OR_REGISTER_HL()
  * Subtracts from the 8-bit A register, the 8-bit register R, and updates flags based on the result.
  * This instruction is basically identical to SUB B, but does not update the A register.
  */
-void CP_REGISTER_R(unsigned char *R)
+void INSTR_CP_REGISTER_R(unsigned char *R)
 {
 	unsigned char result, carry_per_bit;
 	result, carry_per_bit = A_REGISTER - *R;
@@ -299,7 +299,7 @@ void CP_REGISTER_R(unsigned char *R)
  * register HL, and updates flags based on the result. This instruction is basically identical to 
  * SUB (HL), but does not update the A register.
  */
-void CP_REGISTER_HL()
+void INSTR_CP_REGISTER_HL()
 {
 	unsigned char result, carry_per_bit;
 
@@ -345,7 +345,7 @@ void CP_REGISTER_HL()
  * Performs a bitwise XOR operation between the 8-bit A register and immediate data n, and
  * stores the result back into the A register.
  */
-void XOR_N(void)
+void INSTR_XOR_N(void)
 {
 	unsigned char n, result;
 	n = ReadMemory(PC_REGISTER);
@@ -373,7 +373,7 @@ void XOR_N(void)
  * Subtracts from the 8-bit A register, the immediate data n, and updates flags based on the result.
  * This instruction is basically identical to SUB n, but does not update the A register
  */
-void CP_N(void)
+void INSTR_CP_N(void)
 {
 	unsigned char n, result, carry_per_bit;
 	n = ReadMemory(PC_REGISTER);
@@ -414,7 +414,7 @@ void CP_N(void)
 /* CPL - COMPLIMENT ACCUMULATOR
  * Flips all the bits in the 8-bit A register, and sets the N and H flags.
  */
-void CPL()
+void INSTR_CPL()
 {
 	A_REGISTER = ~A_REGISTER;
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
@@ -426,7 +426,7 @@ void CPL()
 /* CCF - COMPLIMENT CARRY FLAG
  * Flips the carry flag, and clears the N and H flags
  */
-void CCF()
+void INSTR_CCF()
 {
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
 	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
@@ -448,7 +448,7 @@ void CCF()
 /* SCF - SET CARRY FLAG
  * Sets the carry flag, and clears the N and H flags
  */
-void SCF()
+void INSTR_SCF()
 {
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
 	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;

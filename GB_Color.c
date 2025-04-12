@@ -15,6 +15,8 @@ int main()
 {
 	unsigned short opcode;
 	PC_REGISTER = 0x0000;
+	/* Load Catridge will eventually have a file path param, but for now hardcode it */
+	LoadCartridge();
 	while (true)
 	{
 		opcode = PC_REGISTER;

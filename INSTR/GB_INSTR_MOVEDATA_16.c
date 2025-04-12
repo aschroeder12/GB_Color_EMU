@@ -6,7 +6,7 @@
  * Load to the 16-bit register RR, the immediate 16-bit data nn.
  * MSB is R1, LSB is R2!
  */
-void LOAD_REGISTER_RR_NN(unsigned char *R1, unsigned char *R2)
+void INSTR_LOAD_REGISTER_RR_NN(unsigned char *R1, unsigned char *R2)
 {
 	unsigned char lsb, msb;
 	unsigned short data;
@@ -23,7 +23,7 @@ void LOAD_REGISTER_RR_NN(unsigned char *R1, unsigned char *R2)
  * Load to the absolute address specified by the 16-bit operand nn, data from the 16-bit SP register.
  * Yeah it's not technically "Load register", oh well
  */
-void LOAD_REGISTER_NN_SP()
+void INSTR_LOAD_REGISTER_NN_SP()
 {
 	unsigned char lsb, msb;
 	lsb = ReadMemory(PC_REGISTER);
@@ -43,7 +43,7 @@ void LOAD_REGISTER_NN_SP()
  * This instruction does not do calculations that affect flags, but POP AF completely replaces the
  * F register value, so all flags are changed based on the 8-bit data that is read from memory.
  */
-void POP_RR(unsigned char *R1, unsigned char *R2)
+void INSTR_POP_RR(unsigned char *R1, unsigned char *R2)
 {
 	unsigned char lsb, msb;
 	unsigned short data;
@@ -60,7 +60,7 @@ void POP_RR(unsigned char *R1, unsigned char *R2)
 /* PUSH RR - PUSH TO STACK
  * Push to the stack memory, data from the 16-bit register RR
  */
-void PUSH_RR(unsigned char *R1, unsigned char *R2)
+void INSTR_PUSH_RR(unsigned char *R1, unsigned char *R2)
 {
 	SP_REGISTER = SP_REGISTER - 1;
 	WriteMemory(SP_REGISTER, *R1);
@@ -71,7 +71,7 @@ void PUSH_RR(unsigned char *R1, unsigned char *R2)
 /* LD SP, HL - LOAD SP FROM HL
  * Load to the 16-bit SP register, data from the 16-bit HL register.
  */
-void LOAD_REGISTER_SP_HL(void)
+void INSTR_LOAD_REGISTER_SP_HL(void)
 {
 	unsigned short data;
 	data = (unsigned short)(H_REGISTER << 8) + (unsigned short)L_REGISTER;
@@ -82,7 +82,7 @@ void LOAD_REGISTER_SP_HL(void)
  * Load to the HL register, 16-bit data calculated by adding the signed 8-bit operand e to the 16-
  * bit value of the SP register.
  */
-void LOAD_REGISTER_HL_ADJSP(void)
+void INSTR_LOAD_REGISTER_HL_ADJSP(void)
 {
 	unsigned short result, carry_per_bit;
 	signed char e;

@@ -28,7 +28,7 @@
 /* LD BC, A - LOAD FROM ACCUMULATOR (INDIRECT BC)
  * Load to the absolute address specified by the 16-bit register BC, data from the 8-bit A register
  */
-void LOAD_REGISTER_BC_A(void)
+void INSTR_LOAD_REGISTER_BC_A(void)
 {
 	ADDRESS_BUS = (unsigned short)(B_REGISTER << 8);
 	ADDRESS_BUS = ADDRESS_BUS | C_REGISTER;
@@ -38,7 +38,7 @@ void LOAD_REGISTER_BC_A(void)
 /* LD B, n - LOAD REGISTER (IMMEDIATE)
  * Load to the 8-bit register R, the immediate data n.
  */
-void LOAD_REGISTER_R_N(unsigned char *R)
+void INSTR_LOAD_REGISTER_R_N(unsigned char *R)
 {
 	*R = ReadMemory(PC_REGISTER);
 	PC_REGISTER = PC_REGISTER + 1;
@@ -47,7 +47,7 @@ void LOAD_REGISTER_R_N(unsigned char *R)
 /* LD A, (BC) - LOAD ACCUMULATOR (INDIRECT BC)
  * Load to the 8-bit A register, data from the absolute address specified by the 16-bit register BC
  */
-void LOAD_REGISTER_A_BC(void)
+void INSTR_LOAD_REGISTER_A_BC(void)
 {
 	ADDRESS_BUS = (unsigned short)(B_REGISTER << 8);
 	ADDRESS_BUS = ADDRESS_BUS | C_REGISTER;
@@ -57,7 +57,7 @@ void LOAD_REGISTER_A_BC(void)
 /* LD DE, A - LOAD FROM ACCUMULATOR (INDIRECT DE)
  * Load to the absolute address specified by the 16-bit register DE, data from the 8-bit A register
  */
-void LOAD_REGISTER_DE_A(void)
+void INSTR_LOAD_REGISTER_DE_A(void)
 {
 	ADDRESS_BUS = (unsigned short)(D_REGISTER << 8);
 	ADDRESS_BUS = ADDRESS_BUS | E_REGISTER;
@@ -67,7 +67,7 @@ void LOAD_REGISTER_DE_A(void)
 /* LD A, (DE) - LOAD ACCUMULATOR (INDIRECT DE)
  * Load to the 8-bit A register, data from the absolute address specified by the 16-bit register DE
  */
-void LOAD_REGISTER_A_DE(void)
+void INSTR_LOAD_REGISTER_A_DE(void)
 {
 	ADDRESS_BUS = (unsigned short)(D_REGISTER << 8);
 	ADDRESS_BUS = ADDRESS_BUS | E_REGISTER;
@@ -78,7 +78,7 @@ void LOAD_REGISTER_A_DE(void)
  * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit A register.
  * The value of HL is incremented after the memory write
  */
-void LOAD_REGISTER_HLI_A(void)
+void INSTR_LOAD_REGISTER_HLI_A(void)
 {
 	unsigned short addr;
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
@@ -93,7 +93,7 @@ void LOAD_REGISTER_HLI_A(void)
  * Load to the 8-bit A register, data from the absolute address specified by the 16-bit register HL.
  * The value of HL is incremented after the memory read.
  */
-void LOAD_REGISTER_A_HLI(void)
+void INSTR_LOAD_REGISTER_A_HLI(void)
 {
 	unsigned short addr;
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
@@ -108,7 +108,7 @@ void LOAD_REGISTER_A_HLI(void)
  * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit A register.
  * The value of HL is decremented after the memory write
  */
-void LOAD_REGISTER_HLD_A(void)
+void INSTR_LOAD_REGISTER_HLD_A(void)
 {
 	unsigned short addr;
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
@@ -122,7 +122,7 @@ void LOAD_REGISTER_HLD_A(void)
 /* LD (HL), n - LOAD REGISTER (IMMEDIATE)
  * Load to the absolute address specified by the 16-bit register HL, the immediate data n
  */
-void LOAD_REGISTER_HL_N(void)
+void INSTR_LOAD_REGISTER_HL_N(void)
 {
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
 	ADDRESS_BUS, addr = ADDRESS_BUS | L_REGISTER;
@@ -133,7 +133,7 @@ void LOAD_REGISTER_HL_N(void)
  * Load to the 8-bit A register, data from the absolute address specified by the 16-bit register HL.
  * The value of HL is decremented after the memory read.
  */
-void LOAD_REGISTER_A_HLD(void)
+void INSTR_LOAD_REGISTER_A_HLD(void)
 {
 	unsigned short addr;
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
@@ -147,7 +147,7 @@ void LOAD_REGISTER_A_HLD(void)
 /* LD R, r - LOAD REGISTER (REGISTER)
  * Load to the 8-bit register R, data from the 8-bit register r.
  */
-void LOAD_REGISTER_R_r(unsigned char *R, unsigned char *r)
+void INSTR_LOAD_REGISTER_R_r(unsigned char *R, unsigned char *r)
 {
 	*R = *r;
 }
@@ -155,7 +155,7 @@ void LOAD_REGISTER_R_r(unsigned char *R, unsigned char *r)
  * Load to the 8-bit register R, data from the absolute address
  * specified by the 16-bit register HL
  */
-void LOAD_REGISTER_R_HL(unsigned char *R)
+void INSTR_LOAD_REGISTER_R_HL(unsigned char *R)
 {
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
 	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
@@ -167,7 +167,7 @@ void LOAD_REGISTER_R_HL(unsigned char *R)
 /* LD HL, R - LOAD REGISTER (REGISTER)
  * Load to the absolute address specified by the 16-bit register HL, data from the 8-bit register R.
  */
-void LOAD_REGISTER_HL_R(unsigned char *R)
+void INSTR_LOAD_REGISTER_HL_R(unsigned char *R)
 {
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
 	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
@@ -179,7 +179,7 @@ void LOAD_REGISTER_HL_R(unsigned char *R)
  * full 16-bit absolute address is obtained by setting the most significant byte to 0xFF and the
  * least significant byte to the value of n, so the possible range is 0xFF00-0xFFFF.
  */
-void LOAD_HW_N_A(void)
+void INSTR_LOAD_HW_N_A(void)
 {
 	unsigned char lsb, msb;
 	lsb = ReadMemory(PC_REGISTER);
@@ -195,7 +195,7 @@ void LOAD_HW_N_A(void)
  * 16-bit absolute address is obtained by setting the most significant byte to 0xFF and the least
  * significant byte to the value of C, so the possible range is 0xFF00-0xFFFF.
  */
-void LOAD_HW_C_A(void)
+void INSTR_LOAD_HW_C_A(void)
 {
 	unsigned char lsb, msb;
 	lsb = C_REGISTER;
@@ -208,7 +208,7 @@ void LOAD_HW_C_A(void)
 /* LDH (nn), A - LOAD FROM ACCUMULATOR (DIRECT)
  * Load to the address specified by the 16-bit immediate data nn, data from the 8-bit A register.
  */
-void LOAD_HW_NN_A(void)
+void INSTR_LOAD_HW_NN_A(void)
 {
 	unsigned char lsb, msb;
 	lsb = ReadMemory(PC_REGISTER);
@@ -225,7 +225,7 @@ void LOAD_HW_NN_A(void)
  * full 16-bit absolute address is obtained by setting the most significant byte to 0xFF and the
  * least significant byte to the value of n, so the possible range is 0xFF00-0xFFFF.
  */
-void LOAD_HW_A_N(void)
+void INSTR_LOAD_HW_A_N(void)
 {
 	unsigned char lsb, msb;
 	lsb = ReadMemory(PC_REGISTER);
@@ -241,7 +241,7 @@ void LOAD_HW_A_N(void)
  * full 16-bit absolute address is obtained by setting the most significant byte to 0xFF and the
  * least significant byte to the value of n, so the possible range is 0xFF00-0xFFFF.
  */
-void LOAD_HW_A_C(void)
+void INSTR_LOAD_HW_A_C(void)
 {
 	unsigned char lsb, msb;
 	lsb = C_REGISTER;
@@ -254,7 +254,7 @@ void LOAD_HW_A_C(void)
 /* LDH A, (nn) - LOAD ACCUMULATOR (DIRECT)
  * Load to the 8-bit A register, data from the absolute address specified by the 16-bit operand nn.
  */
-void LOAD_HW_A_NN(void)
+void INSTR_LOAD_HW_A_NN(void)
 {
 	unsigned char lsb, msb;
 	lsb = ReadMemory(PC_REGISTER);

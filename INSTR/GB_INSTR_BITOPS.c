@@ -6,7 +6,7 @@
  * Shift the A_REGISTER bits left by 1, into the Carry Flag.
  * Carry flag goes into bit 0.
  */
-void RLA(void)
+void INSTR_RLA(void)
 {
 	/* Scootch bit 7 into carry flag */
 	if (A_REGISTER | ZERO_RESET == (unsigned char)0xff)
@@ -38,7 +38,7 @@ void RLA(void)
  * Shift the A_REGISTER bits left by 1, bit 7 into the Carry FLAG 
  * AND back around to bit 0, hence the "circular".
  */
-void RLCA(void)
+void INSTR_RLCA(void)
 {
 	/* Scootch bit 7 into carry flag and back to bit 0 of A_REGISTER */
 	if (A_REGISTER | ZERO_RESET == (unsigned char)0xff)

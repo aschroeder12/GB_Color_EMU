@@ -2,14 +2,14 @@
  * No operation. This instruction doesn’t do anything, but can be used to add a delay of one
  * machine cycle and increment PC by one.
  */
-void NO_OPERATION(void);
+void INSTR_NO_OPERATION(void);
 
 /* STOP - STOP
  * Enter CPU very low power mode. Also used to switch between GBC double speed and normal speed CPU modes.
  * NOTE: No Licensed ROM uses the STOP instruction outside of CGB speed switching. 
  * This instruction is hella confusing and messed up, so I'm gonna skip it until I need to do it for GBC
  */
-void STOP(void);
+void INSTR_STOP(void);
 
 /* HALT
  * Enter CPU low-power consumption mode until an interrupt occurs. 
@@ -27,17 +27,17 @@ void STOP(void);
  * 			The CPU continues execution after the HALT, but the byte after it is read twice in a row (PC is not incremented, due to a hardware bug).
  * TODO
  */
-void HALT(void);
+void INSTR_HALT(void);
 
 /* DI - DISABLE INTERRUPTS
  * Disables interrupt handling by setting IME=0 and cancelling any scheduled effects of the EI
  * instruction if any.
  */
-void DISABLE_INTERRUPTS(void);
+void INSTR_DISABLE_INTERRUPTS(void);
 
 /* EI - ENABLE INTERRUPTS
  * Schedules interrupt handling to be enabled after the next machine cycle.
  */
-void DISABLE_INTERRUPTS(void);
+void INSTR_DISABLE_INTERRUPTS(void);
 
 
