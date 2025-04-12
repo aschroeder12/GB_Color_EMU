@@ -4,6 +4,11 @@
  */
 void INSTR_LOAD_REGISTER_RR_NN(unsigned char *, unsigned char *);
 
+/* LD SP, nn - LOAD 16-BIT REGISTER (IMMEDIATE)
+ * Load to the 16-bit SP register, the immediate 16-bit data nn.
+ */
+void INSTR_LOAD_REGISTER_SP_NN(void)
+
 /* LD nn, SP - LOAD FROM SP (IMMEDIATE)
  * Load to the absolute address specified by the 16-bit operand nn, data from the 16-bit SP register.
  * Yeah it's not technically "Load register", oh well

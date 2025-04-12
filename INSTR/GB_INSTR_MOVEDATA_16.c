@@ -15,15 +15,30 @@ void INSTR_LOAD_REGISTER_RR_NN(unsigned char *R1, unsigned char *R2)
 	msb = ReadMemory(PC_REGISTER);
 	PC_REGISTER = PC_REGISTER + 1;
 	data = (unsigned short)(msb << 8) + (unsigned short)lsb;
-	*R1 = val >> 8;
-	*R2 = val;
+	*R1 = data >> 8;
+	*R2 = data;
+}
+
+/* LD SP, nn - LOAD 16-BIT REGISTER (IMMEDIATE)
+ * Load to the 16-bit SP register, the immediate 16-bit data nn.
+ */
+void INSTR_LOAD_REGISTER_SP_NN(void)
+{
+	unsigned char lsb, msb;
+	unsigned short data;
+	lsb = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	msb = ReadMemory(PC_REGISTER);
+	PC_REGISTER = PC_REGISTER + 1;
+	data = (unsigned short)(msb << 8) + (unsigned short)lsb;
+	SP_REGISTER = data;
 }
 
 /* LD nn, SP - LOAD FROM SP (IMMEDIATE)
  * Load to the absolute address specified by the 16-bit operand nn, data from the 16-bit SP register.
  * Yeah it's not technically "Load register", oh well
  */
-void INSTR_LOAD_REGISTER_NN_SP()
+void INSTR_LOAD_REGISTER_NN_SP(void)
 {
 	unsigned char lsb, msb;
 	lsb = ReadMemory(PC_REGISTER);
