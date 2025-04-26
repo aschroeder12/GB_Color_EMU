@@ -15,8 +15,6 @@
 #include<math.h> /* pow */
 
 /* Gonna go with the easy solution, use an array of bytes (chars) 
- * I could do a 1-to-1 memory arrays and do bit shifting, but I don't know if all Memory operations are Byte aligned?
- * If they are, it'd be easy. If they aren't, then it would suck big time
  */
 
 unsigned char ROM_BANK_00[16384];
@@ -30,20 +28,6 @@ unsigned char IO_REGISTERS[128];
 unsigned char HRAM[127];
 unsigned char IE_REGISTER;
 
-/* Not needed anymore?? */
-unsigned char ConvertFromBitsToDecimal(unsigned char* beginAddr, unsigned char size)
-{
-	unsigned char result;
-	unsigned char value; 
-
-	for (unsigned char i = 0; i < size; i++)
-	{
-		value = *beginAddr;
-		result = result + (value)*(pow(2,(size - (i + 1))));
-		beginAddr++;
-	}
-	return result;
-}
 
 /* ReadMemory Function
  * Based on address, access correct memory region and return the 8 bit data
@@ -55,37 +39,37 @@ unsigned char ReadMemory(unsigned short addr)
 	if (addr <= (unsigned short)0x3fff)
 	{
 		/* convert addr to index in ROM_BANK_00, and get its address */
-		result = ROM_BANK_00[add - 0];
+		result = ROM_BANK_00[addr - 0];
 	}
 	/* BANK 01 */
 	else if (addr <= (unsigned short)0x7fff)
 	{
 		/* convert addr to index in ROM_BANK_01, and get its address */
-		result = ROM_BANK_01[add - (unsigned char)0x4000];
+		result = ROM_BANK_01[addr - (unsigned char)0x4000];
 	}
 	/* VRAM */
 	else if (addr <= (unsigned short)0x9fff)
 	{
 		/* convert addr to index in VRAM, and get its address */
-		result = VRAM[add - (unsigned char)0x8000];
+		result = VRAM[addr - (unsigned char)0x8000];
 	}
 	/* EXTERNAL RAM */
 	else if (addr <= (unsigned short)0xbfff)
 	{
 		/* convert addr to index in EXTERNAL RAM, and get its address */
-		result = EXTERNAL_RAM[add - (unsigned char)0xa000];
+		result = EXTERNAL_RAM[addr - (unsigned char)0xa000];
 	}
 	/* WRAM_1 */
 	else if (addr <= (unsigned short)0xcfff)
 	{
 		/* convert addr to index in WRAM_1, and get its address */
-		result = WRAM_1[add - (unsigned char)0xc000];
+		result = WRAM_1[addr - (unsigned char)0xc000];
 	}
 	/* WRAM_2 */
 	else if (addr <= (unsigned short)0xdfff)
 	{
 		/* convert addr to index in WRAM_2, and get its address */
-		result = WRAM_2[add - (unsigned char)0xd000];
+		result = WRAM_2[addr - (unsigned char)0xd000];
 	}
 	/* ECHO_RAM */
 	else if (addr <= (unsigned short)0xfdff)
@@ -96,7 +80,7 @@ unsigned char ReadMemory(unsigned short addr)
 	else if (addr <= (unsigned short)0xfe9f)
 	{
 		/* convert addr to index in OAM, and get its address */
-		result = OAM[add - (unsigned char)0xfe00];
+		result = OAM[addr - (unsigned char)0xfe00];
 	}
 	/* No */
 	else if (addr <= (unsigned short)0xfeff)
@@ -107,13 +91,13 @@ unsigned char ReadMemory(unsigned short addr)
 	else if (addr <= (unsigned short)0xff7f)
 	{
 		/* convert addr to index in IO_REGISTERS, and get its address */
-		result = IO_REGISTERS[add - (unsigned char)0xff00];
+		result = IO_REGISTERS[addr - (unsigned char)0xff00];
 	}
 	/* HIGH RAM */
 	else if (addr <= (unsigned short)0xfffe)
 	{
 		/* convert addr to index in HRAM, and get its address */
-		result = HRAM[add - (unsigned char)0xff80];
+		result = HRAM[addr - (unsigned char)0xff80];
 	}
 	/* IE REGISTER */
 	else if (addr <= (unsigned short)0xffff)
@@ -138,37 +122,37 @@ void WriteMemory(unsigned short addr, unsigned char data)
 	if (addr <= (unsigned short)0x3fff)
 	{
 		/* Write data to the adjusted index */
-		ROM_BANK_00[add - 0] = data;
+		ROM_BANK_00[addr - 0] = data;
 	}
 	/* BANK 01 */
 	else if (addr <= (unsigned short)0x7fff)
 	{
 		/* Write data to the adjusted index */
-		ROM_BANK_01[add - (unsigned char)0x4000] = data;
+		ROM_BANK_01[addr - (unsigned char)0x4000] = data;
 	}
 	/* VRAM */
 	else if (addr <= (unsigned short)0x9fff)
 	{
 		/* Write data to the adjusted index */
-		VRAM[add - (unsigned char)0x8000] = data;
+		VRAM[addr - (unsigned char)0x8000] = data;
 	}
 	/* EXTERNAL RAM */
 	else if (addr <= (unsigned short)0xbfff)
 	{
 		/* Write data to the adjusted index */
-		EXTERNAL_RAM[add - (unsigned char)0xa000] = data;
+		EXTERNAL_RAM[addr - (unsigned char)0xa000] = data;
 	}
 	/* WRAM_1 */
 	else if (addr <= (unsigned short)0xcfff)
 	{
 		/* Write data to the adjusted index */
-		WRAM_1[add - (unsigned char)0xc000] = data;
+		WRAM_1[addr - (unsigned char)0xc000] = data;
 	}
 	/* WRAM_2 */
 	else if (addr <= (unsigned short)0xdfff)
 	{
 		/* Write data to the adjusted index */
-		WRAM_2[add - (unsigned char)0xd000] = data;
+		WRAM_2[addr - (unsigned char)0xd000] = data;
 	}
 	/* ECHO_RAM */
 	else if (addr <= (unsigned short)0xfdff)
@@ -179,7 +163,7 @@ void WriteMemory(unsigned short addr, unsigned char data)
 	else if (addr <= (unsigned short)0xfe9f)
 	{
 		/* Write data to the adjusted index */
-		OAM[add - (unsigned char)0xfe00] = data;
+		OAM[addr - (unsigned char)0xfe00] = data;
 	}
 	/* No */
 	else if (addr <= (unsigned short)0xfeff)
@@ -190,13 +174,13 @@ void WriteMemory(unsigned short addr, unsigned char data)
 	else if (addr <= (unsigned short)0xff7f)
 	{
 		/* Write data to the adjusted index */
-		IO_REGISTERS[add - (unsigned char)0xff00] = data;
+		IO_REGISTERS[addr - (unsigned char)0xff00] = data;
 	}
 	/* HIGH RAM */
 	else if (addr <= (unsigned short)0xfffe)
 	{
 		/* Write data to the adjusted index */
-		HRAM[add - (unsigned char)0xff80] = data;
+		HRAM[addr - (unsigned char)0xff80] = data;
 	}
 	/* IE REGISTER */
 	else if (addr <= (unsigned short)0xffff)
