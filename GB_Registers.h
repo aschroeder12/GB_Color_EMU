@@ -26,7 +26,6 @@ const unsigned char HALFCARRY_RESET = 0xdf;
 const unsigned char CARRY_SET = 0x10;
 const unsigned char CARRY_RESET = 0xef;
 
-
 extern unsigned short PC_REGISTER;
 extern unsigned short SP_REGISTER;
 
