@@ -6,7 +6,7 @@
 typedef struct PALLETE;
 
 /* quick example to test printing to screen */
-void WriteExampleVRAM()
+void WriteExampleVRAM(void)
 {
     unsigned char dataArr[16] = {0xFF, 0x00, 0x7E, 0xFF, 0x85, 0x81, 0x89, 0x83, 0x93, 0x85, 0xA5, 0x8B, 0xC9, 0x97, 0x7E, 0xFF};
     unsigned short addr = 0x8000;
@@ -21,7 +21,29 @@ void WriteExampleVRAM()
         WriteMemory(addr + i, 0x00);
     }
 }
+/*
+void LoadCatridge(char* fileName)
+{
+    FILE* fptr;
+    fptr = fopen(fileName, "r");
 
+    if (fptr == NULL)
+    {
+        printf("Catridge not found with that file name \n");
+    }
+    // check for cartridge size??? 0x0148, but worry about this later
+    // check for any cartridge RAM, do this later
+    else
+    {
+
+    }
+    fclose(fptr);
+}
+*/
+void DoGameBoyThings(void)
+{
+
+}
 
 //------------------------------------------------------------------------------------
 // Program main entry point
@@ -43,6 +65,7 @@ int main(void)
     DMG_Pallete.Two = (Color){ 48, 98, 48, 255 };
     DMG_Pallete.Three = (Color){ 15, 56, 15, 255 };
 
+    //LoadCatridge("C:/Users/andre/Documents/ProgrammingProjects/Github/GB_Color/test_rom.bin");
 
     WriteExampleVRAM();
     InitWindow(screenWidth, screenHeight, "test example");
@@ -65,6 +88,9 @@ int main(void)
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
         //----------------------------------------------------------------------------------
+
+        DoGameBoyThings();
+
         cnt = cnt + 1;
         if (cnt > 512)
         {
