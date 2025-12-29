@@ -5,6 +5,7 @@
  * 0xcb18 - 1f RR 			- ROTATE RIGHT (REGISTER)
  * 0xcb20 - 27 SLA 			- SHIFT LEFT ARITHMETICALLY (REGISTER)
  * 0xcb28 - 2f SRA 			- SHIFT RIGHT ARITHMETICALLY (REGISTER)
+ * 0xcb38 - 3f SRL 			- SHIFT RIGHT LOGICALLY (REGISTER)
  */
 
 /* RLC R - ROTATE LEFT CIRCULAR (REGISTER)
@@ -452,6 +453,69 @@ void INSTR_SRA_REGISTER_HL(void)
 		{
 			DATA_BUS = DATA_BUS >> 1;
 		}
+		F_REGISTER = F_REGISTER & CARRY_RESET;
+	}
+	if (DATA_BUS == (unsigned char)0)
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+	WriteMemory(ADDRESS_BUS, DATA_BUS);
+}
+
+/* SRL - SHIFT RIGHT LOGICALLY (REGISTER)
+ * Shift the Register R value right by 1, into the Carry Flag.
+ * Bit 7 is 0, bit 0 to Carry Flag.
+ */
+void INSTR_SRL_REGISTER_R(unsigned char *R)
+{
+	/* Scootch bit 0 into carry flag */
+	if (*R | (unsigned char)0xfe  == (unsigned char)0xff)
+	{
+		*R = *R >> 1;
+		F_REGISTER = F_REGISTER | CARRY_SET;
+	}
+	else
+	{
+		*R = *R >> 1;
+		F_REGISTER = F_REGISTER & CARRY_RESET;
+	}
+	if (*R == (unsigned char)0)
+	{
+		F_REGISTER = F_REGISTER | ZERO_SET;
+	}
+	else
+	{
+		F_REGISTER = F_REGISTER & ZERO_RESET;
+	}
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
+}
+
+/* SRL - SHIFT RIGHT LOGICALLY (INDIRECT HL)
+ * Shift the 8-bit value at the address specified by the HL register right by 1, into the Carry Flag.
+ * Bit 7 is 0, bit 0 to Carry Flag.
+ */
+void INSTR_SRL_REGISTER_HL(void)
+{
+	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
+	/* Debug this ADDRESS to make sure it is correct */
+	DATA_BUS = ReadMemory(ADDRESS_BUS);
+	/* Scootch bit 0 into carry flag */
+	if (DATA_BUS | (unsigned char)0xfe  == (unsigned char)0xff)
+	{
+		DATA_BUS = DATA_BUS >> 1;
+		F_REGISTER = F_REGISTER | CARRY_SET;
+	}
+	else
+	{
+		DATA_BUS = DATA_BUS >> 1;
 		F_REGISTER = F_REGISTER & CARRY_RESET;
 	}
 	if (DATA_BUS == (unsigned char)0)
