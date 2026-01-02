@@ -1,3 +1,5 @@
+#ifndef INCLUDE_GB_INSTR_CB_SHIFTS_H
+#define INCLUDE_GB_INSTR_CB_SHIFTS_H
 /* RLC R - ROTATE LEFT CIRCULAR (REGISTER)
  * Shift the Register R bits left by 1, bit 7 into the Carry FLAG 
  * AND back around to bit 0, hence the "circular".
@@ -81,3 +83,5 @@ void INSTR_SRL_REGISTER_R(unsigned char *);
  * Bit 7 is 0, bit 0 to Carry Flag.
  */
 void INSTR_SRL_REGISTER_HL(void);
+
+#endif

@@ -53,18 +53,18 @@ void INSTR_DEC_SP()
  */
 void INSTR_ADD_HL_RR(unsigned char *R1, unsigned char *R2)
 {
-	unsigned short result, carry_per_bit, val1, val2;
+	unsigned short result, val1, val2;
 	/* Get HL and RR */
 	val1 = (unsigned short)(*R1 << 8) + (unsigned short)*R2;
 	val2 = (unsigned short)(H_REGISTER << 8) + (unsigned short)L_REGISTER;
-	result, carry_per_bit = val1 + val2;
+	result = val1 + val2;
 	/* Put HL + RR back into HL */
 	H_REGISTER = result >> 8;
 	L_REGISTER = result;
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
 	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
-	if ((carry_per_bit | (unsigned short)0xf7ff) == (unsigned short)0xffff)
+	if ((result | (unsigned short)0xf7ff) == (unsigned short)0xffff)
 	{
 		F_REGISTER = F_REGISTER | HALFCARRY_SET;
 	}
@@ -73,7 +73,7 @@ void INSTR_ADD_HL_RR(unsigned char *R1, unsigned char *R2)
 		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
-	if ((carry_per_bit | (unsigned short)0x7fff) == (unsigned short)0xffff)
+	if ((result | (unsigned short)0x7fff) == (unsigned short)0xffff)
 	{
 		F_REGISTER = F_REGISTER | CARRY_SET;
 	}
@@ -89,15 +89,15 @@ void INSTR_ADD_HL_RR(unsigned char *R1, unsigned char *R2)
  */
 void INSTR_ADD_HL_SP()
 {
-	unsigned short result, carry_per_bit, val;
+	unsigned short result, val;
 	val = (unsigned short)(H_REGISTER << 8) + (unsigned short)L_REGISTER;
-	result, carry_per_bit = SP_REGISTER + val;
+	result = SP_REGISTER + val;
 	H_REGISTER = result >> 8;
 	L_REGISTER = result;
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
 	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
-	if ((carry_per_bit | (unsigned short)0xf7ff) == (unsigned short)0xffff)
+	if ((result | (unsigned short)0xf7ff) == (unsigned short)0xffff)
 	{
 		F_REGISTER = F_REGISTER | HALFCARRY_SET;
 	}
@@ -106,7 +106,7 @@ void INSTR_ADD_HL_SP()
 		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
-	if ((carry_per_bit | (unsigned short)0x7fff) == (unsigned short)0xffff)
+	if ((result | (unsigned short)0x7fff) == (unsigned short)0xffff)
 	{
 		F_REGISTER = F_REGISTER | CARRY_SET;
 	}
@@ -122,18 +122,18 @@ void INSTR_ADD_HL_SP()
  */
 void INSTR_ADD_SP_E()
 {
-	unsigned char result, carry_per_bit;
+	unsigned char result;
 	signed char e;
 	e = (signed char)ReadMemory(PC_REGISTER);
 	PC_REGISTER = PC_REGISTER + 1;
-	result, carry_per_bit = SP_REGISTER + e;
-	SP = result;
+	result = SP_REGISTER + e;
+	SP_REGISTER = result;
 	/* Deal with zero flag, bit 7 of F_REGISTER */
 	F_REGISTER = F_REGISTER & ZERO_RESET;
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
 	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
-	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
+	if ((result | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
 		F_REGISTER = F_REGISTER | HALFCARRY_SET;
 	}
@@ -142,7 +142,7 @@ void INSTR_ADD_SP_E()
 		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
-	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
+	if ((result | (unsigned char)0x7f) == (unsigned char)0xff)
 	{
 		F_REGISTER = F_REGISTER | CARRY_SET;
 	}

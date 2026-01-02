@@ -1,3 +1,5 @@
+#ifndef INCLUDE_GB_INSTR_CTRLFLOW_H
+#define INCLUDE_GB_INSTR_CTRLFLOW_H
 /* JR e - JUMP RELATIVE
  * Unconditional jump to the relative address specified by the signed 8-bit operand e
  */
@@ -166,3 +168,4 @@ void INSTR_RESTART_30(void);
  */
 void INSTR_RESTART_38(void);
 
+#endif

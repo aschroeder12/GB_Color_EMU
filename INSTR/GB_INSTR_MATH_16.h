@@ -1,3 +1,5 @@
+#ifndef INCLUDE_GB_INSTR_MATH_16_H
+#define INCLUDE_GB_INSTR_MATH_16_H
 /* INC rr - INCREMENT (16-BIT REGISTER, except SP)
  * Increments data in the 16-bit register rr. MSB is R1, LSB is R2!
  */
@@ -40,3 +42,4 @@ void INSTR_ADD_HL_SP(void);
  */
 void INSTR_ADD_SP_E(void);
 
+#endif

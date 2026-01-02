@@ -16,6 +16,7 @@
 
 /* Gonna go with the easy solution, use an array of bytes (chars) 
  */
+unsigned char BOOT_ROM[256];
 
 unsigned char ROM_BANK_00[16384];
 unsigned char ROM_BANK_01[16384];
@@ -36,10 +37,19 @@ unsigned char ReadMemory(unsigned short addr)
 {
 	unsigned char result;
 	/* Bank 00 */
+	result = 0xff;
 	if (addr <= (unsigned short)0x3fff)
 	{
-		/* convert addr to index in ROM_BANK_00, and get its address */
-		result = ROM_BANK_00[addr - 0];
+		if ((ReadMemory(0xff50) == (unsigned char)0) && (addr <= 0x0100)) 
+		{
+			/* Check BOOT_ROM Register to intercept 0x000-0x100 accesses */
+			result = BOOT_ROM[addr - 0];
+		}
+		else
+		{
+			/* convert addr to index in ROM_BANK_00, and get its address */
+			result = ROM_BANK_00[addr - 0];
+		}
 	}
 	/* BANK 01 */
 	else if (addr <= (unsigned short)0x7fff)

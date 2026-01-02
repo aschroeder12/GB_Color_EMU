@@ -1,3 +1,5 @@
+#ifndef INCLUDE_GB_INSTR_MOVEDATA_16_H
+#define INCLUDE_GB_INSTR_MOVEDATA_16_H
 /* LD RR, nn - LOAD 16-BIT REGISTER (IMMEDIATE)
  * Load to the 16-bit register RR, the immediate 16-bit data nn.
  * MSB is R1, LSB is R2!
@@ -38,3 +40,4 @@ void INSTR_LOAD_REGISTER_SP_HL(void);
  */
 void INSTR_LOAD_REGISTER_HL_ADJSP(void);
 
+#endif

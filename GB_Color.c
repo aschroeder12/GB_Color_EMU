@@ -1,9 +1,8 @@
 #include "raylib.h"
-
+#include "INSTR\GB_INSTR.c"
 #include "MEM\MEMORY_MAP.c"
 #include "MEM\GRAPHICS.c"
-
-typedef struct PALLETE;
+#include "GB_Lib.c"
 
 /* quick example to test printing to screen */
 void WriteExampleVRAM(void)
@@ -21,15 +20,47 @@ void WriteExampleVRAM(void)
         WriteMemory(addr + i, 0x00);
     }
 }
+
+void FirstLoad(char* fileName)
+{
+    char a;
+    int x = 0;
+    FILE *fptr;
+    fptr = fopen("test_rom1.bin", "r");
+    
+    if (fptr != NULL)
+    {
+        while (!feof(fptr))
+            {
+                a = fgetc(fptr);
+                if (feof(fptr))
+                {
+                    break;
+                }
+                BOOT_ROM[x] = (unsigned char)a;
+                x = x + 1;
+            }
+    }
+    else
+    {
+        printf("couldnt open file \n");
+    }
+    fclose(fptr);
+
+    /* Init Memory */
+    PC_REGISTER = 0x0000;
+    BR_MODE = 1;
+}
+
 /*
-void LoadCatridge(char* fileName)
+void LoadCartridge(char* fileName)
 {
     FILE* fptr;
     fptr = fopen(fileName, "r");
 
     if (fptr == NULL)
     {
-        printf("Catridge not found with that file name \n");
+        printf("Cartridge not found with that file name \n");
     }
     // check for cartridge size??? 0x0148, but worry about this later
     // check for any cartridge RAM, do this later
@@ -42,6 +73,20 @@ void LoadCatridge(char* fileName)
 */
 void DoGameBoyThings(void)
 {
+    /* PPU Timing 
+     * Total Scan Lines - 154
+     * For Scan Lines 1 - 144
+     * 20 clocks (OAM Search) - 43 clocks (Pixel Transfer) - 51 clocks (H-Blank)
+     * For Scan Lines 145 - 154
+     * 114 clocks (V-Blank)
+     */
+
+    //unsigned char clockCnt;
+    //unsigned char lineCnt;
+
+    //clockCnt = (unsigned char)0;
+    //lineCnt = (unsigned char)0;
+
 
 }
 
@@ -65,7 +110,8 @@ int main(void)
     DMG_Pallete.Two = (Color){ 48, 98, 48, 255 };
     DMG_Pallete.Three = (Color){ 15, 56, 15, 255 };
 
-    //LoadCatridge("C:/Users/andre/Documents/ProgrammingProjects/Github/GB_Color/test_rom.bin");
+    FirstLoad("C:/Users/andre/Documents/ProgrammingProjects/Github/GB_Color/test_rom1.bin");
+    //LoadCartridge("C:/Users/andre/Documents/ProgrammingProjects/Github/GB_Color/test_rom.bin");
 
     WriteExampleVRAM();
     InitWindow(screenWidth, screenHeight, "test example");
@@ -89,7 +135,7 @@ int main(void)
         // TODO: Update your variables here
         //----------------------------------------------------------------------------------
 
-        DoGameBoyThings();
+        //DoGameBoyThings();
 
         cnt = cnt + 1;
         if (cnt > 512)

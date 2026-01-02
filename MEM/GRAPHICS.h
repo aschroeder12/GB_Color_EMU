@@ -4,4 +4,5 @@
 void GB_DrawTile(unsigned short, unsigned char, unsigned char, int, PALLETE);
 void GB_UpdateTextureTile(unsigned short, int, int, Texture*, PALLETE)
 
+
 #endif

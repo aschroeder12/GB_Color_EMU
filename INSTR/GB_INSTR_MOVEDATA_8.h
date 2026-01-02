@@ -1,3 +1,5 @@
+#ifndef INCLUDE_GB_INSTR_MOVEDATA_8_H
+#define INCLUDE_GB_INSTR_MOVEDATA_8_H
 /* LD BC, A - LOAD FROM ACCUMULATOR (INDIRECT BC)
  * Load to the absolute address specified by the 16-bit register BC, data from the 8-bit A register
  */
@@ -104,3 +106,5 @@ void INSTR_LOAD_HW_A_C(void);
  * Load to the 8-bit A register, data from the absolute address specified by the 16-bit operand nn.
  */
 void INSTR_LOAD_HW_A_NN(void);
+
+#endif

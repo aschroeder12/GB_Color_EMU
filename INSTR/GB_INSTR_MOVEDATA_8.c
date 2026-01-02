@@ -23,7 +23,7 @@
  *  0xfa LDH A, (nn)		- LOAD ACCUMLATOR (DIRECT)
  *******************************************************/
 
-#include"GB_Registers.h"
+#include"../GB_Registers.h"
 
 /* LD BC, A - LOAD FROM ACCUMULATOR (INDIRECT BC)
  * Load to the absolute address specified by the 16-bit register BC, data from the 8-bit A register
@@ -80,13 +80,12 @@ void INSTR_LOAD_REGISTER_A_DE(void)
  */
 void INSTR_LOAD_REGISTER_HLI_A(void)
 {
-	unsigned short addr;
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
-	ADDRESS_BUS, addr = ADDRESS_BUS | L_REGISTER;
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
 	WriteMemory(ADDRESS_BUS, A_REGISTER);
-	addr = addr + 1;
-	H_REGISTER = addr >> 8;
-	L_REGISTER = addr;
+	ADDRESS_BUS = ADDRESS_BUS + 1;
+	H_REGISTER = ADDRESS_BUS >> 8;
+	L_REGISTER = ADDRESS_BUS;
 }
 
 /* LD A, (HL+) - LOAD ACCUMULATOR (INDIRECT HL, INCREMENT)
@@ -95,13 +94,12 @@ void INSTR_LOAD_REGISTER_HLI_A(void)
  */
 void INSTR_LOAD_REGISTER_A_HLI(void)
 {
-	unsigned short addr;
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
-	ADDRESS_BUS, addr = ADDRESS_BUS | L_REGISTER;
+	ADDRESS_BUS= ADDRESS_BUS | L_REGISTER;
 	A_REGISTER = ReadMemory(ADDRESS_BUS);
-	addr = addr + 1;
-	H_REGISTER = addr >> 8;
-	L_REGISTER = addr;
+	ADDRESS_BUS = ADDRESS_BUS + 1;
+	H_REGISTER = ADDRESS_BUS >> 8;
+	L_REGISTER = ADDRESS_BUS;
 }
 
 /* LD HL-, A - LOAD FROM ACCUMULATOR (INDIRECT HL, DECREMENT)
@@ -110,13 +108,12 @@ void INSTR_LOAD_REGISTER_A_HLI(void)
  */
 void INSTR_LOAD_REGISTER_HLD_A(void)
 {
-	unsigned short addr;
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
-	ADDRESS_BUS, addr = ADDRESS_BUS | L_REGISTER;
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
 	WriteMemory(ADDRESS_BUS, A_REGISTER);
-	addr = addr - 1;
-	H_REGISTER = addr >> 8;
-	L_REGISTER = addr;
+	ADDRESS_BUS = ADDRESS_BUS - 1;
+	H_REGISTER = ADDRESS_BUS >> 8;
+	L_REGISTER = ADDRESS_BUS;
 }
 
 /* LD (HL), n - LOAD REGISTER (IMMEDIATE)
@@ -125,7 +122,7 @@ void INSTR_LOAD_REGISTER_HLD_A(void)
 void INSTR_LOAD_REGISTER_HL_N(void)
 {
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
-	ADDRESS_BUS, addr = ADDRESS_BUS | L_REGISTER;
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
 	WriteMemory(ADDRESS_BUS, ReadMemory(PC_REGISTER));
 }
 
@@ -135,13 +132,12 @@ void INSTR_LOAD_REGISTER_HL_N(void)
  */
 void INSTR_LOAD_REGISTER_A_HLD(void)
 {
-	unsigned short addr;
 	ADDRESS_BUS = (unsigned short)(H_REGISTER << 8);
-	ADDRESS_BUS, addr = ADDRESS_BUS | L_REGISTER;
+	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
 	A_REGISTER = ReadMemory(ADDRESS_BUS);
-	addr = addr - 1;
-	H_REGISTER = addr >> 8;
-	L_REGISTER = addr;
+	ADDRESS_BUS = ADDRESS_BUS - 1;
+	H_REGISTER = ADDRESS_BUS >> 8;
+	L_REGISTER = ADDRESS_BUS;
 }
 
 /* LD R, r - LOAD REGISTER (REGISTER)

@@ -217,9 +217,7 @@ void INSTR_CALL_NZ(void)
  */
 void INSTR_RESTART_00(void)
 {
-	unsigned short addr;
 	unsigned char tmp;
-
 	/* Create return address from current PC, write it to SP. 
 	 * Then set PC to 0x0000 */
 	SP_REGISTER = SP_REGISTER - 1;
@@ -359,9 +357,7 @@ void INSTR_CALL(void)
  */
 void INSTR_RESTART_08(void)
 {
-	unsigned short addr;
 	unsigned char tmp;
-
 	/* Create return address from current PC, write it to SP. 
 	 * Then set PC to 0x0008 */
 	SP_REGISTER = SP_REGISTER - 1;
@@ -455,9 +451,7 @@ void INSTR_CALL_NC(void)
  */
 void INSTR_RESTART_10(void)
 {
-	unsigned short addr;
 	unsigned char tmp;
-
 	/* Create return address from current PC, write it to SP. 
 	 * Then set PC to 0x0010 */
 	SP_REGISTER = SP_REGISTER - 1;
@@ -573,9 +567,7 @@ void INSTR_CALL_C(void)
  */
 void INSTR_RESTART_18(void)
 {
-	unsigned short addr;
 	unsigned char tmp;
-
 	/* Create return address from current PC, write it to SP. 
 	 * Then set PC to 0x0018 */
 	SP_REGISTER = SP_REGISTER - 1;
@@ -592,9 +584,7 @@ void INSTR_RESTART_18(void)
  */
 void INSTR_RESTART_20(void)
 {
-	unsigned short addr;
 	unsigned char tmp;
-
 	/* Create return address from current PC, write it to SP. 
 	 * Then set PC to 0x0020 */
 	SP_REGISTER = SP_REGISTER - 1;
@@ -621,9 +611,7 @@ void INSTR_JUMP_HL(void)
  */
 void INSTR_RESTART_28(void)
 {
-	unsigned short addr;
 	unsigned char tmp;
-
 	/* Create return address from current PC, write it to SP. 
 	 * Then set PC to 0x0028 */
 	SP_REGISTER = SP_REGISTER - 1;
@@ -640,9 +628,7 @@ void INSTR_RESTART_28(void)
  */
 void INSTR_RESTART_30(void)
 {
-	unsigned short addr;
 	unsigned char tmp;
-
 	/* Create return address from current PC, write it to SP. 
 	 * Then set PC to 0x0030 */
 	SP_REGISTER = SP_REGISTER - 1;
@@ -659,9 +645,7 @@ void INSTR_RESTART_30(void)
  */
 void INSTR_RESTART_38(void)
 {
-	unsigned short addr;
 	unsigned char tmp;
-
 	/* Create return address from current PC, write it to SP. 
 	 * Then set PC to 0x0038 */
 	SP_REGISTER = SP_REGISTER - 1;

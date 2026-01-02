@@ -1,3 +1,5 @@
+#ifndef INCLUDE_GB_INSTR_LOGICAL_H
+#define INCLUDE_GB_INSTR_LOGICAL_H
 /* AND R - AND (REGISTER) 0xa0 - 0xa5, 0xa7
  * Performs a bitwise AND operation between the 8-bit A register and the 8-bit register r, and
  * stores the result back into the A register.
@@ -86,3 +88,4 @@ void INSTR_CCF(void);
  */
 void INSTR_SCF(void);
 
+#endif

@@ -1,3 +1,5 @@
+#ifndef INCLUDE_GB_INSTR_MISC_H
+#define INCLUDE_GB_INSTR_MISC_H
 /* NOP - NO OPERATION
  * No operation. This instruction doesn’t do anything, but can be used to add a delay of one
  * machine cycle and increment PC by one.
@@ -40,4 +42,4 @@ void INSTR_DISABLE_INTERRUPTS(void);
  */
 void INSTR_DISABLE_INTERRUPTS(void);
 
-
+#endif

@@ -1,3 +1,5 @@
+#ifndef INCLUDE_GB_INSTR_MATH_8_H
+#define INCLUDE_GB_INSTR_MATH_8_H
 /* INC R - INCREMENT (REGISTER)
  * Increments data in the 8-bit register R
  */
@@ -96,3 +98,4 @@ void INSTR_SBC_REGISTER_R(unsigned char *);
  */
 void INSTR_SBC_REGISTER_HL(void);
 
+#endif

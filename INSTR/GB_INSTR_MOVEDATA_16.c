@@ -99,19 +99,19 @@ void INSTR_LOAD_REGISTER_SP_HL(void)
  */
 void INSTR_LOAD_REGISTER_HL_ADJSP(void)
 {
-	unsigned short result, carry_per_bit;
+	unsigned short result;
 	signed char e;
 	e = ReadMemory(PC_REGISTER);
 	PC_REGISTER = PC_REGISTER + 1;
 	result = SP_REGISTER + e; /* hopefully this converts correctly to unsigned short? */
-	H_REGISTER = data >> 8;
-	L_REGISTER = data;
+	H_REGISTER = result >> 8;
+	L_REGISTER = result;
 	/* Deal with zero flag, bit 7 of F_REGISTER */
 	F_REGISTER = F_REGISTER & ZERO_RESET;
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
 	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
-	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
+	if ((result | (unsigned char)0xf7) == (unsigned char)0xff)
 	{
 		F_REGISTER = F_REGISTER | HALFCARRY_SET;
 	}
@@ -120,7 +120,7 @@ void INSTR_LOAD_REGISTER_HL_ADJSP(void)
 		F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 	}
 	/* Deal with the carry flag, bit 4 of F_REGISTER */
-	if ((carry_per_bit | (unsigned char)0x7f) == (unsigned char)0xff)
+	if ((result | (unsigned char)0x7f) == (unsigned char)0xff)
 	{
 		F_REGISTER = F_REGISTER | CARRY_SET;
 	}

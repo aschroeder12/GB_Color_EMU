@@ -140,3 +140,4 @@ unsigned char* GetScreenMemPtr(void)
 {
     return &MEM_ScreenPixels[0];
 }
+

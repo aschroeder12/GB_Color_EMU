@@ -19,6 +19,7 @@
 
 unsigned short PC_REGISTER;
 unsigned short SP_REGISTER;
+unsigned char BR_MODE; /* 1 when BOOT_ROM is running, 0 otherwise */
 
 unsigned char A_REGISTER;
 
@@ -42,3 +43,5 @@ unsigned char IR_REGISTER;
 unsigned char IE_REGISTER;
 unsigned char IME_FLAG;
 unsigned char INTERRUPT_FLAG;
+
+unsigned char LCDC_REGISTER;

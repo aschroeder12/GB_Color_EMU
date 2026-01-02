@@ -1,3 +1,4 @@
+#include<stdio.h>
 /*  GB MISC INSTRUCTIONS TODO
  * 
  *  0x00 NOP 					- NO OPERATION
@@ -50,7 +51,7 @@ void INSTR_HALT()
 	/* If IME is set (Enables interrupt handling)*/
 	if (IME_FLAG != 0)
 	{
-		while (IE_REGISTER & Interrupt_FLAG == 0)
+		while ((IE_REGISTER & INTERRUPT_FLAG) == 0)
 		{
 			/* Spin baby spin until there is a pending interrupt*/
 			/* Call an "check for interrupts" function so we aren't stuck in an infinite loop?*/
@@ -62,9 +63,9 @@ void INSTR_HALT()
 	else /* IME not set */
 	{
 		/* If no interrupt pending */
-		if (IE_REGISTER & Interrupt_FLAG == 0)
+		if ((IE_REGISTER & INTERRUPT_FLAG) == 0)
 		{
-			while (IE_REGISTER & Interrupt_FLAG == 0)
+			while ((IE_REGISTER & INTERRUPT_FLAG) == 0)
 			{
 				/* Spin baby spin until there is a pending interrupt*/
 				/* Call an "check for interrupts" function so we aren't stuck in an infinite loop?*/
@@ -90,7 +91,7 @@ void INSTR_DISABLE_INTERRUPTS(void)
 /* EI - ENABLE INTERRUPTS
  * Schedules interrupt handling to be enabled after the next machine cycle.
  */
-void INSTR_DISABLE_INTERRUPTS(void)
+void INSTR_ENABLE_INTERRUPTS(void)
 {
 	IME_FLAG = (unsigned char)1; /* Not sure this is right, might need to do more here? */
 }

@@ -1,3 +1,5 @@
+#ifndef INCLUDE_GB_REGISTERS_H
+#define INCLUDE_GB_REGISTERS_H
 /************GAMEBOY REGISTERS **************
  * 
  *  PC (Program Counter) REGISTER 	- 16 BIT
@@ -58,3 +60,18 @@ extern unsigned char IME_FLAG;
  ************************************************************************************/
 extern unsigned char IE_REGISTER;
 extern unsigned char INTERRUPT_FLAG;
+
+/******** LCD CONTROL BITS **********************************************************
+ * BIT 		NAME							DESCRIPTION	
+ * 7		LCD & PPU enable				Turn Screen/PPU On (1) or Off (0)
+ * 6 		Window Tile Map					Window uses 0x9800 (0) or 0x9c00 (1) bg map
+ * 5 		Window Enable					Window displayed (1) or not (0)
+ * 4		BG & Window Tiles				Addressing Mode for BG and Window, signed (0) unsigned (1)
+ * 3 		BG Tile Map						BG Tile Map Area 0x9800+ (0) or 0x9c00+ (1)
+ * 2 		OBJ Size						Size of ALL Objects
+ * 1		OBJ Enable						Whether Objects are displayed (1) or not (0)
+ * 0 		BG & Window enable/priority		Clear both Window and BG and ignore Bit 5 (0) or normal (1)
+ ************************************************************************************/
+extern unsigned char LCDC_REGISTER;
+
+#endif

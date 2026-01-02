@@ -15,7 +15,7 @@
 void INSTR_RLC_REGISTER_R(unsigned char *R)
 {
 	/* Scootch bit 7 into carry flag and back to bit 0 of R */
-	if (*R | ZERO_RESET == (unsigned char)0xff)
+	if ((*R | ZERO_RESET) == (unsigned char)0xff)
 	{
 		F_REGISTER = F_REGISTER | CARRY_SET;
 		*R = *R << 1;
@@ -50,7 +50,7 @@ void INSTR_RLC_REGISTER_HL(void)
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 
 	/* Scootch bit 7 into carry flag and back to bit 0 of DATA_BUS */
-	if (DATA_BUS | ZERO_RESET == (unsigned char)0xff)
+	if ((DATA_BUS | ZERO_RESET) == (unsigned char)0xff)
 	{
 		F_REGISTER = F_REGISTER | CARRY_SET;
 		DATA_BUS = DATA_BUS << 1;
@@ -81,7 +81,7 @@ void INSTR_RLC_REGISTER_HL(void)
 void INSTR_RRC_REGISTER_R(unsigned char *R)
 {
 	/* Scootch bit 0 into carry flag and back to bit 7 of R */
-	if (*R | (unsigned char)0xfe == (unsigned char)0xff)
+	if ((*R | (unsigned char)0xfe) == (unsigned char)0xff)
 	{
 		F_REGISTER = F_REGISTER | CARRY_SET;
 		*R = *R >> 1;
@@ -116,7 +116,7 @@ void INSTR_RRC_REGISTER_HL(void)
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 
 	/* Scootch bit 0 into carry flag and back to bit 7 of HL */
-	if (DATA_BUS | (unsigned char)0xfe == (unsigned char)0xff)
+	if ((DATA_BUS | (unsigned char)0xfe) == (unsigned char)0xff)
 	{
 		F_REGISTER = F_REGISTER | CARRY_SET;
 		DATA_BUS = DATA_BUS >> 1;
@@ -147,11 +147,11 @@ void INSTR_RRC_REGISTER_HL(void)
 void INSTR_RL_REGISTER_R(unsigned char *R)
 {
 	/* Scootch bit 7 into carry flag */
-	if (*R | ZERO_RESET == (unsigned char)0xff)
+	if ((*R | ZERO_RESET) == (unsigned char)0xff)
 	{
 		*R = *R << 1;
 		/* Wrap carry flag into bit 0, it'll be 0 otherwise */
-		if (F_REGISTER | CARRY_RESET == (unsigned char)0xff)
+		if ((F_REGISTER | CARRY_RESET) == (unsigned char)0xff)
 		{
 			*R = *R | 0x01;
 		}
@@ -161,7 +161,7 @@ void INSTR_RL_REGISTER_R(unsigned char *R)
 	{
 		*R = *R << 1;
 		/* Wrap carry flag into bit 0, it'll be 0 otherwise */
-		if (F_REGISTER | CARRY_RESET == (unsigned char)0xff)
+		if ((F_REGISTER | CARRY_RESET) == (unsigned char)0xff)
 		{
 			*R = *R | 0x01;
 		}
@@ -190,11 +190,11 @@ void INSTR_RL_REGISTER_HL(void)
 	/* Debug this ADDRESS to make sure it is correct */
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 	/* Scootch bit 7 into carry flag */
-	if (DATA_BUS | ZERO_RESET == (unsigned char)0xff)
+	if ((DATA_BUS | ZERO_RESET) == (unsigned char)0xff)
 	{
 		DATA_BUS = DATA_BUS << 1;
 		/* Wrap carry flag into bit 0, it'll be 0 otherwise */
-		if (F_REGISTER | CARRY_RESET == (unsigned char)0xff)
+		if ((F_REGISTER | CARRY_RESET) == (unsigned char)0xff)
 		{
 			DATA_BUS = DATA_BUS | 0x01;
 		}
@@ -204,7 +204,7 @@ void INSTR_RL_REGISTER_HL(void)
 	{
 		DATA_BUS = DATA_BUS << 1;
 		/* Wrap carry flag into bit 0, it'll be 0 otherwise */
-		if (F_REGISTER | CARRY_RESET == (unsigned char)0xff)
+		if ((F_REGISTER | CARRY_RESET) == (unsigned char)0xff)
 		{
 			DATA_BUS = DATA_BUS | 0x01;
 		}
@@ -230,11 +230,11 @@ void INSTR_RL_REGISTER_HL(void)
 void INSTR_RR_REGISTER_R(unsigned char *R)
 {
 	/* Scootch bit 0 into carry flag */
-	if (*R | (unsigned char)0xfe  == (unsigned char)0xff)
+	if ((*R | (unsigned char)0xfe)  == (unsigned char)0xff)
 	{
 		*R = *R >> 1;
 		/* Wrap carry flag into bit 7, it'll be 0 otherwise */
-		if (F_REGISTER | CARRY_RESET == (unsigned char)0xff)
+		if ((F_REGISTER | CARRY_RESET) == (unsigned char)0xff)
 		{
 			*R = *R | ZERO_SET;
 		}
@@ -244,7 +244,7 @@ void INSTR_RR_REGISTER_R(unsigned char *R)
 	{
 		*R = *R >> 1;
 		/* Wrap carry flag into bit 7, it'll be 0 otherwise */
-		if (F_REGISTER | CARRY_RESET == (unsigned char)0xff)
+		if ((F_REGISTER | CARRY_RESET) == (unsigned char)0xff)
 		{
 			*R = *R | ZERO_SET;
 		}
@@ -273,11 +273,11 @@ void INSTR_RR_REGISTER_HL(void)
 	/* Debug this ADDRESS to make sure it is correct */
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 	/* Scootch bit 0 into carry flag */
-	if (DATA_BUS | (unsigned char)0xfe  == (unsigned char)0xff)
+	if ((DATA_BUS | (unsigned char)0xfe)  == (unsigned char)0xff)
 	{
 		DATA_BUS = DATA_BUS >> 1;
 		/* Wrap carry flag into bit 7, it'll be 0 otherwise */
-		if (F_REGISTER | CARRY_RESET == (unsigned char)0xff)
+		if ((F_REGISTER | CARRY_RESET) == (unsigned char)0xff)
 		{
 			DATA_BUS = DATA_BUS | ZERO_SET;
 		}
@@ -287,7 +287,7 @@ void INSTR_RR_REGISTER_HL(void)
 	{
 		DATA_BUS = DATA_BUS >> 1;
 		/* Wrap carry flag into bit 7, it'll be 0 otherwise */
-		if (F_REGISTER | CARRY_RESET == (unsigned char)0xff)
+		if ((F_REGISTER | CARRY_RESET) == (unsigned char)0xff)
 		{
 			DATA_BUS = DATA_BUS | ZERO_SET;
 		}
@@ -313,7 +313,7 @@ void INSTR_RR_REGISTER_HL(void)
 void INSTR_SLA_REGISTER_R(unsigned char *R)
 {
 	/* Scootch bit 7 into carry flag */
-	if (*R | ZERO_RESET == (unsigned char)0xff)
+	if ((*R | ZERO_RESET) == (unsigned char)0xff)
 	{
 		*R = *R << 1;
 		F_REGISTER = F_REGISTER | CARRY_SET;
@@ -346,7 +346,7 @@ void INSTR_SLA_REGISTER_HL(void)
 	/* Debug this ADDRESS to make sure it is correct */
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 	/* Scootch bit 7 into carry flag */
-	if (DATA_BUS | ZERO_RESET == (unsigned char)0xff)
+	if ((DATA_BUS | ZERO_RESET) == (unsigned char)0xff)
 	{
 		DATA_BUS = DATA_BUS << 1;
 		F_REGISTER = F_REGISTER | CARRY_SET;
@@ -376,10 +376,10 @@ void INSTR_SLA_REGISTER_HL(void)
 void INSTR_SRA_REGISTER_R(unsigned char *R)
 {
 	/* Scootch bit 0 into carry flag */
-	if (*R | (unsigned char)0xfe  == (unsigned char)0xff)
+	if ((*R | (unsigned char)0xfe) == (unsigned char)0xff)
 	{
 		/* If bit 7 is 1, keep that value in bit 7 after the shift */
-		if (*R | ZERO_RESET == (unsigned char)0xff)
+		if ((*R | ZERO_RESET) == (unsigned char)0xff)
 		{
 			*R = *R >> 1;
 			*R = *R | ZERO_SET;
@@ -393,7 +393,7 @@ void INSTR_SRA_REGISTER_R(unsigned char *R)
 	else
 	{
 		/* If bit 7 is 1, keep that value in bit 7 after the shift */
-		if (*R | ZERO_RESET == (unsigned char)0xff)
+		if ((*R | ZERO_RESET) == (unsigned char)0xff)
 		{
 			*R = *R >> 1;
 			*R = *R | ZERO_SET;
@@ -427,10 +427,10 @@ void INSTR_SRA_REGISTER_HL(void)
 	/* Debug this ADDRESS to make sure it is correct */
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 	/* Scootch bit 0 into carry flag */
-	if (DATA_BUS | (unsigned char)0xfe  == (unsigned char)0xff)
+	if ((DATA_BUS | (unsigned char)0xfe) == (unsigned char)0xff)
 	{
 		/* If bit 7 is 1, keep that value in bit 7 after the shift */
-		if (DATA_BUS | ZERO_RESET == (unsigned char)0xff)
+		if ((DATA_BUS | ZERO_RESET) == (unsigned char)0xff)
 		{
 			DATA_BUS = DATA_BUS >> 1;
 			DATA_BUS = DATA_BUS | ZERO_SET;
@@ -444,7 +444,7 @@ void INSTR_SRA_REGISTER_HL(void)
 	else
 	{
 		/* If bit 7 is 1, keep that value in bit 7 after the shift */
-		if (DATA_BUS | ZERO_RESET == (unsigned char)0xff)
+		if ((DATA_BUS | ZERO_RESET) == (unsigned char)0xff)
 		{
 			DATA_BUS = DATA_BUS >> 1;
 			DATA_BUS = DATA_BUS | ZERO_SET;
@@ -475,7 +475,7 @@ void INSTR_SRA_REGISTER_HL(void)
 void INSTR_SRL_REGISTER_R(unsigned char *R)
 {
 	/* Scootch bit 0 into carry flag */
-	if (*R | (unsigned char)0xfe  == (unsigned char)0xff)
+	if ((*R | (unsigned char)0xfe)  == (unsigned char)0xff)
 	{
 		*R = *R >> 1;
 		F_REGISTER = F_REGISTER | CARRY_SET;
@@ -508,7 +508,7 @@ void INSTR_SRL_REGISTER_HL(void)
 	/* Debug this ADDRESS to make sure it is correct */
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
 	/* Scootch bit 0 into carry flag */
-	if (DATA_BUS | (unsigned char)0xfe  == (unsigned char)0xff)
+	if ((DATA_BUS | (unsigned char)0xfe)  == (unsigned char)0xff)
 	{
 		DATA_BUS = DATA_BUS >> 1;
 		F_REGISTER = F_REGISTER | CARRY_SET;

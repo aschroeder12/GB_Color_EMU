@@ -1,3 +1,4 @@
+#include "../GB_Registers.h"
 /*  GB SWAP
  * 0xcb30 - 37 SWAP 			- SWAP NIBBLES (REGISTER)
  */
@@ -30,7 +31,7 @@ void INSTR_SWAP_REGISTER_R(unsigned char *R)
  * Swaps the high and low 4-bit nibbles of the 8-bit data at the absolute address specified by the
  * 16-bit register HL.
  */
-void INSTR_SWAP_REGISTER_R(void)
+void INSTR_SWAP_REGISTER_HL(void)
 {
 	unsigned char a;
 	unsigned char b;
@@ -39,10 +40,10 @@ void INSTR_SWAP_REGISTER_R(void)
 	ADDRESS_BUS = ADDRESS_BUS | L_REGISTER;
 	/* Debug this ADDRESS to make sure it is correct */
 	DATA_BUS = ReadMemory(ADDRESS_BUS);
-	a = *R >> 4;
-	b = *R << 4;
-	*R = a | b;
-	if (*R == (unsigned char)0) // Zero flag
+	a = DATA_BUS >> 4;
+	b = DATA_BUS << 4;
+	DATA_BUS = a | b;
+	if (DATA_BUS == (unsigned char)0) // Zero flag
 	{
 		F_REGISTER = F_REGISTER | ZERO_SET;
 	}
