@@ -36,7 +36,7 @@ void INSTR_STOP(void)
  * 0, and bit 7 is copied to the carry flag. Note that unlike the related RL r instruction, RLA always
  * sets the zero flag to 0 without looking at the resulting value of the calculation
  */
-void INSTR_RLA(void)
+void INSTR_RLA(unsigned char *R) /* just pass in A_REGISTER ptr */
 {
 	/* Scootch bit 7 into carry flag */
 	if ((*R | ZERO_RESET) == (unsigned char)0xff)

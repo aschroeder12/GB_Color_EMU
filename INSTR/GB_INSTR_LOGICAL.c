@@ -299,7 +299,7 @@ void INSTR_CP_REGISTER_R(unsigned char *R)
  * register HL, and updates flags based on the result. This instruction is basically identical to 
  * SUB (HL), but does not update the A register.
  */
-void INSTR_CP_REGISTER_HL()
+void INSTR_CP_REGISTER_HL(void)
 {
 	unsigned char carry_per_bit;
 
@@ -414,7 +414,7 @@ void INSTR_CP_N(void)
 /* CPL - COMPLIMENT ACCUMULATOR
  * Flips all the bits in the 8-bit A register, and sets the N and H flags.
  */
-void INSTR_CPL()
+void INSTR_CPL(void)
 {
 	A_REGISTER = ~A_REGISTER;
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
@@ -426,7 +426,7 @@ void INSTR_CPL()
 /* CCF - COMPLIMENT CARRY FLAG
  * Flips the carry flag, and clears the N and H flags
  */
-void INSTR_CCF()
+void INSTR_CCF(void)
 {
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
 	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
@@ -448,7 +448,7 @@ void INSTR_CCF()
 /* SCF - SET CARRY FLAG
  * Sets the carry flag, and clears the N and H flags
  */
-void INSTR_SCF()
+void INSTR_SCF(void)
 {
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
 	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
