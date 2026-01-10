@@ -26,20 +26,11 @@ void FirstLoad(char* fileName)
     char a;
     int x = 0;
     FILE *fptr;
-    fptr = fopen("test_rom1.bin", "r");
+    fptr = fopen("../test_rom1.bin", "rb");
     
     if (fptr != NULL)
     {
-        while (!feof(fptr))
-            {
-                a = fgetc(fptr);
-                if (feof(fptr))
-                {
-                    break;
-                }
-                BOOT_ROM[x] = (unsigned char)a;
-                x = x + 1;
-            }
+        fread(BOOT_ROM, sizeof(unsigned char), 256, fptr);
     }
     else
     {
@@ -86,7 +77,7 @@ void DoGameBoyThings(void)
 
     //clockCnt = (unsigned char)0;
     //lineCnt = (unsigned char)0;
-
+    RunCPU();
 
 }
 
@@ -113,6 +104,11 @@ int main(void)
     FirstLoad("C:/Users/andre/Documents/ProgrammingProjects/Github/GB_Color/test_rom1.bin");
     //LoadCartridge("C:/Users/andre/Documents/ProgrammingProjects/Github/GB_Color/test_rom.bin");
 
+    for (int i = 0; i < 256; i++)
+    {
+        PrintHexLog(BOOT_ROM[i]);
+    }
+
     WriteExampleVRAM();
     InitWindow(screenWidth, screenHeight, "test example");
 
@@ -135,7 +131,7 @@ int main(void)
         // TODO: Update your variables here
         //----------------------------------------------------------------------------------
 
-        //DoGameBoyThings();
+        DoGameBoyThings();
 
         cnt = cnt + 1;
         if (cnt > 512)

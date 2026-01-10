@@ -3,6 +3,7 @@
  * 
  *  0x00 NOP 					- NO OPERATION
  *  0x10 STOP 					- STOP
+ *  0x17 RLA					- ROTATE LEFT (ACCUMULATOR)
  *  0x76 HALT 					- HALT SYSTEM CLOCK
  *  0xf3 DI						- DISABLE INTERRUPTS
  *  0xfb EI 					- ENABLE INTERRUPTS
@@ -27,6 +28,42 @@ void INSTR_STOP(void)
 {
 	printf("STOP INSTRUCTION DETECTED, WTFFFFF\n");
 	printf("Trying to switch speeds for the GameBoy Color??\n");
+}
+
+/* RLA - ROTATE LEFT (ACCUMULATOR)
+ * Rotates the 8-bit A register value left through the carry flag.
+ * Every bit is shifted to the left (e.g. bit 1 value is copied from bit 0). The carry flag is copied to bit
+ * 0, and bit 7 is copied to the carry flag. Note that unlike the related RL r instruction, RLA always
+ * sets the zero flag to 0 without looking at the resulting value of the calculation
+ */
+void INSTR_RLA(void)
+{
+	/* Scootch bit 7 into carry flag */
+	if ((*R | ZERO_RESET) == (unsigned char)0xff)
+	{
+		*R = *R << 1;
+		/* Wrap carry flag into bit 0, it'll be 0 otherwise */
+		if ((F_REGISTER | CARRY_RESET) == (unsigned char)0xff)
+		{
+			*R = *R | 0x01;
+		}
+		F_REGISTER = F_REGISTER | CARRY_SET;
+	}
+	else
+	{
+		*R = *R << 1;
+		/* Wrap carry flag into bit 0, it'll be 0 otherwise */
+		if ((F_REGISTER | CARRY_RESET) == (unsigned char)0xff)
+		{
+			*R = *R | 0x01;
+		}
+		F_REGISTER = F_REGISTER & CARRY_RESET;
+	}
+	
+	F_REGISTER = F_REGISTER & ZERO_RESET;
+
+	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	F_REGISTER = F_REGISTER & HALFCARRY_RESET;
 }
 
 /* HALT

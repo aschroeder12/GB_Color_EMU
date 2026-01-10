@@ -1,190 +1,218 @@
 #include"GB_Registers.h"
 #include"GB_Buses.c"
 #include"GB_Registers.c"
+
+void PrintLog(char *);
+void PrintHexLog(unsigned char);
+
 void RunCPU(void)
 {
 	unsigned short tmp;
 	unsigned short tmp2;
 	tmp = ReadMemory(PC_REGISTER);
+	PrintHexLog(tmp);
 	switch(tmp)
 	{
 	case 0x04:
-		printf("INC B \n");
+		PrintLog("INC B \n");
+		INSTR_INC_R(&B_REGISTER);
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x05:
-		printf("DEC B \n");
+		PrintLog("DEC B \n");
+		INSTR_DEC_R(&B_REGISTER);
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x06:
-		printf("LD B n \n");
+		PrintLog("LD B n \n");
+		INSTR_LOAD_REGISTER_R_N(&B_REGISTER);
 		PC_REGISTER = PC_REGISTER + 2;
 		break;
 	case 0x0d:
-		printf("DEC C \n");
+		PrintLog("DEC C \n");
+		INSTR_DEC_R(&C_REGISTER);
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x0c:
-		printf("INC C \n");
+		PrintLog("INC C \n");
+		INSTR_INC_R(&C_REGISTER);
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x0e:
-		printf("LD C \n");
+		PrintLog("LD C n \n");
+		INSTR_LOAD_REGISTER_R_N(&C_REGISTER);
 		PC_REGISTER = PC_REGISTER + 2;
 		break;
 	case 0x11:
-		printf("LD DE nn \n");
+		PrintLog("LD DE nn Debug this \n");
+		INSTR_LOAD_REGISTER_RR_NN(&D_REGISTER, &E_REGISTER);
 		PC_REGISTER = PC_REGISTER + 3;
 		break;
 	case 0x13:
-		printf("INC DE \n");
+		PrintLog("INC DE debug this\n");
+		INSTR_INC_RR(&D_REGISTER, &E_REGISTER);
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x15:
-		printf("DEC D \n");
+		PrintLog("DEC D \n");
+		INSTR_DEC_R(&D_REGISTER);
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x16:
-		printf("LD D n \n");
+		PrintLog("LD D n \n");
+		INSTR_LOAD_REGISTER_R_N(&D_REGISTER);
 		PC_REGISTER = PC_REGISTER + 2;
 		break;
 	case 0x17:
-		printf("RLA \n");
+		PrintLog("RLA \n");
+		INSTR_RLA(&A_REGISTER);
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x18:
-		printf("JR e \n");
-		PC_REGISTER = PC_REGISTER + 2;
+		PrintLog("JR e \n");
+		PC_REGISTER = PC_REGISTER + 1;
+		INSTR_JUMPR(void);
 		break;
 	case 0x1a:
-		printf("LD A DE \n");
+		PrintLog("LD A DE \n");
+		INSTR_LOAD_REGISTER_A_DE(void);
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x1d:
-		printf("DEC E \n");
+		PrintLog("DEC E \n");
+		INSTR_DEC_R(&E_REGISTER);
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x1e:
-		printf("LD E n \n");
+		PrintLog("LD E n \n");
+		INSTR_LOAD_REGISTER_R_N(&E_REGISTER);
 		PC_REGISTER = PC_REGISTER + 2;
 		break;
 	case 0x20:
-		printf("JR NZ \n");
-		PC_REGISTER = PC_REGISTER + 2;
+		PrintLog("JR NZ \n");
+		PC_REGISTER = PC_REGISTER + 1;
+		INSTR_JUMPR_NZ(void);
 		break;
 	case 0x21:
-		printf("LD HL n \n");
+		PrintLog("LD HL n \n");
+		INSTR_LOAD_REGISTER_RR_NN(&H_REGISTER, &L_REGISTER);
 		PC_REGISTER = PC_REGISTER + 3;
 		break;
 	case 0x22:
-		printf("LD HL+ A \n");
+		PrintLog("LD HL+ A \n");
+		INSTR_LOAD_REGISTER_HLI_A(void);
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x23:
-		printf("INC HL \n");
+		PrintLog("INC HL \n");
+		INSTR_INC_RR(&H_REGISTER, &L_REGISTER);
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x24:
-		printf("INC H \n");
+		PrintLog("INC H \n");
+		INSTR_INC_R(&H_REGISTER);
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x28:
-		printf("JR Z e \n");
-		PC_REGISTER = PC_REGISTER + 2;
+		PrintLog("JR Z e \n");
+		PC_REGISTER = PC_REGISTER + 1;
+		INSTR_JUMPR_Z(void);
 		break;
 	case 0x2e:
-		printf("LD L n \n");
+		PrintLog("LD L n \n");
+		INSTR_LOAD_REGISTER_R_N(&L_REGISTER);
 		PC_REGISTER = PC_REGISTER + 2;
 		break;
 	case 0x31:
-		printf("LD SP \n");
-		// 3 Bytes
-		PC_REGISTER = PC_REGISTER + 3;
+		PrintLog("LD SP \n");
+		PC_REGISTER = PC_REGISTER + 1;
+		INSTR_LOAD_REGISTER_SP_NN(void);
 		break;
 	case 0x32:
-		printf("LD HL - \n");
+		PrintLog("LD HL - \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x3d:
-		printf("DEC A \n");
+		PrintLog("DEC A \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x3e:
-		printf("LD A \n"); //0011
+		PrintLog("LD A n \n"); //0011
+		INSTR_LOAD_REGISTER_R_N(&A_REGISTER);
 		PC_REGISTER = PC_REGISTER + 2;
 		break;
 	case 0x4f:
-		printf("LD C A \n");
+		PrintLog("LD C A \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x57:
-		printf("LD D A \n");
+		PrintLog("LD D A \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x67:
-		printf("LD H A \n");
+		PrintLog("LD H A \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x77:
-		printf("LD HL A \n");
+		PrintLog("LD HL A \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x78:
-		printf("LD A B \n");
+		PrintLog("LD A B \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x7b:
-		printf("LD A E \n");
+		PrintLog("LD A E \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x7c:
-		printf("LD A H \n");
+		PrintLog("LD A H \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x7d:
-		printf("LD A L \n");
+		PrintLog("LD A L \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x86:
-		printf("ADD HL \n");
+		PrintLog("ADD HL \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0x90:
-		printf("SUB B \n");
+		PrintLog("SUB B \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0xaf:
-		printf("XOR A \n");
+		PrintLog("XOR A \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0xbe:
-		printf("CP HL \n");
+		PrintLog("CP HL \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0xc1:
-		printf("POP BC \n");
+		PrintLog("POP BC \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0xc5:
-		printf("PUSH BC \n");
+		PrintLog("PUSH BC \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0xc9:
-		printf("RET \n");
+		PrintLog("RET \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0xcb:
-		printf("CB PREFIXED - ");
+		PrintLog("CB PREFIXED - ");
 		PC_REGISTER = PC_REGISTER + 1;
 		tmp2 = ReadMemory(PC_REGISTER);
 		switch(tmp2)
 		{
 		case 0x11:
-			printf("RL C \n");
+			PrintLog("RL C \n");
 			PC_REGISTER = PC_REGISTER + 1;
 			break;
 		case 0x7c:
-			printf("BIT 7 H \n");
+			PrintLog("BIT 7 H \n");
 			PC_REGISTER = PC_REGISTER + 1;
 			break;
 		default:
@@ -192,30 +220,60 @@ void RunCPU(void)
 		}
 		break;
 	case 0xcd:
-		printf("CALL n \n");
+		PrintLog("CALL n \n");
 		PC_REGISTER = PC_REGISTER + 3;
 		break;
 	case 0xe0:
-		printf("LDH n A \n");
+		PrintLog("LDH n A \n");
 		PC_REGISTER = PC_REGISTER + 2;
 		break;
 	case 0xe2:
-		printf("LDH C A \n");
+		PrintLog("LDH C A \n");
 		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	case 0xea:
-		printf("LD n A \n");
+		PrintLog("LD n A \n");
 		PC_REGISTER = PC_REGISTER + 3;
 		break;
 	case 0xf0:
-		printf("LDH A n \n");
+		PrintLog("LDH A n \n");
 		PC_REGISTER = PC_REGISTER + 2;
 		break;
 	case 0xfe:
-		printf("CP n \n");
+		PrintLog("CP n \n");
 		PC_REGISTER = PC_REGISTER + 2;
 		break;
 	default:
+		PrintLog("Probably Logo \n");
+		PC_REGISTER = PC_REGISTER + 1;
 		break;
 	}
+}
+
+void PrintLog(char * logStr)
+{
+	FILE *fptr = fopen("LOGS/TestLog.txt","a");
+	if (fptr == NULL)
+	{
+		printf("Could not open file \n");
+	}
+	else
+	{
+		fprintf(fptr, logStr);
+	}
+	fclose(fptr);
+}
+
+void PrintHexLog(unsigned char val)
+{
+	FILE *fptr = fopen("LOGS/TestLog.txt","a");
+	if (fptr == NULL)
+	{
+		printf("Could not open file \n");
+	}
+	else
+	{
+		fprintf(fptr, "%02x \n", val);
+	}
+	fclose(fptr);
 }
