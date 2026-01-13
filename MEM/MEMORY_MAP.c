@@ -29,6 +29,8 @@ unsigned char IO_REGISTERS[128];
 unsigned char HRAM[127];
 unsigned char IE_REGISTER;
 
+void PrintLog(char *);
+void Print2HexLog(unsigned char);
 
 /* ReadMemory Function
  * Based on address, access correct memory region and return the 8 bit data
@@ -42,6 +44,7 @@ unsigned char ReadMemory(unsigned short addr)
 	{
 		if ((ReadMemory(0xff50) == (unsigned char)0) && (addr <= 0x0100)) 
 		{
+			PrintLog("Still in Boot Rom mode \n");
 			/* Check BOOT_ROM Register to intercept 0x000-0x100 accesses */
 			result = BOOT_ROM[addr - 0];
 		}
@@ -119,7 +122,6 @@ unsigned char ReadMemory(unsigned short addr)
 	{
 		/* wut */
 	}
-
 	return result;
 }
 

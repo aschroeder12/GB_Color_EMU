@@ -21,7 +21,33 @@ void WriteExampleVRAM(void)
     }
 }
 
-void FirstLoad(char* fileName)
+void PrintStatus(void)
+{
+    PrintLog("PC_REGISTER = ");
+    Print4HexLog(PC_REGISTER);
+    PrintLog("SP_REGISTER = ");
+    Print4HexLog(SP_REGISTER);
+    PrintLog("ADDRESS_BUS = ");
+    Print4HexLog(ADDRESS_BUS);
+    PrintLog("A_REGISTER = ");
+    Print2HexLog(A_REGISTER);
+    PrintLog("B_REGISTER = ");
+    Print2HexLog(B_REGISTER);
+    PrintLog("C_REGISTER = ");
+    Print2HexLog(C_REGISTER);
+    PrintLog("D_REGISTER = ");
+    Print2HexLog(D_REGISTER);
+    PrintLog("E_REGISTER = ");
+    Print2HexLog(E_REGISTER);
+    PrintLog("F_REGISTER = ");
+    Print2HexLog(F_REGISTER);
+    PrintLog("H_REGISTER = ");
+    Print2HexLog(H_REGISTER);
+    PrintLog("L_REGISTER = ");
+    Print2HexLog(L_REGISTER);
+}
+
+void FirstLoad(void)
 {
     char a;
     int x = 0;
@@ -43,42 +69,75 @@ void FirstLoad(char* fileName)
     BR_MODE = 1;
 }
 
-/*
-void LoadCartridge(char* fileName)
-{
-    FILE* fptr;
-    fptr = fopen(fileName, "r");
 
-    if (fptr == NULL)
+void LoadCartridge(void)
+{
+    char a;
+    int x = 0;
+    FILE *fptr;
+    fptr = fopen("../test.gb", "rb");
+    
+    if (fptr != NULL)
     {
-        printf("Cartridge not found with that file name \n");
+        fread(ROM_BANK_00, sizeof(unsigned char), 16384, fptr);
+        fread(ROM_BANK_01, sizeof(unsigned char), 16384, fptr);
     }
-    // check for cartridge size??? 0x0148, but worry about this later
-    // check for any cartridge RAM, do this later
     else
     {
-
+        PrintLog("couldnt open gb file \n");
     }
     fclose(fptr);
 }
-*/
+
+
 void DoGameBoyThings(void)
 {
     /* PPU Timing 
      * Total Scan Lines - 154
+     * Mode 0 - Horizantal Blank (everything accessible)
+     * Mode 1 - Vertical Blank (everything accessible)
+     * Mode 2 - OAM Scan (OAM inaccessible (except DMA))
+     * Mode 3 - Drawing Pixels (VRAM, CGB palletes, OAM inaccessible (except DMA))
      * For Scan Lines 1 - 144
-     * 20 clocks (OAM Search) - 43 clocks (Pixel Transfer) - 51 clocks (H-Blank)
+     * 80 dots (Mode 2) - 172-289 dots (Mode 3) - (376-Mode3) dots (Mode 0)
      * For Scan Lines 145 - 154
-     * 114 clocks (V-Blank)
+     * 456 dots (Mode 1)
      */
 
-    //unsigned char clockCnt;
-    //unsigned char lineCnt;
+    unsigned short dotCnt;
+    unsigned char lineCnt;
 
-    //clockCnt = (unsigned char)0;
-    //lineCnt = (unsigned char)0;
-    RunCPU();
+    dotCnt = (unsigned short)0;
+    lineCnt = (unsigned char)0;
 
+    while (lineCnt < 144)
+    {
+        /* OAM Scan Begin */
+        while (dotCnt < 80)
+        {
+            RunCPU(&dotCnt, (unsigned short)80);
+        }
+        /* OAM Scan End, Drawing Pixels Begin */
+        while (dotCnt < 369)
+        {
+            /* 369 is the max, this most likely will exit before 369 */
+            RunCPU(&dotCnt, (unsigned short)369);
+        }
+        /* Drawing Pixels End, Horizontal Blank Begin */
+        while (dotCnt < 456)
+        {
+            RunCPU(&dotCnt, (unsigned short)456);
+        }
+        lineCnt = lineCnt + 1;
+    }
+    while (lineCnt < 154)
+    {
+        while (dotCnt < 456)
+        {
+            RunCPU(&dotCnt, (unsigned short)456);
+        }
+        lineCnt = lineCnt + 1;
+    }
 }
 
 //------------------------------------------------------------------------------------
@@ -101,15 +160,10 @@ int main(void)
     DMG_Pallete.Two = (Color){ 48, 98, 48, 255 };
     DMG_Pallete.Three = (Color){ 15, 56, 15, 255 };
 
-    FirstLoad("C:/Users/andre/Documents/ProgrammingProjects/Github/GB_Color/test_rom1.bin");
-    //LoadCartridge("C:/Users/andre/Documents/ProgrammingProjects/Github/GB_Color/test_rom.bin");
-
-    for (int i = 0; i < 256; i++)
-    {
-        PrintHexLog(BOOT_ROM[i]);
-    }
-
-    WriteExampleVRAM();
+    SetLogFile();
+    FirstLoad();
+    LoadCartridge();
+    //WriteExampleVRAM();
     InitWindow(screenWidth, screenHeight, "test example");
 
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
@@ -130,8 +184,10 @@ int main(void)
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
         //----------------------------------------------------------------------------------
-
-        DoGameBoyThings();
+        for (int i = 0; i < 32; i++)
+        {
+            DoGameBoyThings();
+        }
 
         cnt = cnt + 1;
         if (cnt > 512)
@@ -175,7 +231,7 @@ int main(void)
 
     CloseWindow();                // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
-
+    CloseLogFile();
     return 0;
 }
 
