@@ -379,7 +379,6 @@ void INSTR_CP_N(void)
 	n = ReadMemory(PC_REGISTER);
 	PC_REGISTER = PC_REGISTER + 1;
 	carry_per_bit = A_REGISTER - n;
-	A_REGISTER = carry_per_bit;
 	/* Deal with zero flag, bit 7 of F_REGISTER */
 	if (carry_per_bit == (unsigned char)0) 
 	{

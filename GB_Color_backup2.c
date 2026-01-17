@@ -21,33 +21,6 @@ void WriteExampleVRAM(void)
     }
 }
 
-void PrintVRAM(void)
-{
-    unsigned short addr = 0x8000;
-    for (addr; addr < 0x9800; addr++)
-    {
-        PrintLog("VRAM addr = ");
-        Print4HexLog(addr);
-        PrintLog("VRAM value = ");
-        Print2HexLog(ReadMemory(addr));
-    }
-}
-void PrintTileMap(void)
-{
-    PrintLog("Print Tile map \n");
-    unsigned short addr = 0x9800;
-    for (addr; addr < 0x9C00; addr++)
-    {
-        if (ReadMemory(addr))
-        {
-            PrintLog("TileMapAddr = ");
-            Print4HexLog(addr);
-            PrintLog("TileMapIndex val = ");
-            Print2HexLog(ReadMemory(addr));
-        }
-    }
-}
-
 void PrintStatus(void)
 {
     PrintLog("PC_REGISTER = ");
@@ -94,14 +67,7 @@ void FirstLoad(void)
     /* Init Memory */
     PC_REGISTER = 0x0000;
     BR_MODE = 1;
-    LCDC_REGISTER = &IO_REGISTERS[63]; /* pretty sure this is FF40 */
-    DMG_Pallete.Zero = (Color){ 155, 188, 15, 255 } ;
-    DMG_Pallete.One = (Color){ 139, 172, 15, 255 };
-    DMG_Pallete.Two = (Color){ 48, 98, 48, 255 };
-    DMG_Pallete.Three = (Color){ 15, 56, 15, 255 };
-
 }
-
 
 void LoadCartridge(void)
 {
@@ -122,7 +88,6 @@ void LoadCartridge(void)
     fclose(fptr);
 }
 
-
 void DoGameBoyThings(void)
 {
     /* PPU Timing 
@@ -139,7 +104,6 @@ void DoGameBoyThings(void)
 
     unsigned short dotCnt;
     unsigned char lineCnt;
-    unsigned char MaxLineCnt = 10;
 
     dotCnt = (unsigned short)0;
     lineCnt = (unsigned char)0;
@@ -172,7 +136,7 @@ void DoGameBoyThings(void)
         }
         lineCnt = lineCnt + 1;
     }
-    PrintLog("CPU DONE, EXECUTE PPU \n");
+
     /* This isn't correct in the slightest, but for now just draw the screen after the CPU runs */
     RunPPU();
 }
@@ -188,7 +152,14 @@ int main(void)
     const int EmuWindowHeight = 512;
     unsigned short tileAddr = 0x8000;
     unsigned char* ScreenMEM;
-    int i, j;
+    int i, j, cnt;
+
+    PALLETE DMG_Pallete;
+    /* OG DMG color pallete */
+    DMG_Pallete.Zero = (Color){ 155, 188, 15, 255 } ;
+    DMG_Pallete.One = (Color){ 139, 172, 15, 255 };
+    DMG_Pallete.Two = (Color){ 48, 98, 48, 255 };
+    DMG_Pallete.Three = (Color){ 15, 56, 15, 255 };
 
     SetLogFile();
     FirstLoad();
@@ -199,13 +170,12 @@ int main(void)
     // NOTE: Textures MUST be loaded after Window initialization (OpenGL context is required)
 
     Image cat = LoadImage("cat.png");             // Load image in CPU memory (RAM)
-    ImageCrop(&cat, (Rectangle){ 0, 0, 160, 144 });      // Crop an image piece
+    ImageCrop(&cat, (Rectangle){ 0, 0, 256, 256 });      // Crop an image piece
     ImageFormat(&cat, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
     Texture2D texture = LoadTextureFromImage(cat);      // Image converted to texture, uploaded to GPU memory (VRAM)
     UnloadImage(cat);       // Unload image from RAM
-    printf("Texture width %d \n", texture.width);
-    printf("Texture height %d \n", texture.height);
     SetTargetFPS(60);
+    cnt = -1;
     //---------------------------------------------------------------------------------------
 
     // Main game loop
@@ -218,6 +188,26 @@ int main(void)
         
         DoGameBoyThings();
         
+
+        cnt = cnt + 1;
+        if (cnt > 512)
+        {
+            cnt = 0;
+        }
+        for (i = 0; i < 256; i += 8)
+        {
+            for (j = 0; j < 256; j += 8)
+            {
+                if (i + j != cnt)
+                {
+                    GB_UpdateTextureTile(tileAddr, i,j, DMG_Pallete);
+                }
+                else
+                {
+                    GB_UpdateTextureTile(0x8010, i, j, DMG_Pallete);
+                }
+            }
+        }
         ScreenMEM = GetScreenMemPtr();
         UpdateTexture(texture, ScreenMEM);
         // Draw

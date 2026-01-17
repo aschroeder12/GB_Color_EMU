@@ -44,4 +44,5 @@ unsigned char IE_REGISTER;
 unsigned char IME_FLAG;
 unsigned char INTERRUPT_FLAG;
 
-unsigned char LCDC_REGISTER;
+
+unsigned char* LCDC_REGISTER;

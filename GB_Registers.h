@@ -72,6 +72,6 @@ extern unsigned char INTERRUPT_FLAG;
  * 1		OBJ Enable						Whether Objects are displayed (1) or not (0)
  * 0 		BG & Window enable/priority		Clear both Window and BG and ignore Bit 5 (0) or normal (1)
  ************************************************************************************/
-extern unsigned char LCDC_REGISTER;
+extern unsigned char* LCDC_REGISTER;
 
 #endif
