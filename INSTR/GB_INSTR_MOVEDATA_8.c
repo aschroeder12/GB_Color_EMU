@@ -23,7 +23,9 @@
  *  0xfa LDH A, (nn)		- LOAD ACCUMLATOR (DIRECT)
  *******************************************************/
 
-#include"../GB_Registers.h"
+#include "../MEM/GB_MEM.h"
+#include "../LIB/GB_LIB.h"
+#include "GB_INSTR_MOVEDATA_8.h"
 
 /* LD BC, A - LOAD FROM ACCUMULATOR (INDIRECT BC)
  * Load to the absolute address specified by the 16-bit register BC, data from the 8-bit A register

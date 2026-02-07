@@ -16,6 +16,10 @@
  *  0x37 SCF 				- SET CARRY FLAG
  */
 
+#include "../MEM/GB_MEM.h"
+#include "../LIB/GB_LIB.h"
+#include "GB_INSTR_LOGICAL.h"
+
 /* AND R - AND (REGISTER) 0xa0 - 0xa5, 0xa7
  * Performs a bitwise AND operation between the 8-bit A register and the 8-bit register r, and
  * stores the result back into the A register.

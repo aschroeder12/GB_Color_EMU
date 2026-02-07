@@ -19,6 +19,10 @@
  *  0xde SBC N 				- SUBTRACT WITH CARRY (IMMEDIATE)
  */
 
+#include "../MEM/GB_MEM.h"
+#include "../LIB/GB_LIB.h"
+#include "GB_INSTR_MATH_8.h"
+
 /* INC R - INCREMENT (REGISTER)
  * Increments data in the 8-bit register R
  */

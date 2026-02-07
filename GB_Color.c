@@ -1,127 +1,7 @@
 #include "raylib.h"
-#include "INSTR\GB_INSTR.c"
-#include "MEM\MEMORY_MAP.c"
-#include "MEM\GRAPHICS.c"
-#include "GB_Lib.c"
-
-/* quick example to test printing to screen */
-void WriteExampleVRAM(void)
-{
-    unsigned char dataArr[16] = {0xFF, 0x00, 0x7E, 0xFF, 0x85, 0x81, 0x89, 0x83, 0x93, 0x85, 0xA5, 0x8B, 0xC9, 0x97, 0x7E, 0xFF};
-    unsigned short addr = 0x8000;
-    for (int i = 0; i < 16; i++)
-    {
-        WriteMemory(addr + i, dataArr[i]);
-    }
-    /* Write a bright tile for debugging */
-    addr = 0x8010;
-    for (int i = 0; i < 16; i++)
-    {
-        WriteMemory(addr + i, 0x00);
-    }
-}
-
-void PrintVRAM(void)
-{
-    unsigned short addr = 0x8000;
-    for (addr; addr < 0x9800; addr++)
-    {
-        PrintLog("VRAM addr = ");
-        Print4HexLog(addr);
-        PrintLog("VRAM value = ");
-        Print2HexLog(ReadMemory(addr));
-    }
-}
-void PrintTileMap(void)
-{
-    PrintLog("Print Tile map \n");
-    unsigned short addr = 0x9800;
-    for (addr; addr < 0x9C00; addr++)
-    {
-        if (ReadMemory(addr))
-        {
-            PrintLog("TileMapAddr = ");
-            Print4HexLog(addr);
-            PrintLog("TileMapIndex val = ");
-            Print2HexLog(ReadMemory(addr));
-        }
-    }
-}
-
-void PrintStatus(void)
-{
-    PrintLog("PC_REGISTER = ");
-    Print4HexLog(PC_REGISTER);
-    PrintLog("SP_REGISTER = ");
-    Print4HexLog(SP_REGISTER);
-    PrintLog("ADDRESS_BUS = ");
-    Print4HexLog(ADDRESS_BUS);
-    PrintLog("A_REGISTER = ");
-    Print2HexLog(A_REGISTER);
-    PrintLog("B_REGISTER = ");
-    Print2HexLog(B_REGISTER);
-    PrintLog("C_REGISTER = ");
-    Print2HexLog(C_REGISTER);
-    PrintLog("D_REGISTER = ");
-    Print2HexLog(D_REGISTER);
-    PrintLog("E_REGISTER = ");
-    Print2HexLog(E_REGISTER);
-    PrintLog("F_REGISTER = ");
-    Print2HexLog(F_REGISTER);
-    PrintLog("H_REGISTER = ");
-    Print2HexLog(H_REGISTER);
-    PrintLog("L_REGISTER = ");
-    Print2HexLog(L_REGISTER);
-}
-
-void FirstLoad(void)
-{
-    char a;
-    int x = 0;
-    FILE *fptr;
-    fptr = fopen("../test_rom1.bin", "rb");
-    
-    if (fptr != NULL)
-    {
-        fread(BOOT_ROM, sizeof(unsigned char), 256, fptr);
-    }
-    else
-    {
-        printf("couldnt open file \n");
-    }
-    fclose(fptr);
-
-    /* Init Memory */
-    PC_REGISTER = 0x0000;
-    BR_MODE = 1;
-    LCDC_REGISTER = &IO_REGISTERS[63]; /* pretty sure this is FF40 */
-    DMG_Pallete.Zero = (Color){ 155, 188, 15, 255 } ;
-    DMG_Pallete.One = (Color){ 139, 172, 15, 255 };
-    DMG_Pallete.Two = (Color){ 48, 98, 48, 255 };
-    DMG_Pallete.Three = (Color){ 15, 56, 15, 255 };
-
-}
-
-
-void LoadCartridge(void)
-{
-    char a;
-    int x = 0;
-    FILE *fptr;
-    fptr = fopen("../test.gb", "rb");
-    
-    if (fptr != NULL)
-    {
-        fread(ROM_BANK_00, sizeof(unsigned char), 16384, fptr);
-        fread(ROM_BANK_01, sizeof(unsigned char), 16384, fptr);
-    }
-    else
-    {
-        PrintLog("couldnt open gb file \n");
-    }
-    fclose(fptr);
-}
-
+#include "INSTR/GB_INSTR.c"
+#include "LIB/GB_LIB.c"
+#include "MEM/GB_MEM.c"
 
 void DoGameBoyThings(void)
 {
@@ -186,10 +66,8 @@ int main(void)
     //--------------------------------------------------------------------------------------
     const int EmuWindowWidth = 512;
     const int EmuWindowHeight = 512;
-    unsigned short tileAddr = 0x8000;
     unsigned char* ScreenMEM;
-    int i, j;
-
+    ClearMemory();
     SetLogFile();
     FirstLoad();
     LoadCartridge();
@@ -203,8 +81,6 @@ int main(void)
     ImageFormat(&cat, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
     Texture2D texture = LoadTextureFromImage(cat);      // Image converted to texture, uploaded to GPU memory (VRAM)
     UnloadImage(cat);       // Unload image from RAM
-    printf("Texture width %d \n", texture.width);
-    printf("Texture height %d \n", texture.height);
     SetTargetFPS(60);
     //---------------------------------------------------------------------------------------
 
@@ -229,7 +105,7 @@ int main(void)
             DrawTexture(texture, EmuWindowWidth/2 - texture.width/2, EmuWindowHeight/2 - texture.height/2 - 40, WHITE);
             DrawRectangleLines(EmuWindowWidth/2 - texture.width/2, EmuWindowHeight/2 - texture.height/2 - 40, texture.width, texture.height, DARKGRAY);
 
-            DrawText("Testing out modifying a texture", 240, 350, 10, DARKGRAY);
+            DrawText("aschroeder12", 240, 350, 10, DARKGRAY);
 
         EndDrawing();
         //----------------------------------------------------------------------------------

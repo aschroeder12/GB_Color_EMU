@@ -1,6 +1,9 @@
 /* GB 16-BIT MOVE DATA INSTRUCTIONS DONE!!
  * LOAD POP PUSH
  */
+#include "../MEM/GB_MEM.h"
+#include "../LIB/GB_LIB.h"
+#include "GB_INSTR_MOVEDATA_16.h"
 
 /* LD RR, nn - LOAD 16-BIT REGISTER (IMMEDIATE)
  * Load to the 16-bit register RR, the immediate 16-bit data nn.

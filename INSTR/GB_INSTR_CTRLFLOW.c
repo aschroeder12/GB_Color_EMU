@@ -32,6 +32,10 @@
  *  0xff RST 0x38 				- RESTART / CALL FUNCTION (IMPLIED)
  */
 
+#include "../MEM/GB_MEM.h"
+#include "../LIB/GB_LIB.h"
+#include "GB_INSTR_CTRLFLOW.h"
+
 /* JR e - JUMP RELATIVE
  * Unconditional jump to the relative address specified by the signed 8-bit operand e
  */
@@ -49,7 +53,7 @@ void INSTR_JUMPR(void)
  * Unconditional jump to the relative address specified by the signed 8-bit operand e,
  * depending on the NON-ZERO condition.
  */
-void INSTR_JUMPR_NZ(void)
+void INSTR_JUMPR_NZ(unsigned short *dotCnt)
 {
 	signed char e;
 
@@ -60,6 +64,11 @@ void INSTR_JUMPR_NZ(void)
 	{
 		PC_REGISTER = PC_REGISTER + e;
 		/* 50% sure this handles overflow correctly, debug this to be sure */
+		*dotCnt = *dotCnt + (3)*4;
+	}
+	else
+	{
+		*dotCnt = *dotCnt + (2)*4;
 	}
 }
 
@@ -67,7 +76,7 @@ void INSTR_JUMPR_NZ(void)
  * Unconditional jump to the relative address specified by the signed 8-bit operand e,
  * depending on the ZERO condition.
  */
-void INSTR_JUMPR_Z(void)
+void INSTR_JUMPR_Z(unsigned short *dotCnt)
 {
 	signed char e;
 
@@ -78,6 +87,11 @@ void INSTR_JUMPR_Z(void)
 	{
 		PC_REGISTER = PC_REGISTER + e;
 		/* 50% sure this handles overflow correctly, debug this to be sure */
+		*dotCnt = *dotCnt + (3)*4;
+	}
+	else
+	{
+		*dotCnt = *dotCnt + (2)*4;
 	}
 }
 

@@ -1,7 +1,10 @@
-#include "../GB_Registers.h"
 /*  GB SWAP
  * 0xcb30 - 37 SWAP 			- SWAP NIBBLES (REGISTER)
  */
+
+#include "../MEM/GB_MEM.h"
+#include "../LIB/GB_LIB.h"
+#include "GB_INSTR_CB_SWAP.h"
 
 /* SWAP R - SWAP NIBBLES (REGISTER)
  * Swaps the high and low 4-bit nibbles of the 8-bit register R

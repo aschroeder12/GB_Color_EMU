@@ -8,6 +8,10 @@
  * 0xcb38 - 3f SRL 			- SHIFT RIGHT LOGICALLY (REGISTER)
  */
 
+#include "../MEM/GB_MEM.h"
+#include "../LIB/GB_LIB.h"
+#include "GB_INSTR_CB_SHIFTS.h"
+
 /* RLC R - ROTATE LEFT CIRCULAR (REGISTER)
  * Shift the Register R bits left by 1, bit 7 into the Carry FLAG 
  * AND back around to bit 0, hence the "circular".

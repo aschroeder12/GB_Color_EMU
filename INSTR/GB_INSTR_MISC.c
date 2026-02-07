@@ -1,4 +1,3 @@
-#include<stdio.h>
 /*  GB MISC INSTRUCTIONS TODO
  * 
  *  0x00 NOP 					- NO OPERATION
@@ -9,6 +8,10 @@
  *  0xfb EI 					- ENABLE INTERRUPTS
  * 
  */ 
+
+#include "../MEM/GB_MEM.h"
+#include "../LIB/GB_LIB.h"
+#include "GB_INSTR_MISC.h"
 
 /* NOP - NO OPERATION
  * No operation. This instruction doesn’t do anything, but can be used to add a delay of one
@@ -26,8 +29,8 @@ void INSTR_NO_OPERATION(void)
  */
 void INSTR_STOP(void)
 {
-	printf("STOP INSTRUCTION DETECTED, WTFFFFF\n");
-	printf("Trying to switch speeds for the GameBoy Color??\n");
+	PrintLog("STOP INSTRUCTION DETECTED, WTFFFFF\n");
+	PrintLog("Trying to switch speeds for the GameBoy Color??\n");
 }
 
 /* RLA - ROTATE LEFT (ACCUMULATOR)

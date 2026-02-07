@@ -3,6 +3,10 @@
  * ADD SP, e
  */
 
+#include "../MEM/GB_MEM.h"
+#include "../LIB/GB_LIB.h"
+#include "GB_INSTR_MATH_16.h"
+
 /* INC rr - INCREMENT (16-BIT REGISTER, except SP)
  * Increments data in the 16-bit register rr. MSB is R1, LSB is R2!
  */

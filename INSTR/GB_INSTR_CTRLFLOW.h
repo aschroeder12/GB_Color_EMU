@@ -9,13 +9,13 @@ void INSTR_JUMPR(void);
  * Unconditional jump to the relative address specified by the signed 8-bit operand e,
  * depending on the NON-ZERO condition.
  */
-void INSTR_JUMPR_NZ(void);
+void INSTR_JUMPR_NZ(unsigned short *);
 
 /* JR Z, e - JUMP RELATIVE (CONDITIONAL)
  * Unconditional jump to the relative address specified by the signed 8-bit operand e,
  * depending on the ZERO condition.
  */
-void INSTR_JUMPR_Z(void);
+void INSTR_JUMPR_Z(unsigned short *);
 
 /* JR NC, e - JUMP RELATIVE (CONDITIONAL)
  * Unconditional jump to the relative address specified by the signed 8-bit operand e,

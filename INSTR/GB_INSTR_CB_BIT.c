@@ -1,6 +1,6 @@
-#include "../GB_Registers.h"
-#include "../GB_Buses.h"
-#include "../MEM/MEMORY_MAP.h"
+#include "../MEM/GB_MEM.h"
+#include "../LIB/GB_LIB.h"
+#include "GB_INSTR_CB_BIT.h"
 
 /*  GB TEST BIT DONE
  * 0xcb40 - 7f BIT 			- TEST BIT (REGISTER)
