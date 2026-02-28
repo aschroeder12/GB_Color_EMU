@@ -69,6 +69,40 @@ unsigned char GetPixelValue(unsigned short tileAddr, unsigned char tileRowLSB, u
 
 }
 
+/* ConvertPixelIndex function
+ * Takes in the "Raw" pixel index (0-3), then uses the FF47 value to 
+ * align it to the correct index. This allows for the program to force the use
+ * of specific colors. 
+ * Return the converted index
+ */
+unsigned char ConvertPixelIndex(unsigned char x)
+{
+	unsigned char tmp;
+	tmp = ReadMemory(0xff47);
+	switch(x)
+	{
+		case 0:
+			tmp = tmp << 6;
+			tmp = tmp >> 6;
+			break;
+		case 1:
+			tmp = tmp << 4;
+			tmp = tmp >> 6;
+			break;
+		case 2:
+			tmp = tmp << 2;
+			tmp = tmp >> 6;
+			break;
+		case 3: 
+			tmp = tmp >> 6;
+			break;
+		default:
+			PrintLog("ERROR With ConvertPixelIndex \n");
+			break;
+	}
+	return tmp;
+}
+
 void RunPPU(void)
 {
 	unsigned short startPixelX_Idx;
@@ -81,6 +115,7 @@ void RunPPU(void)
 	unsigned char tempTileRowMSB;
 	unsigned char tempTilePixelOffset;
 	unsigned char pixelColorValue;
+	unsigned char cvrtdPixelValue;
 	unsigned long memScreenPixelIdx;
 
 	//LCDC_REGISTER = ReadMemory(0xff40); /* LCDC Control Register */
@@ -158,32 +193,6 @@ void RunPPU(void)
 						tempTileRowMSB = tempTileRowLSB + 1;
 						tempTilePixelOffset = GetPixelOffset(currentPixelCol);
 						pixelColorValue = GetPixelValue(0x8000 + tempTileOffset, tempTileRowLSB, tempTileRowMSB, tempTilePixelOffset);
-						if (tempTileOffset != 0)
-						{
-							PrintLog("BEGIN--------------------------------\n");
-							PrintLog ("i = ");
-							PrintLongDecLog((long)i);
-							PrintLog("   -   ");
-							PrintLog ("j = ");
-							PrintLongDecLog((long)j);
-							PrintLog("\n");
-							PrintLog("Tile Map Addr = ");
-							Print4HexLog(tempTileMapAddr);
-							PrintLog("   -   ");
-							PrintLog("Tile Offset in VRAM = ");
-							Print4HexLog(tempTileOffset);
-							PrintLog("\n");
-							PrintLog("Tile Row LSB  ");
-							Print2HexLog(tempTileRowMSB);
-							PrintLog("   -   ");
-							PrintLog("Tile Row MSB = ");
-							Print2HexLog(tempTileRowLSB);
-							PrintLog("   -   ");
-							PrintLog("Pixel Color Val = ");
-							Print2HexLog(pixelColorValue);
-							PrintLog("\n");
-							//PrintVRAM();
-						}
 					}
 					else
 					{
@@ -196,31 +205,33 @@ void RunPPU(void)
 					}
 					
 				}
-				/* Now that we have the Pixel Color Value (0 - 3), store it in the MEM_ScreenPixels array
+				/* Now that we have the Pixel Color Value (0 - 3), convert it using the Pallete Color Index Register (FF47) 
+				 * and store it in the MEM_ScreenPixels array
 				 */
+				cvrtdPixelValue = ConvertPixelIndex(pixelColorValue);
 				memScreenPixelIdx = (SCREEN_PIXELS_WIDE*4*i) + (4*j); 
-				if (pixelColorValue == 3)
+				if (cvrtdPixelValue == 3)
 				{
 					MEM_ScreenPixels[memScreenPixelIdx] = DMG_Pallete.Three.r;
 	                MEM_ScreenPixels[memScreenPixelIdx + 1] = DMG_Pallete.Three.g;
 	                MEM_ScreenPixels[memScreenPixelIdx + 2] = DMG_Pallete.Three.b;
 	                MEM_ScreenPixels[memScreenPixelIdx + 3] = DMG_Pallete.Three.a;
 				}
-				else if (pixelColorValue == 2)
+				else if (cvrtdPixelValue == 2)
 				{
 					MEM_ScreenPixels[memScreenPixelIdx] = DMG_Pallete.Two.r;
 	                MEM_ScreenPixels[memScreenPixelIdx + 1] = DMG_Pallete.Two.g;
 	                MEM_ScreenPixels[memScreenPixelIdx + 2] = DMG_Pallete.Two.b;
 	                MEM_ScreenPixels[memScreenPixelIdx + 3] = DMG_Pallete.Two.a;
 				}
-				else if (pixelColorValue == 1)
+				else if (cvrtdPixelValue == 1)
 				{
 					MEM_ScreenPixels[memScreenPixelIdx] = DMG_Pallete.One.r;
 	                MEM_ScreenPixels[memScreenPixelIdx + 1] = DMG_Pallete.One.g;
 	                MEM_ScreenPixels[memScreenPixelIdx + 2] = DMG_Pallete.One.b;
 	                MEM_ScreenPixels[memScreenPixelIdx + 3] = DMG_Pallete.One.a;
 				}
-				else if (pixelColorValue == 0)
+				else if (cvrtdPixelValue == 0)
 				{
 					MEM_ScreenPixels[memScreenPixelIdx] = DMG_Pallete.Zero.r;
 	                MEM_ScreenPixels[memScreenPixelIdx + 1] = DMG_Pallete.Zero.g;
