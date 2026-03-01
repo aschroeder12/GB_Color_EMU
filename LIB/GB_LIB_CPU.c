@@ -7,9 +7,21 @@ void RunCPU(unsigned short *beginDotCnt, unsigned short endDotCnt)
 {
 	unsigned short tmp;
 	unsigned short tmp2;
-	if (PC_REGISTER == 0x0040)
+	if (PC_REGISTER == 0x002E)
 	{
-		PrintTileMap();
+		int x = 0;
+	}
+	else if (PC_REGISTER == 0x002B)
+	{
+		int x = 0;
+	}
+	else if (PC_REGISTER == 0x0095)
+	{
+		int x = 0;
+	}
+	else if (PC_REGISTER == 0x0096)
+	{
+		int x = 0;
 	}
 	tmp = ReadMemory(PC_REGISTER);
 	PrintLog("Current INSTR (see line below for name) = ");

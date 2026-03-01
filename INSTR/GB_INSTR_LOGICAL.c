@@ -393,7 +393,7 @@ void INSTR_CP_N(void)
 		F_REGISTER = F_REGISTER & ZERO_RESET;
 	}
 	/* Deal with subtraction flag (N), bit 6 of F_REGISTER */
-	F_REGISTER = F_REGISTER & SUBTRACTION_RESET;
+	F_REGISTER = F_REGISTER | SUBTRACTION_SET;
 	/* Deal with the half-carry flag (H), bit 5 of F_REGISTER */
 	if ((carry_per_bit | (unsigned char)0xf7) == (unsigned char)0xff)
 	{

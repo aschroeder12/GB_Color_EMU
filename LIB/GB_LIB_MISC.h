@@ -15,5 +15,13 @@ void PrintTileMap();
 void PrintStatus();
 void FirstLoad();
 void LoadCartridge();
+unsigned char HalfCarrySetAdd_8(unsigned char, unsigned char);
+unsigned char HalfCarrySetSub_8(unsigned char, unsigned char);
+unsigned char HalfCarrySetAdd_16(unsigned short, unsigned short);
+unsigned char HalfCarrySetSub_16(unsigned short, unsigned short);
+unsigned char CarrySetAdd_8(unsigned char, unsigned char);
+unsigned char CarrySetSub_8(unsigned char, unsigned char);
+unsigned char CarrySetAdd_16(unsigned short, unsigned short);
+unsigned char CarrySetSub_16(unsigned short, unsigned short);
 
 #endif

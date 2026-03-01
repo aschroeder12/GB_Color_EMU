@@ -209,3 +209,181 @@ void LoadCartridge(void)
     }
     fclose(fptr);
 }
+
+/* Function HalfCarrySetAdd_8
+ * Function to determine whether a half-carry occured during an addition
+ * This happens when a bit goes from bit 3 -> 4
+ * returns 1 if half-carry, 0 otherwise
+ */
+unsigned char HalfCarrySetAdd_8(unsigned char a, unsigned char b)
+{
+    unsigned short x,y;
+    unsigned short result;
+    x = a;
+    y = b;
+    result = ((x & 0xf) + (y & 0xf)) & 0x10;
+    if (result > 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+/* Function HalfCarrySetSub_8
+ * Function to determine whether a half-carry occured during a subtraction
+ * This happens when a bit goes from bit 3 -> 4
+ * returns 1 if half-carry, 0 otherwise
+ */
+unsigned char HalfCarrySetSub_8(unsigned char a, unsigned char b)
+{
+    unsigned short x,y;
+    unsigned short result;
+    x = a;
+    y = b;
+    result = ((x & 0xf) - (y & 0xf)) & 0x10;
+    if (result > 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+/* Function HalfCarrySetAdd_16
+ * Function to determine whether a half-carry occured during an addition
+ * This happens when a bit goes from bit 11 -> 12???
+ * returns 1 if half-carry, 0 otherwise
+ */
+unsigned char HalfCarrySetAdd_16(unsigned short a, unsigned short b)
+{
+    unsigned int x,y;
+    unsigned int result;
+    x = a;
+    y = b;
+    result = ((x & 0xfff) + (y & 0xfff)) & 0x1000;
+    if (result > 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+/* Function HalfCarrySetSub_16
+ * Function to determine whether a half-carry occured during a subtraction
+ * This happens when a bit goes from bit 11 -> 12???
+ * returns 1 if half-carry, 0 otherwise
+ */
+unsigned char HalfCarrySetSub_16(unsigned short a, unsigned short b)
+{
+    unsigned int x,y;
+    unsigned int result;
+    x = a;
+    y = b;
+    result = ((x & 0xfff) - (y & 0xfff)) & 0x1000;
+    if (result > 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+/* Function CarrySetAdd_8
+ * Function to determine whether a Carry occured during an addition
+ * This happens when a bit goes from bit 7 -> 8
+ * returns 1 if carry, 0 otherwise
+ */
+unsigned char CarrySetAdd_8(unsigned char a, unsigned char b)
+{
+    unsigned short x,y;
+    unsigned short result;
+    x = a;
+    y = b;
+    result = ((x & 0xff) + (y & 0xff)) & 0x100;
+    if (result > 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+/* Function CarrySetSub_8
+ * Function to determine whether a carry occured during a subtraction
+ * This happens when a bit goes from bit 7 -> 8
+ * returns 1 if carry, 0 otherwise
+ */
+unsigned char CarrySetSub_8(unsigned char a, unsigned char b)
+{
+    unsigned short x,y;
+    unsigned short result;
+    x = a;
+    y = b;
+    result = ((x & 0xff) - (y & 0xff)) & 0x100;
+    if (result > 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+/* Function CarrySetAdd_16
+ * Function to determine whether a carry occured during an addition
+ * This happens when a bit goes from bit 15 -> 16
+ * returns 1 if carry, 0 otherwise
+ */
+unsigned char HalfCarrySetAdd_16(unsigned short a, unsigned short b)
+{
+    unsigned int x,y;
+    unsigned int result;
+    x = a;
+    y = b;
+    result = ((x & 0xffff) + (y & 0xffff)) & 0x10000;
+    if (result > 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+/* Function CarrySetSub_16
+ * Function to determine whether a carry occured during a subtraction
+ * This happens when a bit goes from bit 15 -> 16
+ * returns 1 if carry, 0 otherwise
+ */
+unsigned char CarrySetSub_16(unsigned short a, unsigned short b)
+{
+    unsigned int x,y;
+    unsigned int result;
+    x = a;
+    y = b;
+    result = ((x & 0xffff) - (y & 0xffff)) & 0x10000;
+    if (result > 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+
